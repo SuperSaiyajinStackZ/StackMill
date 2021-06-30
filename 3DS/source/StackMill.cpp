@@ -1,0 +1,565 @@
+/*
+*   This file is part of StackMill
+*   Copyright (C) 2021 SuperSaiyajinStackZ
+*
+*   This program is free software: you can redistribute it and/or modify
+*   it under the terms of the GNU General Public License as published by
+*   the Free Software Foundation, either version 3 of the License, or
+*   (at your option) any later version.
+*
+*   This program is distributed in the hope that it will be useful,
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*   GNU General Public License for more details.
+*
+*   You should have received a copy of the GNU General Public License
+*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*
+*   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
+*       * Requiring preservation of specified reasonable legal notices or
+*         author attributions in that material or in the Appropriate Legal
+*         Notices displayed by works containing it.
+*       * Prohibiting misrepresentation of the origin of that material,
+*         or requiring that modified versions of such material be marked in
+*         reasonable ways as different from the original version.
+*/
+
+#include "StackMill.hpp"
+#include <time.h>
+
+/*
+	0			1			2
+		8		9		10
+			16	17	18
+	7	15	23		19	11	3
+			22	21	20
+		14		13		12
+	6			5			4
+*/
+
+/*
+	Init / Load a new game.
+
+	const bool GenerateSeed: If generating the random seed for random operations, or not.
+*/
+void StackMill::LoadGame(const bool GenerateSeed) {
+	/* Init Player and field. */
+	for (int8_t Idx = 0; Idx < 2; Idx++) this->Players[Idx] = std::make_unique<StackMill::Player>();
+	for (int8_t Idx = 0; Idx < 24; Idx++) this->_Field[Idx] = StackMill::GameStone::None;
+
+	this->CPlayer = 1; // Current Player is ALWAYS the White (1) one.
+	if (GenerateSeed) srand(time(nullptr));
+};
+
+/*
+	Returns whetever it can do the specified play or not.
+
+	const int8_t OldPos: The old position of the stone, only used in Move Phase.
+	const int8_t NewPos: The new position for the stone to set.
+	const StackMill::Phases Phase: The Phase to interact with.
+*/
+bool StackMill::CanDoSpecifiedPlay(const int8_t OldPos, const int8_t NewPos, const StackMill::Phases Phase) {
+	if (OldPos < 0 || OldPos > 23 || NewPos < 0 || NewPos > 23) return false; // Bounds checks.
+
+	switch(Phase) {
+		/* Set and Jump are pretty much the same from the logic. */
+		case StackMill::Phases::Set:
+		case StackMill::Phases::Jump:
+			return (this->_Field[NewPos] == StackMill::GameStone::None);
+
+		/* Phase: Move a stone for 1 position. */
+		case StackMill::Phases::Move: {
+			/* Get the possible play positions. */
+			const std::vector<int8_t> PossiblePositions = this->PlayablePositions(OldPos, StackMill::Phases::Move);
+			
+			if (!PossiblePositions.empty()) {
+				/* Go through all the Positions and check if the New Position is included. */
+				for (int8_t Idx = 0; Idx < (int8_t)PossiblePositions.size(); Idx++) {
+					if (PossiblePositions[Idx] == NewPos) return true; // Included!
+				};
+			};
+		};
+
+		break;
+	};
+
+	return false;
+};
+
+/*
+	Returns a std::vector of play-able positions. It also returns an empty vector, if nothing is play-able, so keep that in mind!
+
+	const int8_t StonePosition: The position of the to checked stone. Only used in Move Phase.
+	const StackMill::Phases Phase: The Phase to interact with.
+*/
+std::vector<int8_t> StackMill::PlayablePositions(const int8_t StonePosition, const StackMill::Phases Phase) {
+	std::vector<int8_t> Positions;
+
+	switch(Phase) {
+		/* Set and Jump are pretty much the same from the logic. */
+		case StackMill::Phases::Set:
+		case StackMill::Phases::Jump:
+			/* Check if Index is empty, if so, push that index back. */
+			for (int8_t Idx = 0; Idx < 24; Idx++) {
+				if (this->_Field[Idx] == StackMill::GameStone::None) Positions.push_back(Idx);
+			};
+			break;
+
+		/* Phase: Move a stone for 1 position. */
+		case StackMill::Phases::Move:
+			if (StonePosition < 0 || StonePosition > 23) return Positions; // Bounds checks.
+
+			/* The checks here do the following: Check for play-able positions, if playable -> Check if the position is empty and if so, push the new position back. */
+			switch(StonePosition) {
+				case 0:
+					if (this->_Field[1] == StackMill::GameStone::None) Positions.push_back(1); // ->
+					if (this->_Field[7] == StackMill::GameStone::None) Positions.push_back(7); // DOWN
+					break;
+
+				case 1:
+					if (this->_Field[0] == StackMill::GameStone::None) Positions.push_back(0); // <-
+					if (this->_Field[2] == StackMill::GameStone::None) Positions.push_back(2); // ->
+					if (this->_Field[9] == StackMill::GameStone::None) Positions.push_back(9); // DOWN
+					break;
+
+				case 2:
+					if (this->_Field[1] == StackMill::GameStone::None) Positions.push_back(1); // <-
+					if (this->_Field[3] == StackMill::GameStone::None) Positions.push_back(3); // DOWN
+					break;
+
+				case 3:
+					if (this->_Field[2] == StackMill::GameStone::None) Positions.push_back(2); // ^
+					if (this->_Field[4] == StackMill::GameStone::None) Positions.push_back(4); // DOWN
+					if (this->_Field[11] == StackMill::GameStone::None) Positions.push_back(11); // <-
+					break;
+
+				case 4:
+					if (this->_Field[3] == StackMill::GameStone::None) Positions.push_back(3); // ^
+					if (this->_Field[5] == StackMill::GameStone::None) Positions.push_back(5); // <-
+					break;
+
+				case 5:
+					if (this->_Field[4] == StackMill::GameStone::None) Positions.push_back(4); // ->
+					if (this->_Field[6] == StackMill::GameStone::None) Positions.push_back(6); // <-
+					if (this->_Field[13] == StackMill::GameStone::None) Positions.push_back(13); // ^
+					break;
+
+				case 6:
+					if (this->_Field[5] == StackMill::GameStone::None) Positions.push_back(5); // ->
+					if (this->_Field[7] == StackMill::GameStone::None) Positions.push_back(7); // ^
+					break;
+
+				case 7:
+					if (this->_Field[0] == StackMill::GameStone::None) Positions.push_back(0); // ^
+					if (this->_Field[6] == StackMill::GameStone::None) Positions.push_back(6); // DOWN
+					if (this->_Field[15] == StackMill::GameStone::None) Positions.push_back(15); // ->
+					break;
+
+				case 8:
+					if (this->_Field[9] == StackMill::GameStone::None) Positions.push_back(9); // ->
+					if (this->_Field[15] == StackMill::GameStone::None) Positions.push_back(15); // DOWN
+					break;
+
+				case 9:
+					if (this->_Field[1] == StackMill::GameStone::None) Positions.push_back(1); // ^
+					if (this->_Field[8] == StackMill::GameStone::None) Positions.push_back(8); // <-
+					if (this->_Field[10] == StackMill::GameStone::None) Positions.push_back(10); // ->
+					if (this->_Field[17] == StackMill::GameStone::None) Positions.push_back(17); // DOWN
+					break;
+
+				case 10:
+					if (this->_Field[9] == StackMill::GameStone::None) Positions.push_back(9); // <-
+					if (this->_Field[11] == StackMill::GameStone::None) Positions.push_back(11); // DOWN
+					break;
+
+				case 11:
+					if (this->_Field[3] == StackMill::GameStone::None) Positions.push_back(3); // ->
+					if (this->_Field[10] == StackMill::GameStone::None) Positions.push_back(10); // ^
+					if (this->_Field[12] == StackMill::GameStone::None) Positions.push_back(12); // DOWN
+					if (this->_Field[19] == StackMill::GameStone::None) Positions.push_back(19); // <-
+					break;
+
+				case 12:
+					if (this->_Field[11] == StackMill::GameStone::None) Positions.push_back(11); // ^
+					if (this->_Field[13] == StackMill::GameStone::None) Positions.push_back(13); // <-
+					break;
+
+				case 13:
+					if (this->_Field[5] == StackMill::GameStone::None) Positions.push_back(5); // DOWN
+					if (this->_Field[12] == StackMill::GameStone::None) Positions.push_back(12); // ->
+					if (this->_Field[14] == StackMill::GameStone::None) Positions.push_back(14); // <-
+					if (this->_Field[21] == StackMill::GameStone::None) Positions.push_back(21); // ^
+					break;
+
+				case 14:
+					if (this->_Field[13] == StackMill::GameStone::None) Positions.push_back(13); // ->
+					if (this->_Field[15] == StackMill::GameStone::None) Positions.push_back(15); // ^
+					break;
+
+				case 15:
+					if (this->_Field[7] == StackMill::GameStone::None) Positions.push_back(7); // <-
+					if (this->_Field[8] == StackMill::GameStone::None) Positions.push_back(8); // ^
+					if (this->_Field[14] == StackMill::GameStone::None) Positions.push_back(14); // DOWN
+					if (this->_Field[23] == StackMill::GameStone::None) Positions.push_back(23); // ->
+					break;
+
+
+				case 16:
+					if (this->_Field[17] == StackMill::GameStone::None) Positions.push_back(17); // ->
+					if (this->_Field[23] == StackMill::GameStone::None) Positions.push_back(23); // DOWN
+					break;
+
+				case 17:
+					if (this->_Field[9] == StackMill::GameStone::None) Positions.push_back(9); // ^
+					if (this->_Field[16] == StackMill::GameStone::None) Positions.push_back(16); // <-
+					if (this->_Field[18] == StackMill::GameStone::None) Positions.push_back(18); // ->
+					break;
+
+				case 18:
+					if (this->_Field[17] == StackMill::GameStone::None) Positions.push_back(17); // <-
+					if (this->_Field[19] == StackMill::GameStone::None) Positions.push_back(19); // DOWN
+					break;
+
+				case 19:
+					if (this->_Field[11] == StackMill::GameStone::None) Positions.push_back(11); // ->
+					if (this->_Field[18] == StackMill::GameStone::None) Positions.push_back(18); // ^
+					if (this->_Field[20] == StackMill::GameStone::None) Positions.push_back(20); // DOWN
+					break;
+
+				case 20:
+					if (this->_Field[19] == StackMill::GameStone::None) Positions.push_back(19); // ^
+					if (this->_Field[21] == StackMill::GameStone::None) Positions.push_back(21); // <-
+					break;
+
+				case 21:
+					if (this->_Field[13] == StackMill::GameStone::None) Positions.push_back(13); // DOWN
+					if (this->_Field[20] == StackMill::GameStone::None) Positions.push_back(20); // ->
+					if (this->_Field[22] == StackMill::GameStone::None) Positions.push_back(22); // <-
+					break;
+
+				case 22:
+					if (this->_Field[21] == StackMill::GameStone::None) Positions.push_back(21); // ->
+					if (this->_Field[23] == StackMill::GameStone::None) Positions.push_back(23); // ^
+					break;
+
+				case 23:
+					if (this->_Field[15] == StackMill::GameStone::None) Positions.push_back(15); // <-
+					if (this->_Field[16] == StackMill::GameStone::None) Positions.push_back(16); // ^
+					if (this->_Field[22] == StackMill::GameStone::None) Positions.push_back(22); // DOWN
+					break;
+			};
+	};
+
+	Positions.shrink_to_fit();
+	return Positions;
+};
+
+/*
+	Returns, whetever a match is possible with the specified Stone as the last played stone.
+
+	const int8_t StoneIdx: The last played stone position, from which around to check for a match.
+	const StackMill::GameStone Stone: The stone color which to check for a match.
+*/
+bool StackMill::Match(const int8_t StoneIdx, const StackMill::GameStone Stone) {
+	if (this->_Field[StoneIdx] == Stone) { // Ensure the specified Stone Index is actually the same stone.
+		std::vector<int8_t> Includes;
+
+		/* Check if the specified Stone index is included in any of the matches, if so, push that index back. */
+		for (int8_t Idx = 0; Idx < 16; Idx++) {
+			if (this->Fields[Idx].Stones[0] == StoneIdx || this->Fields[Idx].Stones[1] == StoneIdx || this->Fields[Idx].Stones[2] == StoneIdx) {
+				Includes.push_back(Idx);
+			};
+		};
+
+		Includes.shrink_to_fit(); // No need for useless allocation.
+
+		/* Now check if 3 in a row exist, if so, return true, else it would go to the fallback option, which is false. */
+		for (int8_t I = 0; I < (int8_t)Includes.size(); I++) {
+			if (this->_Field[this->Fields[Includes[I]].Stones[0]] == Stone && // Check first stone.
+				this->_Field[this->Fields[Includes[I]].Stones[1]] == Stone && // Check second stone.
+				this->_Field[this->Fields[Includes[I]].Stones[2]] == Stone) return true; // And the last and if it matches, return true.
+		};
+	};
+
+	return false;
+};
+
+/*
+	Returns the remove state of the action.
+
+	const int8_t StoneIdx: The stone position you want to remove.
+	const StackMill::GameStone Stone: The stone color to remove. (Black for Player 2, White for Player 1)
+
+	This returns...
+	* StackMill::RemoveState::Lost: If the Player from which the stone got removed has 2 or less stones left.
+	* StackMill::RemoveState::Removed: If the Player from which the stone got removed has 3 or more stones left.
+	* StackMill::RemoveState::Invalid: If the specified stone cannot be removed.
+*/
+StackMill::RemoveState StackMill::StoneRemove(const int8_t StoneIdx, const StackMill::GameStone Stone) {
+	if (this->_Field[StoneIdx] == Stone) { // Ensure the specified stone position is actually the stone to remove.
+		bool Included = false;
+
+		/* Check if the Stone Index Position is included in the remove-able stones. */
+		const std::vector<int8_t> Removeables = this->RemoveableStones(Stone);
+
+		for (int8_t Idx = 0; Idx < (int8_t)Removeables.size(); Idx++) {
+			if (Removeables[Idx] == StoneIdx) {
+				Included = true; // It is included, so we can continue.
+				break;
+			};
+		};
+
+		if (Included) { // If the StoneIdx is included -> Continue.
+			int8_t RemoveIdx = -1;
+
+			/* Check all stones of the specified color if it matches with the StoneIdx. Sets the RemoveIdx to which one matches. */
+			for (int8_t Idx = 0; Idx < 9; Idx++) {
+				if (this->Players[Stone == StackMill::GameStone::Black]->Position(Idx) == StoneIdx) {
+					RemoveIdx = Idx;
+					break;
+				};
+			};
+
+			/* Only do this, if stone can actually be removed. */
+			if (RemoveIdx != -1) {
+				/* Set that stone index of the Player to -2, which means it got removed and empty specified position on the field. */
+				this->Players[Stone == StackMill::GameStone::Black]->Position(RemoveIdx, -2);
+				this->_Field[StoneIdx] = StackMill::GameStone::None;
+
+				/* In case only 3 Stones are available -> Switch to the Jump Phase. */
+				if (this->Players[Stone == StackMill::GameStone::Black]->Available() == 3) this->Players[Stone == StackMill::GameStone::Black]->Phase(StackMill::Phases::Jump);
+				return (this->Players[Stone == StackMill::GameStone::Black]->Available() < 3 ? StackMill::RemoveState::Lost : StackMill::RemoveState::Removed);
+			};
+		};
+	};
+
+	return StackMill::RemoveState::Invalid;
+};
+
+/*
+	Returns a vector of all remove-able stones from the specified stone color.
+
+	const StackMill::GameStone Stone: The stone color to get all remove-able indexes from.
+*/
+std::vector<int8_t> StackMill::RemoveableStones(const StackMill::GameStone Stone) {
+	std::vector<int8_t> Stones, PotentialMills;
+	bool Contains = false;
+
+	/* Go through all the Player stones. */
+	for (int8_t Idx = 0; Idx < 9; Idx++) {
+		const int8_t Index = this->Players[Stone == StackMill::GameStone::Black]->Position(Idx);
+
+		/* Ensure the index is 0 or larger. -1 would be not set and -2 already lost. */
+		if (Index > -1) {
+			Contains = false; // Reset contains state.
+			PotentialMills.clear();
+
+			/* Check if index' position matches one of the possibilities, if so, push the Index back to the Indexes vector. */
+			for (int8_t Idx2 = 0; Idx2 < 16; Idx2++) {
+				if (this->Fields[Idx2].Stones[0] == Index || this->Fields[Idx2].Stones[1] == Index || this->Fields[Idx2].Stones[2] == Index) {
+					PotentialMills.push_back(Idx2);
+				};
+			};
+
+			PotentialMills.shrink_to_fit();
+			if (PotentialMills.empty()) continue; // Go to the next stone.
+
+			/* Now check, if that index position actually contains a Mill, because you cannot remove a stone from it, except all stones are mills. */
+			for (int8_t Idx2 = 0; Idx2 < (int8_t)PotentialMills.size(); Idx2++) {
+				if (this->_Field[this->Fields[PotentialMills[Idx2]].Stones[0]] == Stone && // Check first Match position.
+					this->_Field[this->Fields[PotentialMills[Idx2]].Stones[1]] == Stone && // Check second Match position.
+					this->_Field[this->Fields[PotentialMills[Idx2]].Stones[2]] == Stone) { // Check third Match position.
+						Contains = true; // If it contains it, set that it contains it. 
+						break;
+				};
+			};
+
+			/* If it doesn't contain it, that stone can be removed freely. */
+			if (!Contains) Stones.push_back(Index);
+		};
+	};
+
+	/* Additional checks, in case the remove-able stones are empty. */
+	if (Stones.empty()) {
+		/* Go through all the stones of the player and get it's index. */
+		for (int8_t Idx = 0; Idx < 9; Idx++) {
+			const int8_t Index = this->Players[Stone == StackMill::GameStone::Black]->Position(Idx);
+
+			/* If 0 or larger -> Push it back to the remove-able stone positions, because all are mills and you can remove any from them. */
+			if (Index > -1) Stones.push_back(Index);
+		};
+	};
+
+	Stones.shrink_to_fit(); // Get rid of useless allocation.
+	return Stones;
+};
+
+/*
+	Do a play turn and return a state for the turn.
+
+	const int8_t OldPos: The old stone position to play.
+	const int8_t NewPos: The new stone position to play.
+
+	This returns...
+	* StackMill::PlayStatus::Normal: If no match exist, however was successfully able to play.
+	* StackMill::PlayStatus::Match: If a match exist, so you could remove a stone from your opponent.
+	* StackMill::PlayStatus::Invalid: If the play was invalid, due to not valid position to play.
+*/
+StackMill::PlayStatus StackMill::Play(const int8_t OldPos, const int8_t NewPos) {
+	/* Player Phase: Set a stone to a free spot. */
+	if (this->Players[this->CPlayer - 1]->Phase() == StackMill::Phases::Set) {
+		if (this->CanDoSpecifiedPlay(OldPos, NewPos, StackMill::Phases::Set)) { // Ensure we can actually play it.
+				
+			/* Set Position from the Players stones to the setted one, and set the Field to the color of the Player. */
+			this->Players[this->CPlayer - 1]->Position(this->Players[this->CPlayer - 1]->Idx(), NewPos);
+			this->_Field[NewPos] = (this->CPlayer == 1 ? StackMill::GameStone::White : StackMill::GameStone::Black);
+
+			if (this->Players[this->CPlayer - 1]->Idx() < 8) this->Players[this->CPlayer - 1]->IncreaseIdx();
+
+			/* If 9 Stones are already played -> We switch to the Move Phase. */
+			else this->Players[this->CPlayer - 1]->Phase(StackMill::Phases::Move);
+
+			/* Check, if a match is possible with the setted stone. */
+			if (this->Match(NewPos, (this->CPlayer == 1 ? StackMill::GameStone::White : StackMill::GameStone::Black))) {
+				return StackMill::PlayStatus::Match; // 3 in einer Reihe!
+
+			} else {
+				return StackMill::PlayStatus::Normal;
+			};
+		};
+
+	/* The Phase is Move OR Jump, both of them do not rely on new setted stones anymore and instead change the available ones. */
+	} else {
+		int8_t StonePos = -1;
+
+		/* Check for the right stone that contains the old position. */
+		for (int8_t I = 0; I < 9; I++) {
+			if (this->Players[this->CPlayer - 1]->Position(I) == OldPos) {
+				StonePos = I;
+				break;
+			};
+		};
+
+		/* If the previous check was successful, then we can go ahead. */
+		if (StonePos != -1) {
+
+			/* Ensure we can actually play it. */
+			if (this->CanDoSpecifiedPlay(OldPos, NewPos, this->Players[this->CPlayer - 1]->Phase())) {
+
+				/* Move the Stone from the Player to the new position. */
+				this->Players[this->CPlayer - 1]->Position(StonePos, NewPos);
+
+				/* Clear old position and set that stone / color to the new position. */
+				this->_Field[OldPos] = StackMill::GameStone::None;
+				this->_Field[NewPos] = (this->CPlayer == 1 ? StackMill::GameStone::White : StackMill::GameStone::Black);
+
+				/* Check, if a match is possible with the setted stone. */
+				if (this->Match(NewPos, (this->CPlayer == 1 ? StackMill::GameStone::White : StackMill::GameStone::Black))) {
+					return StackMill::PlayStatus::Match; // 3 in einer Reihe!
+
+				} else {
+					return StackMill::PlayStatus::Normal;
+				};
+			};
+		};
+	};
+
+	return StackMill::PlayStatus::Invalid; // If something went wrong, returns Invalid.
+};
+
+/*
+	Returns whetever a player can still do a play, or is basically locked because no plays possible anymore.
+*/
+bool StackMill::CanPlay() {
+	/* Go through all 9 Stones. */
+	for (int8_t Idx = 0; Idx < 9; Idx++) {
+
+		/* If position is not -2, then the stone is still available to check. */
+		if (this->Players[this->CPlayer - 1]->Position(Idx) != -2) {
+
+			/* Get all play-able positions. */
+			const std::vector<int8_t> Plays = this->PlayablePositions(this->Players[this->CPlayer - 1]->Position(Idx), this->Players[this->CPlayer - 1]->Phase());
+
+			/* In case it's not empty, we can play. */
+			if (!Plays.empty()) return true;
+		};
+	};
+
+	return false; // If nothing is play-able, return false.
+};
+
+
+/*
+	Random AI / Computer Play.
+
+	Returns a std::pair of first: Old Position (Stone Position), second: New Position.
+*/
+std::pair<int8_t, int8_t> StackMill::AIRandomPlay() {
+	std::pair<int8_t, int8_t> Play = std::make_pair(-1, -1);
+	std::vector<int8_t> PossiblePlays;
+
+	switch(this->Phase((this->CurrentPlayer() - 1) == 1 ? StackMill::GameStone::White : StackMill::GameStone::Black)) {
+		/* Player Phase: Set a stone to a free spot. */
+		case StackMill::Phases::Set:
+
+			/* Check all Field position for free spots and push them back to the PossiblePlays vector. */
+			for (int8_t Idx = 0; Idx < 24; Idx++) {
+				if (this->Field(Idx) == StackMill::GameStone::None) PossiblePlays.push_back(Idx);
+			};
+
+			/* Choose a random free spot. */
+			PossiblePlays.shrink_to_fit();
+			if (!PossiblePlays.empty()) Play.second = PossiblePlays[rand() % (int8_t)PossiblePlays.size()];
+			break;
+
+		/* Player Phase: Move a stone for 1 spot. */
+		case StackMill::Phases::Move:
+
+			/* Check all available Stones for play-abilities and push them to the PossiblePlays vector. */
+			for (int8_t Idx = 0; Idx < 9; Idx++) {
+				
+				if (this->Players[this->CPlayer - 1]->Position(Idx) > -1) {
+					if (!this->PlayablePositions(this->Players[this->CPlayer - 1]->Position(Idx), StackMill::Phases::Move).empty()) {
+						PossiblePlays.push_back(this->Players[this->CPlayer - 1]->Position(Idx));
+					};
+				};
+			};
+
+			/* Choose a random Stone that is play-able. */
+			PossiblePlays.shrink_to_fit();
+			if (!PossiblePlays.empty()) Play.first = PossiblePlays[rand() % (int8_t)PossiblePlays.size()];
+
+			/* Do the same as above.. but for the new position for that stone. */
+			PossiblePlays = this->PlayablePositions(Play.first, StackMill::Phases::Move);
+			PossiblePlays.shrink_to_fit();
+			if (!PossiblePlays.empty()) Play.second = PossiblePlays[rand() % (int8_t)PossiblePlays.size()];
+			break;
+
+		/* Player Phase: Jump to a free spot. */
+		case StackMill::Phases::Jump:
+
+			/* Check all Field position for free spots and push them back to the PossiblePlays vector. */
+			for (int8_t Idx = 0; Idx < 24; Idx++) {
+				if (this->Field(Idx) == StackMill::GameStone::None) PossiblePlays.push_back(Idx);
+			};
+
+			/* Choose a random free spot. */
+			PossiblePlays.shrink_to_fit();
+			if (!PossiblePlays.empty()) Play.second = PossiblePlays[rand() % (int8_t)PossiblePlays.size()];
+			PossiblePlays.clear(); // Clear for the next operation.
+
+			/* Check for all play-able Stones and push them back to the PossiblePlays vector. */
+			for (int8_t Idx = 0; Idx < 9; Idx++) {
+				if (this->Players[this->CPlayer - 1]->Position(Idx) > -1) {
+					PossiblePlays.push_back(this->Players[this->CPlayer - 1]->Position(Idx));
+				};
+			};
+
+			/* Choose a random Stone that is play-able. */
+			PossiblePlays.shrink_to_fit();
+			if (!PossiblePlays.empty()) Play.first = PossiblePlays[rand() % (int8_t)PossiblePlays.size()];
+			break;
+	};
+
+	return Play;
+};

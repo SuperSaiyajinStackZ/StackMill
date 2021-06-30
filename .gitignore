@@ -1,0 +1,12 @@
+
+*.bin
+*.d
+*.o
+3DS/build/sprites.h
+*.lst
+*.map
+*.t3x
+*.smdh
+*.elf
+*.cia
+*.3dsx
