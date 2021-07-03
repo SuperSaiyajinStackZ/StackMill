@@ -35,8 +35,7 @@ public:
 	void Draw();
 	void Handler();
 
-	static int8_t StoneColors[3];
-	static bool AI;
+	static int8_t StoneColors[3], AI;
 private:
 	int8_t SelectedOption = 0;
 

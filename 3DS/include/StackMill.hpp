@@ -68,7 +68,10 @@ public:
 	StackMill::RemoveState StoneRemove(const int8_t StoneIdx, const StackMill::GameStone Stone);
 
 	void NextPlayer() { this->CPlayer = (this->CPlayer == 1 ? 2 : 1); };
+
 	std::pair<int8_t, int8_t> AIRandomPlay();
+	std::pair<int8_t, int8_t> AI5050();
+	int8_t AIStoneRemove();
 private:
 	struct MatchField { int8_t Stones[3] = { 0 }; }; // 3 Stones.
 

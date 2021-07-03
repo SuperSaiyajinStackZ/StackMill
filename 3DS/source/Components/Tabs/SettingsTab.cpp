@@ -28,7 +28,7 @@
 #include "SettingsTab.hpp"
 
 int8_t SettingsTab::StoneColors[3] = { 1, 0, 4 }; // 0: Player 1, 1: Player 2, 2: Preview Color.
-bool SettingsTab::AI = true;
+int8_t SettingsTab::AI = 1;
 
 void SettingsTab::Draw() {
 	/* Player 1 Stone Color. */
@@ -62,11 +62,12 @@ void SettingsTab::Draw() {
 
 
 	/* AI. */
-	Gui::DrawStringCentered(0 + Tab::SettingsOffset, 190, 0.5f, TEXT_BG_COLOR, "Using Random Computer AI");
-	StackMill3DS::App->GData->DrawStone(9, this->XPos[4] + Tab::SettingsOffset, 210); // Red.
-	StackMill3DS::App->GData->DrawStone(7, this->XPos[5] + Tab::SettingsOffset, 210); // Green.
+	Gui::DrawStringCentered(0 + Tab::SettingsOffset, 190, 0.5f, TEXT_BG_COLOR, "Computer Opponent (Disabled, Random, 50:50)");
+	StackMill3DS::App->GData->DrawStone(9, this->XPos[4] - 15 + Tab::SettingsOffset, 210); // Red.
+	StackMill3DS::App->GData->DrawStone(4, this->XPos[5] - 15 + Tab::SettingsOffset, 210); // Yellow.
+	StackMill3DS::App->GData->DrawStone(7, this->XPos[6] - 15 + Tab::SettingsOffset, 210); // Green.
 
-	StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->XPos[4 + SettingsTab::AI] + 6 + Tab::SettingsOffset, 216);
+	StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->XPos[4 + SettingsTab::AI] - 15 + 6 + Tab::SettingsOffset, 216);
 	if (this->SelectedOption == 3) Gui::drawGrid(5 + Tab::SettingsOffset, 190, 310, 45, BAR_COLOR_OUTLINE);
 };
 
@@ -91,8 +92,8 @@ void SettingsTab::Handler() {
 		};
 
 		/* AI Mode Handler. */
-		for (int8_t Idx = 0; Idx < 2; Idx++) {
-			if (StackMill3DS::App->T.px >= this->XPos[4 + Idx] && StackMill3DS::App->T.px <= this->XPos[4 + Idx] + 20 && StackMill3DS::App->T.py >= 210 && StackMill3DS::App->T.py <= 230) {
+		for (int8_t Idx = 0; Idx < 3; Idx++) {
+			if (StackMill3DS::App->T.px >= this->XPos[4 + Idx] - 15 && StackMill3DS::App->T.px <= this->XPos[4 + Idx] - 15 + 20 && StackMill3DS::App->T.py >= 210 && StackMill3DS::App->T.py <= 230) {
 				SettingsTab::AI = Idx;
 				return;
 			};
@@ -113,7 +114,7 @@ void SettingsTab::Handler() {
 			if (SettingsTab::StoneColors[this->SelectedOption] < 9) SettingsTab::StoneColors[this->SelectedOption]++;
 
 		} else {
-			if (!SettingsTab::AI) SettingsTab::AI = true;
+			if (SettingsTab::AI < 2) SettingsTab::AI++;
 		};
 	};
 	if (StackMill3DS::App->Repeat & KEY_LEFT) {
@@ -121,7 +122,7 @@ void SettingsTab::Handler() {
 			if (SettingsTab::StoneColors[this->SelectedOption] > 0) SettingsTab::StoneColors[this->SelectedOption]--;
 
 		} else {
-			if (SettingsTab::AI) SettingsTab::AI = false;
+			if (SettingsTab::AI > 0) SettingsTab::AI--;
 		};
 	};
 };

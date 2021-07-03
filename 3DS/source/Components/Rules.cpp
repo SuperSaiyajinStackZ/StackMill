@@ -177,6 +177,9 @@ void Rules::DrawBottom() {
 	/* Display page buttons on the middle. */
 	for (int8_t Idx = 0; Idx < 7; Idx++) {
 		Gui::drawGrid(this->ButtonPages[Idx].x, this->ButtonPages[Idx].y, this->ButtonPages[Idx].w, this->ButtonPages[Idx].h, BAR_COLOR_OUTLINE);
+		/* If Idx is the current page -> Fill the button with the bar color. */
+		if ((Idx == (int)this->Page)) Gui::Draw_Rect(this->ButtonPages[Idx].x + 1, this->ButtonPages[Idx].y + 1, this->ButtonPages[Idx].w - 2, this->ButtonPages[Idx].h - 2, BAR_COLOR);
+
 		Gui::DrawStringCentered(0, this->ButtonPages[Idx].y + 8, 0.5f, TEXT_BG_COLOR, this->ButtonNames[Idx], 120);
 	};
 
@@ -212,7 +215,7 @@ void Rules::HelperHandler(uint32_t &Down, touchPosition &T) {
 			};
 		};
 
-		if (Down & KEY_L) {
+		if (Down & KEY_L || Down & KEY_UP) {
 			if (this->CanGoPrev()) {
 				this->Direction = false;
 				this->ToSwipe = 1;
@@ -220,7 +223,7 @@ void Rules::HelperHandler(uint32_t &Down, touchPosition &T) {
 			};
 		};
 
-		if (Down & KEY_R) {
+		if (Down & KEY_R || Down & KEY_DOWN) {
 			if (this->CanGoNext()) {
 				this->Direction = true;
 				this->ToSwipe = 1;

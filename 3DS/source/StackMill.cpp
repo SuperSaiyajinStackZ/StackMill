@@ -37,6 +37,8 @@
 	6			5			4
 */
 
+
+
 /*
 	Init / Load a new game.
 
@@ -50,6 +52,8 @@ void StackMill::LoadGame(const bool GenerateSeed) {
 	this->CPlayer = 1; // Current Player is ALWAYS the White (1) one.
 	if (GenerateSeed) srand(time(nullptr));
 };
+
+
 
 /*
 	Returns whetever it can do the specified play or not.
@@ -85,6 +89,8 @@ bool StackMill::CanDoSpecifiedPlay(const int8_t OldPos, const int8_t NewPos, con
 
 	return false;
 };
+
+
 
 /*
 	Returns a std::vector of play-able positions. It also returns an empty vector, if nothing is play-able, so keep that in mind!
@@ -254,6 +260,8 @@ std::vector<int8_t> StackMill::PlayablePositions(const int8_t StonePosition, con
 	return Positions;
 };
 
+
+
 /*
 	Returns, whetever a match is possible with the specified Stone as the last played stone.
 
@@ -261,7 +269,7 @@ std::vector<int8_t> StackMill::PlayablePositions(const int8_t StonePosition, con
 	const StackMill::GameStone Stone: The stone color which to check for a match.
 */
 bool StackMill::Match(const int8_t StoneIdx, const StackMill::GameStone Stone) {
-	if (this->_Field[StoneIdx] == Stone) { // Ensure the specified Stone Index is actually the same stone.
+	if (this->_Field[StoneIdx] == Stone) {
 		std::vector<int8_t> Includes;
 
 		/* Check if the specified Stone index is included in any of the matches, if so, push that index back. */
@@ -283,6 +291,8 @@ bool StackMill::Match(const int8_t StoneIdx, const StackMill::GameStone Stone) {
 
 	return false;
 };
+
+
 
 /*
 	Returns the remove state of the action.
@@ -335,6 +345,8 @@ StackMill::RemoveState StackMill::StoneRemove(const int8_t StoneIdx, const Stack
 
 	return StackMill::RemoveState::Invalid;
 };
+
+
 
 /*
 	Returns a vector of all remove-able stones from the specified stone color.
@@ -393,6 +405,8 @@ std::vector<int8_t> StackMill::RemoveableStones(const StackMill::GameStone Stone
 	Stones.shrink_to_fit(); // Get rid of useless allocation.
 	return Stones;
 };
+
+
 
 /*
 	Do a play turn and return a state for the turn.
@@ -467,6 +481,8 @@ StackMill::PlayStatus StackMill::Play(const int8_t OldPos, const int8_t NewPos) 
 	return StackMill::PlayStatus::Invalid; // If something went wrong, returns Invalid.
 };
 
+
+
 /*
 	Returns whetever a player can still do a play, or is basically locked because no plays possible anymore.
 */
@@ -489,6 +505,7 @@ bool StackMill::CanPlay() {
 };
 
 
+
 /*
 	Random AI / Computer Play.
 
@@ -498,7 +515,7 @@ std::pair<int8_t, int8_t> StackMill::AIRandomPlay() {
 	std::pair<int8_t, int8_t> Play = std::make_pair(-1, -1);
 	std::vector<int8_t> PossiblePlays;
 
-	switch(this->Phase((this->CurrentPlayer() - 1) == 1 ? StackMill::GameStone::White : StackMill::GameStone::Black)) {
+	switch(this->Phase((this->CPlayer == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black)) {
 		/* Player Phase: Set a stone to a free spot. */
 		case StackMill::Phases::Set:
 
@@ -559,6 +576,372 @@ std::pair<int8_t, int8_t> StackMill::AIRandomPlay() {
 			PossiblePlays.shrink_to_fit();
 			if (!PossiblePlays.empty()) Play.first = PossiblePlays[rand() % (int8_t)PossiblePlays.size()];
 			break;
+	};
+
+	return Play;
+};
+
+
+
+/*
+	An AI, that isn't completely random, in case something can cause a match, in that case it does a 50:50 base.
+
+	Returns a std::pair of first: Old Position (Stone Position), second: New Position.
+*/
+std::pair<int8_t, int8_t> StackMill::AI5050() {
+	std::pair<int8_t, int8_t> Play = std::make_pair(-1, -1);
+	std::vector<int8_t> PossiblePlays;
+
+	switch(this->Phase((this->CPlayer == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black)) {
+		/* Player Phase: Set a stone to a free spot. */
+		case StackMill::Phases::Set: {
+			bool Danger = false, CanMatch = false;
+			int8_t DangerIdx = -1, MatchIdx = -1;
+
+			for (int8_t Idx = 0; Idx < 24; Idx++) {
+				if (this->_Field[Idx] == StackMill::GameStone::None) {
+					PossiblePlays.push_back(Idx); // Since it is empty, push the possible plays back to the vector.
+
+					if (!Danger) {
+						/* Set the stone temporarely here to check for a match. */
+						this->_Field[Idx] = (this->CPlayer == 1 ? StackMill::GameStone::Black : StackMill::GameStone::White);
+
+						/* The opponent aka player has a dangerous situation for the Computer / AI, cause a match is possible with the next Stone. */
+						if (this->Match(Idx, this->_Field[Idx])) {
+							Danger = true, DangerIdx = Idx;
+						};
+
+						this->_Field[Idx] = StackMill::GameStone::None; // Reset again, because we don't play there actually.
+					};
+
+					if (!CanMatch) {
+						/* Set the stone temporarely here to check for a match. */
+						this->_Field[Idx] = (this->CPlayer == 1 ? StackMill::GameStone::White : StackMill::GameStone::Black);
+
+						/* The Computer / AI can do a match. */
+						if (this->Match(Idx, this->_Field[Idx])) {
+							CanMatch = true, MatchIdx = Idx;
+						};
+
+						this->_Field[Idx] = StackMill::GameStone::None; // Reset again, because we don't play there actually.
+					};
+				};
+			};
+
+			PossiblePlays.shrink_to_fit(); // Get rid of useless allocation.
+
+			/* If one of those fit, do 50:50 chance for a match or counter. */
+			bool MatchCounter = false, DangerCounter = false;
+				
+			if (CanMatch) MatchCounter = (rand() % 2 + 1) == 1;
+			if (Danger) DangerCounter = (rand() % 2 + 1) == 1;
+				
+			if (MatchCounter) Play.second = MatchIdx;
+			else if (DangerCounter) Play.second = DangerIdx;
+			else {
+				if (!PossiblePlays.empty()) Play.second = PossiblePlays[(rand() % (int8_t)PossiblePlays.size())];
+			};
+		};
+		break;
+
+		/* Player Phase: Move a stone for 1 spot. */
+		case StackMill::Phases::Move: {
+			std::vector<int8_t> OpponentPossiblePlays;
+			bool Danger = false, CanMatch = false;
+			std::pair<int8_t, int8_t> DangerIdx = { -1, -1 };
+			std::pair<int8_t, int8_t> MatchIdx = { -1, -1 }; // first: StonePos, second: MovePos.
+
+
+			/* Check all available Stones for play-abilities and push them to the PossiblePlays vector. */
+			for (int8_t Idx = 0; Idx < 9; Idx++) {
+				
+				/* Check for play-able positions for the Computer. */
+				if (this->Players[this->CPlayer == 2]->Position(Idx) > -1) {
+					if (!this->PlayablePositions(this->Players[this->CPlayer == 2]->Position(Idx), StackMill::Phases::Move).empty()) {
+						PossiblePlays.push_back(this->Players[this->CPlayer == 2]->Position(Idx));
+					};
+				};
+
+
+				/*
+					Do the same for the opponent, AKA: Player.
+					
+					this->CPlayer == 1, because the AI is usually Player 2 and with a check of Player 1, it would be false, hence it accesses the 0 index.
+				*/
+				if (this->Players[this->CPlayer == 1]->Position(Idx) > -1) {
+					if (!this->PlayablePositions(this->Players[this->CPlayer == 1]->Position(Idx), this->Players[this->CPlayer == 1]->Phase()).empty()) {
+						OpponentPossiblePlays.push_back(this->Players[this->CPlayer == 1]->Position(Idx));
+					};
+				};
+			};
+
+			/* No useless allocation. */
+			PossiblePlays.shrink_to_fit(); OpponentPossiblePlays.shrink_to_fit();
+
+
+			/* Go through all possibilities for the Computer. */
+			for (int8_t Idx = 0; Idx < (int8_t)PossiblePlays.size(); Idx++) {
+				const std::vector<int8_t> Checks = this->PlayablePositions(PossiblePlays[Idx], StackMill::Phases::Move);
+
+				/* Check for all possible positions. */
+				for (int8_t Idx2 = 0; Idx2 < (int8_t)Checks.size(); Idx2++) {
+
+					/* Temporarely move the stone to check if a match exist. */
+					this->_Field[Checks[Idx2]] = this->_Field[PossiblePlays[Idx]];
+					this->_Field[PossiblePlays[Idx]] = StackMill::GameStone::None;
+
+					/* The Computer / AI can do a match. */
+					if (this->Match(Checks[Idx2], this->_Field[Checks[Idx2]])) {
+						CanMatch = true, MatchIdx = { PossiblePlays[Idx], Checks[Idx2] };
+					};
+
+					/* Reset temporarely stuff. */
+					this->_Field[PossiblePlays[Idx]] = this->_Field[Checks[Idx2]];
+					this->_Field[Checks[Idx2]] = StackMill::GameStone::None;
+				}
+
+				if (CanMatch) break;
+			};
+
+			/* Do the same for the Opponent AKA Player. */
+			for (int8_t Idx = 0; Idx < (int8_t)OpponentPossiblePlays.size(); Idx++) {
+				const std::vector<int8_t> Checks = this->PlayablePositions(OpponentPossiblePlays[Idx], this->Players[this->CPlayer == 1]->Phase());
+
+				/* Check for all possible positions. */
+				for (int8_t Idx2 = 0; Idx2 < (int8_t)Checks.size(); Idx2++) {
+
+					/* Temporarely move the stone to check if a match exist. */
+					this->_Field[Checks[Idx2]] = this->_Field[OpponentPossiblePlays[Idx]];
+					this->_Field[OpponentPossiblePlays[Idx]] = StackMill::GameStone::None;
+
+					/* The Opponent AKA Player can do a match. */
+					if (this->Match(Checks[Idx2], this->_Field[Checks[Idx2]])) {
+						Danger = true, DangerIdx = { OpponentPossiblePlays[Idx], Checks[Idx2] };
+					};
+
+					/* Reset temporarely stuff. */
+					this->_Field[OpponentPossiblePlays[Idx]] = this->_Field[Checks[Idx2]];
+					this->_Field[Checks[Idx2]] = StackMill::GameStone::None;
+				}
+
+				if (Danger) break;
+			};
+
+			/* If one of those fit, do 50:50 chance for a match or counter. */
+			bool MatchCounter = false, DangerCounter = false;
+
+			if (CanMatch) MatchCounter = (rand() % 2 + 1) == 1;
+			if (Danger) DangerCounter = (rand() % 2 + 1) == 1;
+
+			if (MatchCounter) Play = MatchIdx; // 100% Match.
+
+			/* Here is an exception, trying to block the Stone if possible. */
+			else if (DangerCounter) {
+				bool CanBlock = false;
+
+				/* Go through all possibilities for the Computer. */
+				for (int8_t Idx = 0; Idx < (int8_t)PossiblePlays.size(); Idx++) {
+					const std::vector<int8_t> Checks = this->PlayablePositions(PossiblePlays[Idx], StackMill::Phases::Move);
+
+					/* Check for all possible positions. */
+					for (int8_t Idx2 = 0; Idx2 < (int8_t)Checks.size(); Idx2++) {
+						if (Checks[Idx2] == DangerIdx.second) {
+							MatchIdx = { PossiblePlays[Idx], Checks[Idx2] };
+							CanBlock = true;
+							break;
+						};
+					};
+
+					if (CanBlock) break;
+				};
+
+				if (CanBlock) Play = MatchIdx;
+
+			} else {
+				/* If not empty, set randomly. */
+				if (!PossiblePlays.empty()) {
+					Play.first = PossiblePlays[rand() % (int8_t)PossiblePlays.size()];
+
+					/* Do the same as above.. but for the new position for that stone. */
+					PossiblePlays = this->PlayablePositions(Play.first, StackMill::Phases::Move);
+					PossiblePlays.shrink_to_fit();
+					if (!PossiblePlays.empty()) Play.second = PossiblePlays[rand() % (int8_t)PossiblePlays.size()];
+				};
+			};
+		};
+		break;
+
+		/* Player Phase: Jump to a free spot. */
+		case StackMill::Phases::Jump: {
+			std::vector<int8_t> OpponentPossiblePlays;
+			bool Danger = false, CanMatch = false;
+			std::pair<int8_t, int8_t> DangerIdx = { -1, -1 };
+			std::pair<int8_t, int8_t> MatchIdx = { -1, -1 }; // first: StonePos, second: MovePos.
+
+
+			/* Check all available Stones for play-abilities and push them to the PossiblePlays vector. */
+			for (int8_t Idx = 0; Idx < 9; Idx++) {
+				
+				/* Check for play-able positions for the Computer. */
+				if (this->Players[this->CPlayer == 2]->Position(Idx) > -1) {
+					if (!this->PlayablePositions(this->Players[this->CPlayer == 2]->Position(Idx), StackMill::Phases::Jump).empty()) {
+						PossiblePlays.push_back(this->Players[this->CPlayer == 2]->Position(Idx));
+					};
+				};
+
+
+				/*
+					Do the same for the opponent, AKA: Player.
+					
+					this->CPlayer == 1, because the AI is usually Player 2 and with a check of Player 1, it would be false, hence it accesses the 0 index.
+				*/
+				if (this->Players[this->CPlayer == 1]->Position(Idx) > -1) {
+					if (!this->PlayablePositions(this->Players[this->CPlayer == 1]->Position(Idx), this->Players[this->CPlayer == 1]->Phase()).empty()) {
+						OpponentPossiblePlays.push_back(this->Players[this->CPlayer == 1]->Position(Idx));
+					};
+				};
+			};
+
+			/* No useless allocation. */
+			PossiblePlays.shrink_to_fit(); OpponentPossiblePlays.shrink_to_fit();
+
+
+			/* Go through all possibilities for the Computer. */
+			for (int8_t Idx = 0; Idx < (int8_t)PossiblePlays.size(); Idx++) {
+				const std::vector<int8_t> Checks = this->PlayablePositions(PossiblePlays[Idx], StackMill::Phases::Jump);
+
+				/* Check for all possible positions. */
+				for (int8_t Idx2 = 0; Idx2 < (int8_t)Checks.size(); Idx2++) {
+
+					/* Temporarely move the stone to check if a match exist. */
+					this->_Field[Checks[Idx2]] = this->_Field[PossiblePlays[Idx]];
+					this->_Field[PossiblePlays[Idx]] = StackMill::GameStone::None;
+
+					/* The Computer / AI can do a match. */
+					if (this->Match(Checks[Idx2], this->_Field[Checks[Idx2]])) {
+						CanMatch = true, MatchIdx = { PossiblePlays[Idx], Checks[Idx2] };
+					};
+
+					/* Reset temporarely stuff. */
+					this->_Field[PossiblePlays[Idx]] = this->_Field[Checks[Idx2]];
+					this->_Field[Checks[Idx2]] = StackMill::GameStone::None;
+				}
+
+				if (CanMatch) break;
+			};
+
+			/* Do the same for the Opponent AKA Player. */
+			for (int8_t Idx = 0; Idx < (int8_t)OpponentPossiblePlays.size(); Idx++) {
+				const std::vector<int8_t> Checks = this->PlayablePositions(OpponentPossiblePlays[Idx], this->Players[this->CPlayer == 1]->Phase());
+
+				/* Check for all possible positions. */
+				for (int8_t Idx2 = 0; Idx2 < (int8_t)Checks.size(); Idx2++) {
+
+					/* Temporarely move the stone to check if a match exist. */
+					this->_Field[Checks[Idx2]] = this->_Field[OpponentPossiblePlays[Idx]];
+					this->_Field[OpponentPossiblePlays[Idx]] = StackMill::GameStone::None;
+
+					/* The Opponent AKA Player can do a match. */
+					if (this->Match(Checks[Idx2], this->_Field[Checks[Idx2]])) {
+						Danger = true, DangerIdx = { OpponentPossiblePlays[Idx], Checks[Idx2] };
+					};
+
+					/* Reset temporarely stuff. */
+					this->_Field[OpponentPossiblePlays[Idx]] = this->_Field[Checks[Idx2]];
+					this->_Field[Checks[Idx2]] = StackMill::GameStone::None;
+				}
+
+				if (Danger) break;
+			};
+
+			/* If one of those fit, do 50:50 chance for a match or counter. */
+			bool MatchCounter = false, DangerCounter = false;
+
+			if (CanMatch) MatchCounter = (rand() % 2 + 1) == 1;
+			if (Danger) DangerCounter = (rand() % 2 + 1) == 1;
+
+			if (MatchCounter) Play = MatchIdx; // 100% Match.
+
+			/* Here is an exception, trying to block the Stone if possible. */
+			else if (DangerCounter) {
+				bool CanBlock = false;
+
+				/* Go through all possibilities for the Computer. */
+				for (int8_t Idx = 0; Idx < (int8_t)PossiblePlays.size(); Idx++) {
+					const std::vector<int8_t> Checks = this->PlayablePositions(PossiblePlays[Idx], StackMill::Phases::Jump);
+
+					/* Check for all possible positions. */
+					for (int8_t Idx2 = 0; Idx2 < (int8_t)Checks.size(); Idx2++) {
+						if (Checks[Idx2] == DangerIdx.second) {
+							MatchIdx = { PossiblePlays[Idx], Checks[Idx2] };
+							CanBlock = true;
+							break;
+						};
+					};
+
+					if (CanBlock) break;
+				};
+
+				if (CanBlock) Play = MatchIdx;
+
+			} else {
+				/* If not empty, set randomly. */
+				if (!PossiblePlays.empty()) {
+					Play.first = PossiblePlays[rand() % (int8_t)PossiblePlays.size()];
+
+					/* Do the same as above.. but for the new position for that stone. */
+					PossiblePlays = this->PlayablePositions(Play.first, StackMill::Phases::Jump);
+					PossiblePlays.shrink_to_fit();
+					if (!PossiblePlays.empty()) Play.second = PossiblePlays[rand() % (int8_t)PossiblePlays.size()];
+				};
+			};
+		};
+		break;
+	};
+
+	return Play;
+};
+
+
+
+/*
+	Remove Action of a Stone for the AI.
+	Priority is to remove stones that have as much stones together as possible.
+
+	Returns an int8_t of the position to remove.
+*/
+int8_t StackMill::AIStoneRemove() {
+	int8_t Play = -1;
+	std::vector<int8_t> Removeables = this->RemoveableStones((this->CPlayer == 1) ? StackMill::GameStone::Black : StackMill::GameStone::White);
+	std::vector<int8_t> MatchingStones;
+
+	for (int8_t Idx = 0; Idx < (int8_t)Removeables.size(); Idx++) {
+		MatchingStones.push_back(0); // Push back a 0.
+		std::vector<int8_t> Includes;
+
+		/* Check if the specified Stone index is included in any of the matches, if so, push that index back. */
+		for (int8_t Idx2 = 0; Idx2 < 16; Idx2++) {
+			if (this->Fields[Idx2].Stones[0] == Removeables[Idx] || this->Fields[Idx2].Stones[1] == Removeables[Idx] || this->Fields[Idx2].Stones[2] == Removeables[Idx]) {
+				Includes.push_back(Idx2);
+			};
+		};
+
+		Includes.shrink_to_fit(); // No need for useless allocation.
+
+		/* Now go check the amount of stones that are there. */
+		for (int8_t Idx2 = 0; Idx2 < (int8_t)Includes.size(); Idx2++) {
+			int8_t Temp = 0;
+
+			for (int8_t Idx3 = 0; Idx3 < 3; Idx3++) {
+				if (this->_Field[this->Fields[Includes[Idx2]].Stones[Idx3]] == ((this->CPlayer == 1) ? StackMill::GameStone::Black : StackMill::GameStone::White)) Temp++;
+			};
+
+			if (Temp > MatchingStones[Idx]) MatchingStones[Idx] = Temp;
+		};
+	};
+
+	for (int8_t Idx2 = 0; Idx2 < (int8_t)MatchingStones.size(); Idx2++) {
+		if (MatchingStones[Idx2] > Play) Play = Removeables[Idx2];
 	};
 
 	return Play;
