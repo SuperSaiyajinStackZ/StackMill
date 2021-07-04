@@ -75,7 +75,6 @@ public:
 private:
 	struct MatchField { int8_t Stones[3] = { 0 }; }; // 3 Stones.
 
-
 	/* Player class implementation of StackMill. */
 	class Player {
 	public:

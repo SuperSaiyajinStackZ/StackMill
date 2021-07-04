@@ -27,6 +27,7 @@
 #include "Common.hpp"
 #include "Tab.hpp"
 
+
 float Tab::Cubic = 0.0f; // Cubic Bezier animation for tab switches.
 int Tab::GameOffset = 0, Tab::SettingsOffset = 320, Tab::CreditsOffset = 640; // The tab draw-offset.
 bool Tab::TabSwitch = false; // If true, don't accept any input from the other components until the switch is over.
@@ -52,6 +53,7 @@ void Tab::Draw() {
 	Gui::DrawStringCentered(0, 2, 0.45f, TEXT_COLOR, "Settings", 100);
 	Gui::DrawStringCentered(106, 2, 0.45f, TEXT_COLOR, "Credits", 100);
 };
+
 
 void Tab::Handler() {
 	if (Tab::TabSwitch) this->HandleSwitch(); // If we switch Tabs, handle the switch.

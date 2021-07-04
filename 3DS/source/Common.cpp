@@ -26,6 +26,7 @@
 
 #include "Common.hpp"
 
+
 /* Some common helper thing, to handle touch position presses with the Structs::ButtonPos structure. */
 bool Common::Touching(const touchPosition T, const Structs::ButtonPos P) {
 	return (T.px >= P.x && T.px <= (P.x + P.w) && T.py >= P.y && T.py <= (P.y + P.h));

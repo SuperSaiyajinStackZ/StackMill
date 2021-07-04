@@ -28,6 +28,7 @@
 #include "GameTab.hpp"
 #include "Rules.hpp"
 
+
 void GameTab::NewGame() {
 	this->Preview.clear();
 	this->StartMode = true;
@@ -35,6 +36,7 @@ void GameTab::NewGame() {
 	this->SelectedStone = 0, this->Selection = 0, this->SelectionMode = 1;
 	this->RemoveMode = false;
 };
+
 
 void GameTab::Draw() {
 	StackMill3DS::App->GData->DrawSprite(sprites_field_idx, 50 + Tab::GameOffset, 20);
@@ -101,6 +103,7 @@ void GameTab::Up(int8_t &Slt) {
 	};
 };
 
+
 /* Goes a position down. */
 void GameTab::Down(int8_t &Slt) {
 	switch(Slt) {
@@ -130,6 +133,7 @@ void GameTab::Down(int8_t &Slt) {
 	};
 };
 
+
 /* Goes a position right. */
 void GameTab::Right(int8_t &Slt) {
 	switch(Slt) {
@@ -158,6 +162,7 @@ void GameTab::Right(int8_t &Slt) {
 		case 5: Slt = 4; break;
 	};
 };
+
 
 /* Goes a position left. */
 void GameTab::Left(int8_t &Slt) {
@@ -340,6 +345,7 @@ void GameTab::PlayerTurn() {
 		};
 	};
 
+
 	if (this->RemoveMode) this->RemoveAction(); // We are in the remove action.
 	else {
 		/* If Move / Jump Phase, try to go to stone selection. */
@@ -353,6 +359,7 @@ void GameTab::PlayerTurn() {
 				};
 			};
 		};
+
 
 		if (StackMill3DS::App->Down & KEY_TOUCH) {
 			for (int8_t Idx = 0; Idx < 24; Idx++) {
@@ -378,6 +385,7 @@ void GameTab::PlayerTurn() {
 						};
 					};
 
+
 					/* In case Pos and Stone Selection are the same, go back to Stone Selection. */
 					if (Idx == this->SelectedStone) {
 						if (!this->StartMode) {
@@ -389,6 +397,7 @@ void GameTab::PlayerTurn() {
 							break;
 						};
 					};
+
 
 					/* Check if the specific play can be done. */
 					if (StackMill3DS::App->Core->CanDoSpecifiedPlay(this->SelectedStone, Idx, StackMill3DS::App->Core->Phase((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black))) {
@@ -408,6 +417,7 @@ void GameTab::PlayerTurn() {
 								this->Jump();
 								break;
 						};
+
 
 						const StackMill::PlayStatus Status = StackMill3DS::App->Core->Play(this->SelectedStone, this->Selection);
 
@@ -438,7 +448,6 @@ void GameTab::PlayerTurn() {
 		};
 
 
-
 		if (StackMill3DS::App->Down & KEY_A) {
 			if (!this->ShowPointer) this->ShowPointer = true;
 
@@ -456,6 +465,7 @@ void GameTab::PlayerTurn() {
 					return;
 				};
 			};
+
 
 			/* In case Pos and Stone Selection are the same, go back to Stone Selection. */
 			if (this->Selection == this->SelectedStone) {
@@ -514,6 +524,7 @@ void GameTab::PlayerTurn() {
 	};
 };
 
+
 /* The AI Handler. */
 void GameTab::AITurn() {
 	this->Preview.clear();
@@ -549,6 +560,7 @@ void GameTab::AITurn() {
 				Status = true;
 			};
 	};
+
 
 	if (Status) {
 		const StackMill::PlayStatus PStatus = StackMill3DS::App->Core->Play(this->SelectedStone, this->Selection);
@@ -602,14 +614,14 @@ void GameTab::AITurn() {
 };
 
 
-
 void GameTab::Handler() {
 	if (Tab::TabSwitch) return; // No Input.
 
+	/* If Player 2, it's Player 2 (If 0) or AI's mode (If 1 or 2). */
 	if (StackMill3DS::App->Core->CurrentPlayer() == 2) {
 		if (SettingsTab::AI > 0) {
 			this->AITurn();
-			return;
+			return; // Return so we don't go to the Player Logic.
 		};
 	};
 
@@ -652,6 +664,7 @@ void GameTab::Move() {
 		};
 	};
 
+
 	/* If Direction is not -1, aka start and destination being the same, don't do this. */
 	if (Direction != -1) {
 		while(aptMainLoop() && !Done) {
@@ -666,7 +679,6 @@ void GameTab::Move() {
 
 			/* Draw the Stones. */
 			for (int8_t Idx = 0; Idx < 24; Idx++) {
-
 				/* Draw the Stone to animate. */
 				if (Idx == this->SelectedStone) {
 					switch(Direction) {
@@ -695,6 +707,7 @@ void GameTab::Move() {
 				};
 			};
 
+
 			StackMill3DS::App->GData->DrawSprite(sprites_help_idx, this->Help.x, this->Help.y);
 			C3D_FrameEnd(0);
 			Pos = std::lerp(Pos, ToMove + 0.1f, 0.1f); // cubic bezier animation for the Stone to move.
@@ -704,6 +717,7 @@ void GameTab::Move() {
 		};
 	};
 };
+
 
 /* Scale the stone out with cubic bezier animation. */
 void GameTab::Remove() {
@@ -722,7 +736,6 @@ void GameTab::Remove() {
 
 		/* Draw the Stones. */
 		for (int8_t Idx = 0; Idx < 24; Idx++) {
-
 			/* Draw the Stone to scale out. */
 			if (Idx == this->Selection) {
 				if (Scale >= 0.0f) {
@@ -737,8 +750,6 @@ void GameTab::Remove() {
 			};
 		};
 
-		StackMill3DS::App->GData->DrawSprite(sprites_help_idx, this->Help.x, this->Help.y);
-
 		/* Draw Side Stones. */
 		for (int8_t Idx = 0; Idx < 9; Idx++) {
 			if (StackMill3DS::App->Core->Position(StackMill::GameStone::White, Idx) == -1) {
@@ -749,13 +760,17 @@ void GameTab::Remove() {
 				StackMill3DS::App->GData->DrawStone(SettingsTab::StoneColors[1], (Idx % 2 == 0 ? 270 + Tab::GameOffset : 295 + Tab::GameOffset), 40 + (Idx / 2 * 30));
 			};
 		};
-		C3D_FrameEnd(0);
 
+
+		StackMill3DS::App->GData->DrawSprite(sprites_help_idx, this->Help.x, this->Help.y);
+		C3D_FrameEnd(0);
 		gspWaitForVBlank();
 		Scale = std::lerp(Scale, 1.1f, 0.1f); // cubic bezier animation for the Stone to remove.
+
 		if (Scale >= 1.0f) Done = true;
 	};
 };
+
 
 /* Scale the stone in with cubic bezier animation. */
 void GameTab::Place() {
@@ -774,7 +789,6 @@ void GameTab::Place() {
 
 		/* Draw the Stones. */
 		for (int8_t Idx = 0; Idx < 24; Idx++) {
-
 			/* Draw the to placed Stone. */
 			if (Idx == this->Selection) {
 				StackMill3DS::App->GData->DrawStone(SettingsTab::StoneColors[StackMill3DS::App->Core->CurrentPlayer() - 1], this->Fields[Idx].x, this->Fields[Idx].y, Scale, Scale);
@@ -786,8 +800,6 @@ void GameTab::Place() {
 				};
 			};
 		};
-
-		StackMill3DS::App->GData->DrawSprite(sprites_help_idx, this->Help.x, this->Help.y);
 
 		/* Side Stones. */
 		for (int8_t Idx = 0; Idx < 9; Idx++) {
@@ -822,12 +834,14 @@ void GameTab::Place() {
 			};
 		};
 
+		StackMill3DS::App->GData->DrawSprite(sprites_help_idx, this->Help.x, this->Help.y);
 		C3D_FrameEnd(0);
-
 		Scale = std::lerp(Scale, 1.1f, 0.1f); // cubic bezier animation for the Stone to place.
+
 		if (Scale >= 1.0f) Done = true;
 	};
 };
+
 
 /* Scale the old stone out and new stone in at the same time with cubic bezier animation. */
 void GameTab::Jump() {
@@ -846,7 +860,6 @@ void GameTab::Jump() {
 
 		/* Draw the Stones. */
 		for (int8_t Idx = 0; Idx < 24; Idx++) {
-
 			/* Draw the new positioned Stone. */
 			if (Idx == this->Selection) {
 				StackMill3DS::App->GData->DrawStone(SettingsTab::StoneColors[StackMill3DS::App->Core->CurrentPlayer() - 1], this->Fields[Idx].x, this->Fields[Idx].y, Scale, Scale);
@@ -863,8 +876,6 @@ void GameTab::Jump() {
 			};
 		};
 
-		StackMill3DS::App->GData->DrawSprite(sprites_help_idx, this->Help.x, this->Help.y);
-
 		/* Draw Side Stones. */
 		for (int8_t Idx = 0; Idx < 9; Idx++) {
 			if (StackMill3DS::App->Core->Position(StackMill::GameStone::White, Idx) == -1) {
@@ -875,9 +886,12 @@ void GameTab::Jump() {
 				StackMill3DS::App->GData->DrawStone(SettingsTab::StoneColors[1], (Idx % 2 == 0 ? 270 + Tab::GameOffset : 295 + Tab::GameOffset), 40 + (Idx / 2 * 30));
 			};
 		};
-		C3D_FrameEnd(0);
 
+
+		StackMill3DS::App->GData->DrawSprite(sprites_help_idx, this->Help.x, this->Help.y);
+		C3D_FrameEnd(0);
 		Scale = std::lerp(Scale, 1.1f, 0.1f); // cubic bezier animation for the Stone to "jump".
+
 		if (Scale >= 1.0f) Done = true;
 	};
 };
@@ -932,6 +946,7 @@ void GameTab::PopupPrompt() {
 				break;
 
 		};
+
 
 		Gui::DrawStringCentered(0, 70 + PromptPos, 0.5f, TEXT_COLOR, "Do you want to play another match?");
 

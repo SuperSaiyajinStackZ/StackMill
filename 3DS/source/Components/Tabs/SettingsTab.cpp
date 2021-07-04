@@ -27,8 +27,10 @@
 #include "Common.hpp"
 #include "SettingsTab.hpp"
 
+
 int8_t SettingsTab::StoneColors[3] = { 1, 0, 4 }; // 0: Player 1, 1: Player 2, 2: Preview Color.
 int8_t SettingsTab::AI = 1;
+
 
 void SettingsTab::Draw() {
 	/* Player 1 Stone Color. */
@@ -70,6 +72,7 @@ void SettingsTab::Draw() {
 	StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->XPos[4 + SettingsTab::AI] - 15 + 6 + Tab::SettingsOffset, 216);
 	if (this->SelectedOption == 3) Gui::drawGrid(5 + Tab::SettingsOffset, 190, 310, 45, BAR_COLOR_OUTLINE);
 };
+
 
 void SettingsTab::Handler() {
 	if (Tab::TabSwitch) return;

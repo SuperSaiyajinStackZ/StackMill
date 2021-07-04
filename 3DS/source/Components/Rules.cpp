@@ -27,6 +27,7 @@
 #include "Common.hpp"
 #include "Rules.hpp"
 
+
 void Rules::DrawPages(const Rules::HelperPage PG, const int AddOffs) {
 	switch(PG) {
 		case Rules::HelperPage::Main:
@@ -167,6 +168,7 @@ void Rules::DrawTop() {
 	if (StackMill3DS::App->FadeAlpha > 0) Gui::Draw_Rect(0, 0, 400, 240, C2D_Color32(0, 0, 0, StackMill3DS::App->FadeAlpha));
 };
 
+
 void Rules::DrawBottom() {
 	StackMill3DS::App->GData->DrawBottom();
 
@@ -235,8 +237,10 @@ void Rules::HelperHandler(uint32_t &Down, touchPosition &T) {
 	};
 };
 
+
 bool Rules::CanGoNext() const { return this->Page != Rules::HelperPage::Instructions; };
 bool Rules::CanGoPrev() const { return this->Page != Rules::HelperPage::Main; };
+
 
 /* Switches the pages. */
 void Rules::PageHandler() {
@@ -275,7 +279,6 @@ void Rules::PageSwitch() {
 		};
 	};
 };
-
 
 
 void Rules::Handler() {

@@ -28,8 +28,10 @@
 #include "GFXData.hpp"
 #include "screenCommon.hpp"
 
+
 GFXData::GFXData() { Gui::loadSheet("romfs:/gfx/sprites.t3x", this->Sprites); };
 GFXData::~GFXData() { Gui::unloadSheet(this->Sprites); };
+
 
 void GFXData::DrawTop() {
 	Gui::ScreenDraw(Top);
@@ -38,23 +40,28 @@ void GFXData::DrawTop() {
 	Gui::Draw_Rect(0, 21, 400, 219, BG_COLOR);
 };
 
+
 void GFXData::DrawBottom() {
 	Gui::ScreenDraw(Bottom);
 	Gui::Draw_Rect(0, 0, 320, 240, BG_COLOR);
 };
 
+
 void GFXData::DrawStone(const int8_t StoneColor, const int X, const int Y, const float ScaleX, const float ScaleY) {
 	Gui::DrawSprite(this->Sprites, sprites_0_idx + StoneColor, X, Y, ScaleX, ScaleY);
 };
+
 
 void GFXData::DrawPlayer(const bool StackZ, const int X, const int Y) {
 	Gui::DrawSprite(this->Sprites, sprites_border_0_idx + (SettingsTab::StoneColors[(StackZ ? 0 : 1)]), X, Y);
 	Gui::DrawSprite(this->Sprites, (StackZ ? sprites_StackZ_idx : sprites_Stackie_idx), X, Y);
 };
 
+
 void GFXData::DrawSprite(const size_t Idx, const int X, const int Y) {
 	Gui::DrawSprite(this->Sprites, Idx, X, Y);
 };
+
 
 /*
 	Draw the Corner Edges, being used for the Rules Component.

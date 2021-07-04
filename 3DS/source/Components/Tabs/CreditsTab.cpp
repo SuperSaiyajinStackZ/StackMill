@@ -27,6 +27,7 @@
 #include "Common.hpp"
 #include "CreditsTab.hpp"
 
+
 void CreditsTab::Draw() {
 	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 35, 0.5f, TEXT_BG_COLOR, "StackMill developed by SuperSaiyajinStackZ.");
 	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 55, 0.5f, TEXT_BG_COLOR, "StackMill-Core: SuperSaiyajinStackZ");

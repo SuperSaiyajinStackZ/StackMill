@@ -47,7 +47,6 @@ private:
 	void PageHandler();
 	void DrawPages(const Rules::HelperPage PG, const int AddOffs = 0);
 	bool PageButtonHandle(const int PG);
-	
 
 	float Cubic = 0.0f;
 	int PageOffs[7] = { 0, 400, 800, 1200, 1600, 2000, 2400 }, BackupOffs[7] = { 0, 400, 800, 1200, 1600, 2000, 2400 }, ToSwipe = 0;

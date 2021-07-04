@@ -28,7 +28,9 @@
 #include "Splash.hpp"
 #include "StackMill3DS.hpp"
 
+
 std::unique_ptr<StackMill3DS> StackMill3DS::App = nullptr;
+
 
 StackMill3DS::StackMill3DS() {
 	gfxInitDefault();
@@ -46,7 +48,9 @@ StackMill3DS::StackMill3DS() {
 	this->Core = std::make_unique<StackMill>(true); // Current Game initializer.
 };
 
+
 void StackMill3DS::DrawTab() { this->_Tab->Draw(); };
+
 
 void StackMill3DS::DrawTop() {
 	/* Draw the top screen content. */
@@ -122,6 +126,7 @@ void StackMill3DS::Draw() {
 	if (this->FadeAlpha > 0) Gui::Draw_Rect(0, 0, 320, 240, C2D_Color32(0, 0, 0, this->FadeAlpha));
 	C3D_FrameEnd(0);
 };
+
 
 int StackMill3DS::Handler() {
 	while(aptMainLoop() && this->Running) {

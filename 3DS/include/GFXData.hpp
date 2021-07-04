@@ -37,7 +37,6 @@
 #define TEXT_COLOR			C2D_Color32(255, 255, 255, 200)
 #define TEXT_BG_COLOR		C2D_Color32(0, 0, 0, 200)
 
-
 class GFXData {
 public:
 	GFXData();

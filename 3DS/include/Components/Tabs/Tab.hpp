@@ -41,7 +41,6 @@ public:
 private:
 	bool SwipeDir = false;
 	int8_t TabsToGo = 0, NewTab = 0;
-
 	int SOffs = 320, GOffs = 0, COffs = 640;
 
 	static constexpr Structs::ButtonPos Tabs[3] = {
@@ -49,7 +48,6 @@ private:
 		{ 107, 0, 106, 20 },
 		{ 213, 0, 106, 20 }
 	};
-
 
 	void SwitchTabs(const int8_t TabIdx);
 	void HandleSwitch();

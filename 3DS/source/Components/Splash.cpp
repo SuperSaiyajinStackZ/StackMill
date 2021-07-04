@@ -27,6 +27,7 @@
 #include "Common.hpp"
 #include "Splash.hpp"
 
+
 void Splash::Handler() {
 	while(aptMainLoop() && !this->Done) {
 		C2D_TargetClear(Top, C2D_Color32(0, 0, 0, 0));
