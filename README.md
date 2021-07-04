@@ -1,6 +1,6 @@
 # StackMill
 <p align="center">
-	<a href="https://github.com/SuperSaiyajinStackZ/StackMill/releases/latest"><img src="https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/logos/banner.png"></a><br>
+	<a href="https://github.com/SuperSaiyajinStackZ/StackMill/releases/latest"><img src="https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/logos/v0.1.0-v0.2.0/banner.png"></a><br>
 	<b>A clone of the mill game for Nintendo 3DS.</b><br>
 </p>
 
@@ -16,7 +16,7 @@ StackMill includes the following features right now:
 
 * Select a color from 10 for the Stones from Player 1, Player 2 and a highlighted color for possible plays.
 
-* Play together with a friend on a single console, or with a random Computer / AI. The AI is enabled by default, so if you want to play with a friend, disable it in the second tab `Settings`, so that `Using Random Computer AI` has the Red Stone.
+* Play together with a friend on a single console, with a random Computer / AI or with a 50:50 Computer / AI. The random AI is enabled by default, so if you want to play with a friend, disable it in the second tab `Settings`, so that `Computer Opponent` has the Red Stone.
 
 ## Screenshots
 
