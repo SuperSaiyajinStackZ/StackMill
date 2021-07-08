@@ -36,14 +36,13 @@ public:
 	void Draw();
 	void Handler();
 
-	bool RemoveMode = false; // Accessible for the StackMill3DS class.
+	static std::vector<int8_t> Preview; // Static for the Import | Export Option.
 private:
 	void NewGame();
 
 	bool ShowPointer = true;
 	bool StoneSelect = false, StartMode = true;
 	int8_t Selection = 0, SelectedStone = 0, SelectionMode = 1, Winner = 0;
-	std::vector<int8_t> Preview;
 
 	void Up(int8_t &Slt);
 	void Down(int8_t &Slt);
@@ -62,7 +61,7 @@ private:
 	void Jump(); // Jumping.
 
 	void PopupPrompt();
-	
+
 	static constexpr Structs::ButtonPos Help = { 13, 202, 28, 33 };
 	static constexpr Structs::ButtonPos Prompt[2] = {
 		{ 24, 140, 124, 48 },

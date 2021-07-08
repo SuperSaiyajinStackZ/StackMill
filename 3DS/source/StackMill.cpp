@@ -26,9 +26,25 @@
 
 #include "StackMill.hpp"
 #include <time.h>
-
+#include <unistd.h> // access().
 
 /*
+	Game Data Structure.
+
+	0x0: Current Player. ( 0x1 / 0x2 ).
+	0x1: Removing a Stone phase? ( 0x0 for false, 0x1 for true ).
+	0x2 - 0x19: Field stones. ( 0x0: Unused / Free, 0x1: White / Player 1, 0x2: Black / Player 2 ).
+	0x1A - 0x22: Player 1 Stones. ( 0x0 - 0x18: Position; 0x19: Not played, 0x1A: Gone ).
+	0x23: Player 1 Phase. ( 0x0: Set, 0x1: Move, 0x2: Jump ).
+	0x24 - 0x2C: Player 2 Stones. ( 0x0 - 0x18: Position; 0x19: Not played, 0x1A: Gone ).
+	0x2D: Player 2 Phase. ( 0x0: Set, 0x1: Move, 0x2: Jump ).
+
+	GameDataSize: 0x2E --> 46 Bytes.
+*/
+
+/*
+	Game Field Indexes visually here.
+
 	0			1			2
 		8		9		10
 			16	17	18
@@ -50,7 +66,9 @@ void StackMill::LoadGame(const bool GenerateSeed) {
 	for (int8_t Idx = 0; Idx < 24; Idx++) this->_Field[Idx] = StackMill::GameStone::None;
 
 	this->CPlayer = 1; // Current Player is ALWAYS the White (1) one.
+	this->RemovePhase = false;
 	if (GenerateSeed) srand(time(nullptr));
+	this->GameValid = true;
 };
 
 
@@ -74,7 +92,7 @@ bool StackMill::CanDoSpecifiedPlay(const int8_t OldPos, const int8_t NewPos, con
 		case StackMill::Phases::Move: {
 			/* Get the possible play positions. */
 			const std::vector<int8_t> PossiblePositions = this->PlayablePositions(OldPos, StackMill::Phases::Move);
-			
+
 			if (!PossiblePositions.empty()) {
 				/* Go through all the Positions and check if the New Position is included. */
 				for (int8_t Idx = 0; Idx < (int8_t)PossiblePositions.size(); Idx++) {
@@ -376,7 +394,7 @@ std::vector<int8_t> StackMill::RemoveableStones(const StackMill::GameStone Stone
 				if (this->_Field[this->Fields[PotentialMills[Idx2]].Stones[0]] == Stone && // Check first Match position.
 					this->_Field[this->Fields[PotentialMills[Idx2]].Stones[1]] == Stone && // Check second Match position.
 					this->_Field[this->Fields[PotentialMills[Idx2]].Stones[2]] == Stone) { // Check third Match position.
-						Contains = true; // If it contains it, set that it contains it. 
+						Contains = true; // If it contains it, set that it contains it.
 						break;
 				};
 			};
@@ -417,7 +435,7 @@ StackMill::PlayStatus StackMill::Play(const int8_t OldPos, const int8_t NewPos) 
 	/* Player Phase: Set a stone to a free spot. */
 	if (this->Players[this->CPlayer - 1]->Phase() == StackMill::Phases::Set) {
 		if (this->CanDoSpecifiedPlay(OldPos, NewPos, StackMill::Phases::Set)) { // Ensure we can actually play it.
-				
+
 			/* Set Position from the Players stones to the setted one, and set the Field to the color of the Player. */
 			this->Players[this->CPlayer - 1]->Position(this->Players[this->CPlayer - 1]->Idx(), NewPos);
 			this->_Field[NewPos] = (this->CPlayer == 1 ? StackMill::GameStone::White : StackMill::GameStone::Black);
@@ -622,10 +640,10 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 
 			/* If one of those fit, do 50:50 chance for a match or counter. */
 			bool MatchCounter = false, DangerCounter = false;
-				
+
 			if (CanMatch) MatchCounter = (rand() % 2 + 1) == 1;
 			if (Danger) DangerCounter = (rand() % 2 + 1) == 1;
-				
+
 			if (MatchCounter) Play.second = MatchIdx;
 			else if (DangerCounter) Play.second = DangerIdx;
 			else {
@@ -653,7 +671,7 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 
 				/*
 					Do the same for the opponent, AKA: Player.
-					
+
 					this->CPlayer == 1, because the AI is usually Player 2 and with a check of Player 1, it would be false, hence it accesses the 0 index.
 				*/
 				if (this->Players[this->CPlayer == 1]->Position(Idx) > -1) {
@@ -777,7 +795,7 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 
 				/*
 					Do the same for the opponent, AKA: Player.
-					
+
 					this->CPlayer == 1, because the AI is usually Player 2 and with a check of Player 1, it would be false, hence it accesses the 0 index.
 				*/
 				if (this->Players[this->CPlayer == 1]->Position(Idx) > -1) {
@@ -927,4 +945,183 @@ int8_t StackMill::AIStoneRemove() {
 	};
 
 	return Play;
+};
+
+
+bool StackMill::ImportGame(const std::string &Path) {
+	this->GameValid = false;
+	if (access(Path.c_str(), F_OK) != 0) return false; // File doesn't exist.
+
+	FILE *GameData = fopen(Path.c_str(), "rb");
+
+	if (GameData) {
+		fseek(GameData, 0, SEEK_END);
+		const uint32_t GameSize = ftell(GameData);
+		fseek(GameData, 0, SEEK_SET);
+
+		if (GameSize == this->DataSize) {
+			std::unique_ptr<uint8_t[]> Data = std::make_unique<uint8_t[]>(this->DataSize);
+			fread(Data.get(), 1, this->DataSize, GameData);
+
+
+			if (Data[0x0] > 0x0 && Data[0x0] < 3) this->CPlayer = Data[0x0];
+			else this->CPlayer = 0x1;
+
+			this->RemovePhase = Data[0x1];
+
+			/* Get the GameField Stones. */
+			for (int8_t Idx = 0; Idx < 24; Idx++) {
+				switch(Data[0x2 + Idx]) {
+					case 0x0:
+					default:
+						this->_Field[Idx] = StackMill::GameStone::None;
+						break;
+
+					case 0x1:
+						this->_Field[Idx] = StackMill::GameStone::White;
+						break;
+
+					case 0x2:
+						this->_Field[Idx] = StackMill::GameStone::Black;
+						break;
+				};
+			};
+
+			/* Init Player. */
+			for (int8_t Idx = 0; Idx < 2; Idx++) this->Players[Idx] = std::make_unique<StackMill::Player>();
+
+			/* Get Player 1 Stones. */
+			for (int8_t Idx = 0; Idx < 9; Idx++) {
+				if (Data[0x1A + Idx] < 24) this->Players[0]->Position(Idx, Data[0x1A + Idx]);
+				else if (Data[0x1A + Idx] == 0x19) this->Players[0]->Position(Idx, -1);
+				else if (Data[0x1A + Idx] == 0x1A) this->Players[0]->Position(Idx, -2);
+			};
+
+			/* Get Player 1 Phase. */
+			switch(Data[0x23]) {
+				case 0: // Set.
+					this->Players[0]->Phase(StackMill::Phases::Set);
+					break;
+
+				case 1: // Move.
+					this->Players[0]->Phase(StackMill::Phases::Move);
+					break;
+
+				case 2: // Jump.
+					this->Players[0]->Phase(StackMill::Phases::Jump);
+					break;
+			};
+
+
+			/* Get Player 2 Stones. */
+			for (int8_t Idx = 0; Idx < 9; Idx++) {
+				if (Data[0x24 + Idx] < 24) this->Players[1]->Position(Idx, Data[0x24 + Idx]);
+				else if (Data[0x24 + Idx] == 0x19) this->Players[1]->Position(Idx, -1);
+				else if (Data[0x24 + Idx] == 0x1A) this->Players[1]->Position(Idx, -2);
+			};
+
+			/* Get Player 2 Phase. */
+			switch(Data[0x2D]) {
+				case 0: // Set.
+					this->Players[1]->Phase(StackMill::Phases::Set);
+					break;
+
+				case 1: // Move.
+					this->Players[1]->Phase(StackMill::Phases::Move);
+					break;
+
+				case 2: // Jump.
+					this->Players[1]->Phase(StackMill::Phases::Jump);
+					break;
+			};
+
+			this->GameValid = true;
+		};
+
+		fclose(GameData);
+	};
+
+	return this->GameValid;
+};
+
+
+bool StackMill::ExportGame(const std::string &Path) {
+	std::unique_ptr<uint8_t[]> Data = std::make_unique<uint8_t[]>(this->DataSize); // Allocate data of 0x2E.
+
+	Data[0x0] = this->CPlayer;
+	Data[0x1] = this->RemovePhase;
+
+	/* Get the GameField Stones. */
+	for (int8_t Idx = 0; Idx < 24; Idx++) {
+		switch(this->_Field[Idx]) {
+			case StackMill::GameStone::None:
+				Data[0x2 + Idx] = 0x0;
+				break;
+
+			case StackMill::GameStone::White:
+				Data[0x2 + Idx] = 0x1;
+				break;
+
+			case StackMill::GameStone::Black:
+				Data[0x2 + Idx] = 0x2;
+				break;
+		};
+	};
+
+
+	/* Get Player 1 Stones. */
+	for (int8_t Idx = 0; Idx < 9; Idx++) {
+		if (this->Players[0]->Position(Idx) >= 0 && this->Players[0]->Position(Idx) < 24) Data[0x1A + Idx] = this->Players[0]->Position(Idx);
+		else if (this->Players[0]->Position(Idx) == -1) Data[0x1A + Idx] = 0x19;
+		else if (this->Players[0]->Position(Idx) == -2) Data[0x1A + Idx] = 0x1A;
+	};
+
+	/* Get Player 1 Phase. */
+	switch(this->Players[0]->Phase()) {
+		case StackMill::Phases::Set: // Set.
+			Data[0x23] = 0x0;
+			break;
+
+		case StackMill::Phases::Move: // Move.
+			Data[0x23] = 0x1;
+			break;
+
+		case StackMill::Phases::Jump: // Jump.
+			Data[0x23] = 0x2;
+			break;
+	};
+
+
+	/* Get Player 2 Stones. */
+	for (int8_t Idx = 0; Idx < 9; Idx++) {
+		if (this->Players[1]->Position(Idx) >= 0 && this->Players[1]->Position(Idx) < 24) Data[0x24 + Idx] = this->Players[1]->Position(Idx);
+		else if (this->Players[1]->Position(Idx) == -1) Data[0x24 + Idx] = 0x19;
+		else if (this->Players[1]->Position(Idx) == -2) Data[0x24 + Idx] = 0x1A;
+	};
+
+	/* Get Player 2 Phase. */
+	switch(this->Players[1]->Phase()) {
+		case StackMill::Phases::Set: // Set.
+			Data[0x2D] = 0x0;
+			break;
+
+		case StackMill::Phases::Move: // Move.
+			Data[0x2D] = 0x1;
+			break;
+
+		case StackMill::Phases::Jump: // Jump.
+			Data[0x2D] = 0x2;
+			break;
+	};
+
+
+	/* Handle Writing to the GameDataFile. */
+	FILE *GameOut = fopen(Path.c_str(), "wb");
+	if (GameOut) {
+		fwrite(Data.get(), 1, this->DataSize, GameOut);
+		fclose(GameOut);
+		return true;
+	};
+
+	return false;
 };

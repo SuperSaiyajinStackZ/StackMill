@@ -24,42 +24,11 @@
 *         reasonable ways as different from the original version.
 */
 
-#ifndef _STACKMILL_3DS_HPP
-#define _STACKMILL_3DS_HPP
-
-#include "CreditsTab.hpp"
-#include "GFXData.hpp"
-#include "GameTab.hpp"
 #include "LangHandler.hpp"
-#include "SettingsTab.hpp"
-#include "StackMill.hpp"
-#include "Tab.hpp"
-#include <3ds.h>
 
-class StackMill3DS {
-public:
-	enum class Tabs : int8_t { Game = 0, Settings = 1, Credits = 2 };
-	StackMill3DS();
-	int Handler();
-	void Draw();
-	void DrawTop();
-	void DrawTab();
 
-	static std::unique_ptr<StackMill3DS> App;
-	std::unique_ptr<GFXData> GData = nullptr;
-	std::unique_ptr<LangHandler> LH = nullptr;
-	std::unique_ptr<StackMill> Core = nullptr;
-	Tabs ActiveTab = Tabs::Game;
+LangHandler::LangHandler(const LangHandler::Langs Lng) { this->LoadLang(Lng); };
+void LangHandler::LoadLang(const LangHandler::Langs Lng) { this->ActiveLang = Lng; };
 
-	uint32_t Down = 0, Repeat = 0;
-	touchPosition T;
-	bool Running = true;
-	uint8_t FadeAlpha = 255;
-private:
-	std::unique_ptr<GameTab> Game = nullptr;
-	std::unique_ptr<SettingsTab> Settings = nullptr;
-	std::unique_ptr<Tab> _Tab = nullptr;
-	std::unique_ptr<CreditsTab> Credits = nullptr;
-};
 
-#endif
+std::string LangHandler::Translation(const LangHandler::Strings STR) const { return this->TranslationStrings[(int8_t)this->ActiveLang][(int8_t)STR]; };

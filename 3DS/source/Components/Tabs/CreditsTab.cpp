@@ -29,10 +29,10 @@
 
 
 void CreditsTab::Draw() {
-	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 35, 0.5f, TEXT_BG_COLOR, "StackMill developed by SuperSaiyajinStackZ.");
-	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 55, 0.5f, TEXT_BG_COLOR, "StackMill-Core: SuperSaiyajinStackZ");
-	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 70, 0.5f, TEXT_BG_COLOR, "Graphics: SuperSaiyajinStackZ");
-	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 85, 0.5f, TEXT_BG_COLOR, "Universal-Core: Universal-Team");
+	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 35, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::DevBy));
+	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 55, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::SmilCore));
+	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 70, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Graphics));
+	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 85, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::UnivCore));
 
 	StackMill3DS::App->GData->DrawSprite(sprites_StackZ_idx, 110 + Tab::CreditsOffset, 105);
 };

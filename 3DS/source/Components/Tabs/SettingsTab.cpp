@@ -30,52 +30,176 @@
 
 int8_t SettingsTab::StoneColors[3] = { 1, 0, 4 }; // 0: Player 1, 1: Player 2, 2: Preview Color.
 int8_t SettingsTab::AI = 1;
+bool SettingsTab::Swipe = false;
 
 
-void SettingsTab::Draw() {
-	/* Player 1 Stone Color. */
-	Gui::DrawStringCentered(0 + Tab::SettingsOffset, 25, 0.5f, TEXT_BG_COLOR, "Player 1 Stone Color");
-	for (int8_t Idx = 0; Idx < 10; Idx++) {
-		StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 45);
+void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
+	if (AddOffs > -240 && AddOffs < 240) {
+		switch(M) {
+			case SettingsTab::SubMenu::Main:
+				Gui::Draw_Rect(this->MainPos[0].x + Tab::SettingsOffset, this->MainPos[0].y + AddOffs, this->MainPos[0].w, this->MainPos[0].h, BAR_COLOR_OUTLINE);
+				Gui::DrawStringCentered(Tab::SettingsOffset, this->MainPos[0].y + 10 + AddOffs, 0.5f, TEXT_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::GameSettings), 135);
+
+				Gui::Draw_Rect(this->MainPos[1].x + Tab::SettingsOffset, this->MainPos[1].y + AddOffs, this->MainPos[1].w, this->MainPos[1].h, BAR_COLOR_OUTLINE);
+				Gui::DrawStringCentered(Tab::SettingsOffset, this->MainPos[1].y + 10 + AddOffs, 0.5f, TEXT_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Language), 135);
+
+				Gui::Draw_Rect(this->MainPos[2].x + Tab::SettingsOffset, this->MainPos[2].y + AddOffs, this->MainPos[2].w, this->MainPos[2].h, BAR_COLOR_OUTLINE);
+				Gui::DrawStringCentered(Tab::SettingsOffset, this->MainPos[2].y + 10 + AddOffs, 0.5f, TEXT_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::ImportExport), 135);
+
+				/* Selector. */
+				StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, 220 + Tab::SettingsOffset, this->MainPos[0].y - 5 + (this->SelectedOption * 60) + AddOffs);
+				break;
+
+
+			/* Game Settings. */
+			case SettingsTab::SubMenu::GameSettings:
+				/* Player 1 Stone Color. */
+				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 25 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Player1Color));
+				for (int8_t Idx = 0; Idx < 10; Idx++) {
+					StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 45 + AddOffs);
+				};
+
+				StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->XPos[SettingsTab::StoneColors[0]] + 6 + Tab::SettingsOffset, 51 + AddOffs);
+				if (this->SelectedOption == 0) Gui::drawGrid(5 + Tab::SettingsOffset, 25 + AddOffs, 310, 50, BAR_COLOR_OUTLINE);
+
+				/* Player 2 Stone Color. */
+				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 80 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Player2Color));
+				for (int8_t Idx = 0; Idx < 10; Idx++) {
+					StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 100 + AddOffs);
+				};
+
+				StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->XPos[SettingsTab::StoneColors[1]] + 6 + Tab::SettingsOffset, 106 + AddOffs);
+				if (this->SelectedOption == 1) Gui::drawGrid(5 + Tab::SettingsOffset, 80 + AddOffs, 310, 50, BAR_COLOR_OUTLINE);
+
+				/* Possibly Play Color. */
+				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 135 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::HighlightColor));
+				for (int8_t Idx = 0; Idx < 10; Idx++) {
+					StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 155 + AddOffs);
+				};
+
+				StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->XPos[SettingsTab::StoneColors[2]] + 6 + Tab::SettingsOffset, 161 + AddOffs);
+				if (this->SelectedOption == 2) Gui::drawGrid(5 + Tab::SettingsOffset, 135 + AddOffs, 310, 50, BAR_COLOR_OUTLINE);
+
+				/* AI. */
+				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 190 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Computer));
+				StackMill3DS::App->GData->DrawStone(9, this->XPos[4] - 15 + Tab::SettingsOffset, 210 + AddOffs); // Red.
+				StackMill3DS::App->GData->DrawStone(4, this->XPos[5] - 15 + Tab::SettingsOffset, 210 + AddOffs); // Yellow.
+				StackMill3DS::App->GData->DrawStone(7, this->XPos[6] - 15 + Tab::SettingsOffset, 210 + AddOffs); // Green.
+
+				StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->XPos[4 + SettingsTab::AI] - 15 + 6 + Tab::SettingsOffset, 216 + AddOffs);
+				if (this->SelectedOption == 3) Gui::drawGrid(5 + Tab::SettingsOffset, 190 + AddOffs, 310, 45, BAR_COLOR_OUTLINE);
+				break;
+
+
+			/* Language Selection. */
+			case SettingsTab::SubMenu::Language: { // Needed to do '{' because of a declared variable inside it.
+				uint8_t ClrIdx = 0;
+
+				for (uint8_t Lang = 0; Lang < 2; Lang++) {
+					/* Switch the chip color index, so the selection looks good. */
+					if (ClrIdx < 9) ClrIdx++;
+					else ClrIdx = 0;
+
+					StackMill3DS::App->GData->DrawStone(ClrIdx, this->LanguagePos[Lang].x + Tab::SettingsOffset, this->LanguagePos[Lang].y + AddOffs);
+					if (this->Language == Lang) StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->LanguagePos[Lang].x + 6 + Tab::SettingsOffset, this->LanguagePos[Lang].y + 6 + AddOffs);
+				};
+
+				Gui::DrawString(this->LanguagePos[0].x + 25 + Tab::SettingsOffset, this->LanguagePos[0].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "English", 320);
+				Gui::DrawString(this->LanguagePos[1].x + 25 + Tab::SettingsOffset, this->LanguagePos[1].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "Deutsch", 320);
+			};
+			break;
+
+
+			/* Import / Export Game. */
+			case SettingsTab::SubMenu::ImportExport:
+				Gui::Draw_Rect(this->ImportExportPos[0].x + Tab::SettingsOffset, this->ImportExportPos[0].y + AddOffs, this->ImportExportPos[0].w, this->ImportExportPos[0].h, BAR_COLOR_OUTLINE);
+				Gui::DrawStringCentered(Tab::SettingsOffset, this->ImportExportPos[0].y + 10 + AddOffs, 0.5f, TEXT_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::ImportGame), 135);
+
+				Gui::Draw_Rect(this->ImportExportPos[1].x + Tab::SettingsOffset, this->ImportExportPos[1].y + AddOffs, this->ImportExportPos[1].w, this->ImportExportPos[1].h, BAR_COLOR_OUTLINE);
+				Gui::DrawStringCentered(Tab::SettingsOffset, this->ImportExportPos[1].y + 10 + AddOffs, 0.5f, TEXT_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::ExportGame), 135);
+
+				/* Selector. */
+				StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, 220 + Tab::SettingsOffset, this->ImportExportPos[0].y - 5 + (this->SelectedOption * 60) + AddOffs);
+				break;
+		};
 	};
-
-	StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->XPos[SettingsTab::StoneColors[0]] + 6 + Tab::SettingsOffset, 51);
-	if (this->SelectedOption == 0) Gui::drawGrid(5 + Tab::SettingsOffset, 25, 310, 50, BAR_COLOR_OUTLINE);
-
-
-	/* Player 2 Stone Color. */
-	Gui::DrawStringCentered(0 + Tab::SettingsOffset, 80, 0.5f, TEXT_BG_COLOR, "Player 2 Stone Color");
-	for (int8_t Idx = 0; Idx < 10; Idx++) {
-		StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 100);
-	};
-
-	StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->XPos[SettingsTab::StoneColors[1]] + 6 + Tab::SettingsOffset, 106);
-	if (this->SelectedOption == 1) Gui::drawGrid(5 + Tab::SettingsOffset, 80, 310, 50, BAR_COLOR_OUTLINE);
-
-
-	/* Possibly Play Color. */
-	Gui::DrawStringCentered(0 + Tab::SettingsOffset, 135, 0.5f, TEXT_BG_COLOR, "Preview Play Color");
-	for (int8_t Idx = 0; Idx < 10; Idx++) {
-		StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 155);
-	};
-
-	StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->XPos[SettingsTab::StoneColors[2]] + 6 + Tab::SettingsOffset, 161);
-	if (this->SelectedOption == 2) Gui::drawGrid(5 + Tab::SettingsOffset, 135, 310, 50, BAR_COLOR_OUTLINE);
-
-
-	/* AI. */
-	Gui::DrawStringCentered(0 + Tab::SettingsOffset, 190, 0.5f, TEXT_BG_COLOR, "Computer Opponent (Disabled, Random, 50:50)");
-	StackMill3DS::App->GData->DrawStone(9, this->XPos[4] - 15 + Tab::SettingsOffset, 210); // Red.
-	StackMill3DS::App->GData->DrawStone(4, this->XPos[5] - 15 + Tab::SettingsOffset, 210); // Yellow.
-	StackMill3DS::App->GData->DrawStone(7, this->XPos[6] - 15 + Tab::SettingsOffset, 210); // Green.
-
-	StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->XPos[4 + SettingsTab::AI] - 15 + 6 + Tab::SettingsOffset, 216);
-	if (this->SelectedOption == 3) Gui::drawGrid(5 + Tab::SettingsOffset, 190, 310, 45, BAR_COLOR_OUTLINE);
 };
 
 
-void SettingsTab::Handler() {
-	if (Tab::TabSwitch) return;
+void SettingsTab::Draw() {
+	this->DrawMenu(SettingsTab::SubMenu::Main, this->MenuPos[0]);
+
+	/* Handle next menu draws. */
+	switch(this->Menu) {
+		case SettingsTab::SubMenu::Main:
+			break; // Already handled above ^.
+
+		case SettingsTab::SubMenu::GameSettings:
+			this->DrawMenu(SettingsTab::SubMenu::GameSettings, this->MenuPos[1]);
+			break;
+
+		case SettingsTab::SubMenu::Language:
+			this->DrawMenu(SettingsTab::SubMenu::Language, this->MenuPos[1]);
+			break;
+
+		case SettingsTab::SubMenu::ImportExport:
+			this->DrawMenu(SettingsTab::SubMenu::ImportExport, this->MenuPos[1]);
+			break;
+	};
+};
+
+
+void SettingsTab::MainHandle() {
+	if (StackMill3DS::App->Down & KEY_TOUCH) {
+		for (int8_t Idx = 1; Idx < 4; Idx++) {
+			if (Common::Touching(StackMill3DS::App->T, this->MainPos[Idx - 1])) {
+				this->Menu = (SettingsTab::SubMenu)Idx;
+				this->In = true, this->SelectedOption = (this->Menu == SettingsTab::SubMenu::Language ? StackMill3DS::App->LH->GetLang() : 0);
+				SettingsTab::Swipe = true;
+				break;
+			};
+		};
+	};
+
+
+	if (StackMill3DS::App->Down & KEY_A) {
+		switch(this->SelectedOption) {
+			case 0:
+				this->Menu = SettingsTab::SubMenu::GameSettings;
+				this->In = true, this->SelectedOption = 0;
+				SettingsTab::Swipe = true;
+				break;
+
+			case 1:
+				this->Menu = SettingsTab::SubMenu::Language;
+				this->In = true, this->SelectedOption = StackMill3DS::App->LH->GetLang();
+				SettingsTab::Swipe = true;
+				break;
+
+			case 2:
+				this->Menu = SettingsTab::SubMenu::ImportExport;
+				this->In = true, this->SelectedOption = 0;
+				SettingsTab::Swipe = true;
+				break;
+		};
+	};
+
+	if (StackMill3DS::App->Down & KEY_DOWN) {
+		if (this->SelectedOption < 2) this->SelectedOption++;
+	};
+
+	if (StackMill3DS::App->Down & KEY_UP) {
+		if (this->SelectedOption > 0) this->SelectedOption--;
+	};
+};
+
+
+
+void SettingsTab::GameSettingsHandle() {
+	if (StackMill3DS::App->Down & KEY_B) {
+		this->In = false, this->SelectedOption = 0;
+		SettingsTab::Swipe = true;
+	};
 
 	if (StackMill3DS::App->Down & KEY_TOUCH) {
 		/* Stone Color Handler. */
@@ -126,6 +250,137 @@ void SettingsTab::Handler() {
 
 		} else {
 			if (SettingsTab::AI > 0) SettingsTab::AI--;
+		};
+	};
+};
+
+
+void SettingsTab::LanguageHandle() {
+	if (StackMill3DS::App->Down & KEY_B) {
+		this->In = false, this->SelectedOption = 0;
+		SettingsTab::Swipe = true;
+	};
+
+	if (StackMill3DS::App->Down & KEY_DOWN) {
+		if (this->Language < 1) this->Language++;
+	};
+
+	if (StackMill3DS::App->Down & KEY_UP) {
+		if (this->Language > 0) this->Language--;
+	};
+
+	if (StackMill3DS::App->Down & KEY_A) {
+		/* Load Language. */
+		StackMill3DS::App->LH->LoadLang((LangHandler::Langs)this->Language);
+
+		this->In = false, this->SelectedOption = 0;
+		SettingsTab::Swipe = true;
+	};
+
+	if (StackMill3DS::App->Down & KEY_TOUCH) {
+		for (int8_t Idx = 0; Idx < 2; Idx++) {
+			if (Common::Touching(StackMill3DS::App->T, this->LanguagePos[Idx])) {
+				this->Language = Idx;
+				/* Load Language. */
+				StackMill3DS::App->LH->LoadLang((LangHandler::Langs)this->Language);
+
+				this->In = false, this->SelectedOption = 0;
+				SettingsTab::Swipe = true;
+				break;
+			};
+		};
+	};
+};
+
+
+void SettingsTab::ImportExportHandle() {
+	if (StackMill3DS::App->Down & KEY_B) {
+		this->In = false, this->SelectedOption = 0;
+		SettingsTab::Swipe = true;
+	};
+
+	if (StackMill3DS::App->Down & KEY_DOWN) {
+		if (this->SelectedOption < 1) this->SelectedOption++;
+	};
+
+	if (StackMill3DS::App->Down & KEY_UP) {
+		if (this->SelectedOption > 0) this->SelectedOption--;
+	};
+
+
+	if (StackMill3DS::App->Down & KEY_A) {
+		switch(this->SelectedOption) {
+			case 0: // Import Game.
+				if (StackMill3DS::App->Core->ImportGame("sdmc:/3ds/StackMill/GameData.dat")) {
+					if (StackMill3DS::App->Core->InRemove()) {
+						GameTab::Preview = StackMill3DS::App->Core->RemoveableStones((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::Black : StackMill::GameStone::White);
+					};
+				};
+				break;
+
+			case 1: // Export Game.
+				StackMill3DS::App->Core->ExportGame("sdmc:/3ds/StackMill/GameData.dat");
+				break;
+		};
+	};
+
+
+	if (StackMill3DS::App->Down & KEY_TOUCH) {
+		if (Common::Touching(StackMill3DS::App->T, this->ImportExportPos[0])) { // Import Game.
+			if (StackMill3DS::App->Core->ImportGame("sdmc:/3ds/StackMill/GameData.dat")) {
+				if (StackMill3DS::App->Core->InRemove()) {
+					GameTab::Preview = StackMill3DS::App->Core->RemoveableStones((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::Black : StackMill::GameStone::White);
+				};
+			};
+
+		} else if (Common::Touching(StackMill3DS::App->T, this->ImportExportPos[1])) { // Export Game.
+			StackMill3DS::App->Core->ExportGame("sdmc:/3ds/StackMill/GameData.dat");
+		};
+	};
+};
+
+
+void SettingsTab::Handler() {
+	if (Tab::TabSwitch) return;
+
+	if (SettingsTab::Swipe) this->DoSwipe();
+	else {
+		switch(this->Menu) {
+			case SettingsTab::SubMenu::Main:
+				this->MainHandle();
+				break;
+
+			case SettingsTab::SubMenu::GameSettings:
+				this->GameSettingsHandle();
+				break;
+
+			case SettingsTab::SubMenu::Language:
+				this->LanguageHandle();
+				break;
+
+			case SettingsTab::SubMenu::ImportExport:
+				this->ImportExportHandle();
+				break;
+		};
+	};
+};
+
+
+void SettingsTab::DoSwipe() {
+	if (this->Cubic < 240.0f) {
+		this->Cubic = std::lerp(this->Cubic, 241.0f, 0.1f);
+
+		if (this->In) this->MenuPos[0] = 0 - this->Cubic, this->MenuPos[1] = 240 - this->Cubic;
+		else this->MenuPos[0] = -240 + this->Cubic, this->MenuPos[1] = 0 + this->Cubic;
+
+		if (this->Cubic >= 240.0f) {
+			if (this->In) this->MenuPos[0] = -240, this->MenuPos[1] = 0;
+			else {
+				this->MenuPos[0] = 0, this->MenuPos[1] = 240;
+				this->Menu = SettingsTab::SubMenu::Main;
+			};
+
+			this->Cubic = 0.0f, SettingsTab::Swipe = false;
 		};
 	};
 };

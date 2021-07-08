@@ -36,11 +36,44 @@ public:
 	void Handler();
 
 	static int8_t StoneColors[3], AI;
+	static bool Swipe;
 private:
-	int8_t SelectedOption = 0;
+	enum class SubMenu : int8_t { Main = 0, GameSettings = 1, Language = 2, ImportExport = 3 };
+	SubMenu Menu = SubMenu::Main;
+	int8_t SelectedOption = 0, Language = 0;
+	float Cubic = 0.0f;
+	int MenuPos[2] = { 0, 240 }; // 0: Main, 1: The others.
+	bool In = true;
 
+	void DrawMenu(const SettingsTab::SubMenu M, const int AddOffs);
+	void DoSwipe();
+
+
+	void MainHandle();
+	static constexpr Structs::ButtonPos MainPos[3] = {
+		{ 90, 50, 140, 35 }, // Game Settings.
+		{ 90, 110, 140, 35 }, // Language.
+		{ 90, 170, 140, 35 } // Import | Export.
+	};
+
+
+	void GameSettingsHandle();
 	/* X-Positions of the Stone colors. */
 	static constexpr int XPos[10] = { 15, 45, 75, 105, 135, 165, 195, 225, 255, 285 };
+
+
+	void LanguageHandle();
+	static constexpr Structs::ButtonPos LanguagePos[2] = {
+		{ 37, 32, 18, 18 }, // English.
+		{ 37, 72, 18, 18 } // Deutsch.
+	};
+
+
+	void ImportExportHandle();
+	static constexpr Structs::ButtonPos ImportExportPos[2] = {
+		{ 90, 50, 140, 35 }, // Import.
+		{ 90, 110, 140, 35 } // Export.
+	};
 };
 
 #endif

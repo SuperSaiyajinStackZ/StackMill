@@ -34,8 +34,6 @@ bool Tab::TabSwitch = false; // If true, don't accept any input from the other c
 
 
 void Tab::Draw() {
-	StackMill3DS::App->GData->DrawBottom();
-
 	/* Draw Tabs. */
 	Gui::Draw_Rect(1, 0, 106, 17, (StackMill3DS::App->ActiveTab == StackMill3DS::Tabs::Game ? BAR_COLOR_OUTLINE : BAR_COLOR));
 	Gui::Draw_Rect(107, 0, 106, 17, (StackMill3DS::App->ActiveTab == StackMill3DS::Tabs::Settings ? BAR_COLOR_OUTLINE : BAR_COLOR));
@@ -49,13 +47,15 @@ void Tab::Draw() {
 	Gui::Draw_Rect(319, 0, 1, 17, BAR_COLOR_OUTLINE); // |
 
 	/* Tab Names. */
-	Gui::DrawStringCentered(-106, 2, 0.45f, TEXT_COLOR, "Game", 100);
-	Gui::DrawStringCentered(0, 2, 0.45f, TEXT_COLOR, "Settings", 100);
-	Gui::DrawStringCentered(106, 2, 0.45f, TEXT_COLOR, "Credits", 100);
+	Gui::DrawStringCentered(-106, 2, 0.45f, TEXT_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Game), 100);
+	Gui::DrawStringCentered(0, 2, 0.45f, TEXT_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Settings), 100);
+	Gui::DrawStringCentered(106, 2, 0.45f, TEXT_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Credits), 100);
 };
 
 
 void Tab::Handler() {
+	if (SettingsTab::Swipe) return; // No.
+
 	if (Tab::TabSwitch) this->HandleSwitch(); // If we switch Tabs, handle the switch.
 	else { // Otherwise handle the Tabs.
 
@@ -98,7 +98,7 @@ void Tab::Handler() {
 				case StackMill3DS::Tabs::Credits:
 					break;
 			};
-		};	
+		};
 	};
 };
 
@@ -119,7 +119,7 @@ void Tab::HandleSwitch() {
 				Tab::SettingsOffset = this->SOffs + Tab::Cubic;
 				Tab::GameOffset = this->GOffs + Tab::Cubic;
 			};
-			
+
 
 			if (Tab::Cubic >= (this->TabsToGo == 1 ? 320.0f : 640.0f)) {
 				Tab::Cubic = 0.0f;

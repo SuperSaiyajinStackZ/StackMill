@@ -38,9 +38,11 @@ public:
 	enum class PlayStatus : int8_t { Invalid = 0, Normal = 1, Match = 2 };
 	enum class RemoveState : int8_t { Invalid = 0, Removed = 1, Lost = 2 };
 
+
 	/* Constructor and Loader. */
 	StackMill(const bool GenerateSeed = false) { this->LoadGame(GenerateSeed); };
 	void LoadGame(const bool GenerateSeed = false);
+
 
 	/* Some return things about the game. */
 	StackMill::GameStone Field(const int8_t Pos) const {
@@ -62,16 +64,25 @@ public:
 	std::vector<int8_t> RemoveableStones(const StackMill::GameStone Stone);
 	bool Good(const int8_t Pos, const StackMill::GameStone Stone) const { return this->_Field[Pos] == Stone; };
 	bool CanPlay();
+	bool InRemove() const { return this->RemovePhase; };
+	void InRemove(const bool V) { this->RemovePhase = V; };
+
 
 	/* Actual actions. */
 	StackMill::PlayStatus Play(const int8_t OldPos, const int8_t NewPos);
 	StackMill::RemoveState StoneRemove(const int8_t StoneIdx, const StackMill::GameStone Stone);
 
+
 	void NextPlayer() { this->CPlayer = (this->CPlayer == 1 ? 2 : 1); };
+
 
 	std::pair<int8_t, int8_t> AIRandomPlay();
 	std::pair<int8_t, int8_t> AI5050();
 	int8_t AIStoneRemove();
+
+
+	bool ImportGame(const std::string &Path);
+	bool ExportGame(const std::string &Path);
 private:
 	struct MatchField { int8_t Stones[3] = { 0 }; }; // 3 Stones.
 
@@ -122,6 +133,8 @@ private:
 	std::unique_ptr<StackMill::Player> Players[2] = { nullptr };
 	StackMill::GameStone _Field[24] = { StackMill::GameStone::None };
 	int8_t CPlayer = 1; // Current Player.
+	bool GameValid = false, RemovePhase = false;
+	static constexpr int DataSize = 0x2E;
 
 	/* The Matching Field. */
 	static constexpr StackMill::MatchField Fields[16] = {

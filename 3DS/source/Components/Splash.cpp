@@ -43,7 +43,7 @@ void Splash::Handler() {
 
 		StackMill3DS::App->GData->DrawBottom();
 		StackMill3DS::App->GData->DrawSprite(sprites_StackZ_idx, 110, 90);
-		Gui::DrawStringCentered(0, 30, 0.5f, TEXT_BG_COLOR, "StackMill developed by SuperSaiyajinStackZ.\nCopyright (c) 2021");
+		Gui::DrawStringCentered(0, 30, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Splash));
 		if (StackMill3DS::App->FadeAlpha > 0) Gui::Draw_Rect(0, 0, 320, 240, C2D_Color32(0, 0, 0, StackMill3DS::App->FadeAlpha));
 		C3D_FrameEnd(0);
 

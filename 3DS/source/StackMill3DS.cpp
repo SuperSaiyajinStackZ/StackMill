@@ -27,6 +27,7 @@
 #include "screenCommon.hpp"
 #include "Splash.hpp"
 #include "StackMill3DS.hpp"
+#include <dirent.h>
 
 
 std::unique_ptr<StackMill3DS> StackMill3DS::App = nullptr;
@@ -36,16 +37,19 @@ StackMill3DS::StackMill3DS() {
 	gfxInitDefault();
 	romfsInit();
 	Gui::init();
-	hidSetRepeatParameters(25, 3);
+	hidSetRepeatParameters(25, 2);
+
+	mkdir("sdmc:/3ds", 0x777);
+	mkdir("sdmc:/3ds/StackMill", 0x777); // For the GameData.
 
 	this->GData = std::make_unique<GFXData>(); // Graphic data.
+	this->LH = std::make_unique<LangHandler>(LangHandler::Langs::English);
+	this->Core = std::make_unique<StackMill>(true); // Current Game initializer.
 
+	this->_Tab = std::make_unique<Tab>(); // Tab Handler.
 	this->Game = std::make_unique<GameTab>(); // Game-Tab.
 	this->Settings = std::make_unique<SettingsTab>(); // Settings-Tab.
 	this->Credits = std::make_unique<CreditsTab>(); // Credits-Tab.
-	this->_Tab = std::make_unique<Tab>(); // Tab Handler.
-
-	this->Core = std::make_unique<StackMill>(true); // Current Game initializer.
 };
 
 
@@ -57,35 +61,35 @@ void StackMill3DS::DrawTop() {
 	this->GData->DrawTop();
 	Gui::DrawStringCentered(0, 1, 0.6f, TEXT_COLOR, "StackMill");
 	Gui::DrawString(340, 1, 0.6f, TEXT_COLOR, V_STRING); // Version.
-	
+
 	/* Player 1. */
 	this->GData->DrawPlayer(true, 40, 40);
 	Gui::Draw_Rect(37, 169, 106, 20, BAR_COLOR);
-	Gui::DrawString(68, 172, 0.45f, TEXT_COLOR, "Player 1", 100);
-	Gui::DrawString(33, 200, 0.45f, C2D_Color32(0, 0, 0, 200), "Stones available: " + std::to_string(this->Core->Available(StackMill::GameStone::White)), 120);
+	Gui::DrawString(68, 172, 0.45f, TEXT_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " 1", 100);
+	Gui::DrawString(33, 200, 0.45f, C2D_Color32(0, 0, 0, 200), this->LH->Translation(LangHandler::Strings::StonesAvailable) + std::to_string(this->Core->Available(StackMill::GameStone::White)), 120);
 
 	/* Player 2. */
 	this->GData->DrawPlayer(false, 260, 40);
 	Gui::Draw_Rect(257, 169, 106, 20, BAR_COLOR);
-	Gui::DrawString(287, 172, 0.45f, TEXT_COLOR, "Player 2", 100);
-	Gui::DrawString(253, 200, 0.45f, TEXT_BG_COLOR, "Stones available: " + std::to_string(this->Core->Available(StackMill::GameStone::Black)), 120);
+	Gui::DrawString(287, 172, 0.45f, TEXT_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " 2", 100);
+	Gui::DrawString(253, 200, 0.45f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::StonesAvailable) + std::to_string(this->Core->Available(StackMill::GameStone::Black)), 120);
 
 
-	if (this->Game->RemoveMode) { // Removing a stone.
-		Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, "Player " + std::to_string(this->Core->CurrentPlayer()) + ": Remove a Stone from your opponent.");
+	if (this->Core->InRemove()) { // Removing a stone.
+		Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " " + std::to_string(this->Core->CurrentPlayer()) + ": " + this->LH->Translation(LangHandler::Strings::RemoveStone));
 
 	} else { // The phase display.
 		switch(this->Core->Phase((this->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black)) {
 			case StackMill::Phases::Set:
-				Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, "Player " + std::to_string(this->Core->CurrentPlayer()) + ": Set a Stone to a free intersection.");
+				Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " " + std::to_string(this->Core->CurrentPlayer()) + ": " + this->LH->Translation(LangHandler::Strings::SetStone));
 				break;
 
 			case StackMill::Phases::Move:
-				Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, "Player " + std::to_string(this->Core->CurrentPlayer()) + ": Move a Stone around.");
+				Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " " + std::to_string(this->Core->CurrentPlayer()) + ": " + this->LH->Translation(LangHandler::Strings::MoveStone));
 				break;
 
 			case StackMill::Phases::Jump:
-				Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, "Player " + std::to_string(this->Core->CurrentPlayer()) + ": Jump a Stone to a free intersection.");
+				Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::Player) + ": " + this->LH->Translation(LangHandler::Strings::JumpStone));
 				break;
 		};
 	};
@@ -101,7 +105,7 @@ void StackMill3DS::Draw() {
 	this->DrawTop();
 	if (this->FadeAlpha > 0) Gui::Draw_Rect(0, 0, 400, 240, C2D_Color32(0, 0, 0, this->FadeAlpha));
 
-	this->DrawTab();
+	this->GData->DrawBottom();
 	if (Tab::TabSwitch) { // On Tab Switch, draw all with animation.
 		this->Game->Draw();
 		this->Settings->Draw();
@@ -123,6 +127,7 @@ void StackMill3DS::Draw() {
 		};
 	};
 
+	this->DrawTab();
 	if (this->FadeAlpha > 0) Gui::Draw_Rect(0, 0, 320, 240, C2D_Color32(0, 0, 0, this->FadeAlpha));
 	C3D_FrameEnd(0);
 };
@@ -131,7 +136,7 @@ void StackMill3DS::Draw() {
 int StackMill3DS::Handler() {
 	while(aptMainLoop() && this->Running) {
 		this->Draw();
-		
+
 		hidScanInput();
 		this->Down = hidKeysDown();
 		this->Repeat = hidKeysDownRepeat();

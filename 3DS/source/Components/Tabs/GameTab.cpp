@@ -29,12 +29,14 @@
 #include "Rules.hpp"
 
 
+std::vector<int8_t> GameTab::Preview;
+
+
 void GameTab::NewGame() {
-	this->Preview.clear();
+	GameTab::Preview.clear();
 	this->StartMode = true;
 	StackMill3DS::App->Core->LoadGame();
 	this->SelectedStone = 0, this->Selection = 0, this->SelectionMode = 1;
-	this->RemoveMode = false;
 };
 
 
@@ -50,9 +52,9 @@ void GameTab::Draw() {
 
 	/* If Selection Phase -> Display the Preview of the play-able Stones. */
 	if (this->SelectionMode) {
-		if (this->Preview.size() > 0) {
-			for (int8_t Idx = 0; Idx < (int8_t)this->Preview.size(); Idx++) {
-				StackMill3DS::App->GData->DrawStone(SettingsTab::StoneColors[2], this->Fields[this->Preview[Idx]].x + Tab::GameOffset, this->Fields[this->Preview[Idx]].y);
+		if (GameTab::Preview.size() > 0) {
+			for (int8_t Idx = 0; Idx < (int8_t)GameTab::Preview.size(); Idx++) {
+				StackMill3DS::App->GData->DrawStone(SettingsTab::StoneColors[2], this->Fields[GameTab::Preview[Idx]].x + Tab::GameOffset, this->Fields[GameTab::Preview[Idx]].y);
 			};
 		};
 	};
@@ -205,8 +207,8 @@ void GameTab::RemoveAction() {
 
 				bool CanContinue = false;
 
-				for (int8_t Idx2 = 0; Idx2 < (int8_t)this->Preview.size(); Idx2++) {
-					if (this->Preview[Idx2] == Idx) {
+				for (int8_t Idx2 = 0; Idx2 < (int8_t)GameTab::Preview.size(); Idx2++) {
+					if (GameTab::Preview[Idx2] == Idx) {
 						CanContinue = true;
 						break;
 					};
@@ -228,7 +230,7 @@ void GameTab::RemoveAction() {
 							StackMill3DS::App->Core->NextPlayer();
 							this->StartMode = (StackMill3DS::App->Core->Phase((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black) == StackMill::Phases::Set);
 							this->Reset();
-							this->RemoveMode = false; // Back in the game.
+							StackMill3DS::App->Core->InRemove(false);
 							if (this->StartMode) this->SelectionMode = 1;
 							this->CheckStatus();
 							break;
@@ -248,8 +250,8 @@ void GameTab::RemoveAction() {
 		if (!this->ShowPointer) this->ShowPointer = true;
 		bool CanContinue = false;
 
-		for (int8_t Idx = 0; Idx < (int8_t)this->Preview.size(); Idx++) {
-			if (this->Preview[Idx] == this->Selection) {
+		for (int8_t Idx = 0; Idx < (int8_t)GameTab::Preview.size(); Idx++) {
+			if (GameTab::Preview[Idx] == this->Selection) {
 				CanContinue = true;
 				break;
 			};
@@ -271,7 +273,7 @@ void GameTab::RemoveAction() {
 					StackMill3DS::App->Core->NextPlayer();
 					this->StartMode = (StackMill3DS::App->Core->Phase((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black) == StackMill::Phases::Set);
 					this->Reset();
-					this->RemoveMode = false; // Back in the game.
+					StackMill3DS::App->Core->InRemove(false);
 					if (this->StartMode) this->SelectionMode = 1;
 					this->CheckStatus();
 					break;
@@ -303,7 +305,7 @@ void GameTab::CheckStatus() {
 
 /* Reset some things for the next turn. */
 void GameTab::Reset() {
-	this->Preview.clear();
+	GameTab::Preview.clear();
 	this->SelectedStone = this->Selection;
 	this->SelectionMode = 0;
 };
@@ -346,7 +348,7 @@ void GameTab::PlayerTurn() {
 	};
 
 
-	if (this->RemoveMode) this->RemoveAction(); // We are in the remove action.
+	if (StackMill3DS::App->Core->InRemove()) this->RemoveAction(); // We are in the remove action.
 	else {
 		/* If Move / Jump Phase, try to go to stone selection. */
 		if (StackMill3DS::App->Down & KEY_B) {
@@ -355,7 +357,7 @@ void GameTab::PlayerTurn() {
 
 				if (this->SelectionMode) {
 					this->SelectionMode = 0;
-					this->Preview.clear();
+					GameTab::Preview.clear();
 				};
 			};
 		};
@@ -373,9 +375,9 @@ void GameTab::PlayerTurn() {
 							if (StackMill3DS::App->Core->Good(Idx, (StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black)) {
 
 								this->SelectedStone = Idx;
-								this->Preview = StackMill3DS::App->Core->PlayablePositions(this->SelectedStone, StackMill3DS::App->Core->Phase((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black));
+								GameTab::Preview = StackMill3DS::App->Core->PlayablePositions(this->SelectedStone, StackMill3DS::App->Core->Phase((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black));
 
-								if (!this->Preview.empty()) {
+								if (!GameTab::Preview.empty()) {
 									this->SelectionMode = 1;
 									this->Selection = this->SelectedStone;
 								};
@@ -391,7 +393,7 @@ void GameTab::PlayerTurn() {
 						if (!this->StartMode) {
 							if (this->SelectionMode) {
 								this->SelectionMode = 0;
-								this->Preview.clear();
+								GameTab::Preview.clear();
 							};
 
 							break;
@@ -427,14 +429,14 @@ void GameTab::PlayerTurn() {
 								StackMill3DS::App->Core->NextPlayer();
 								this->Reset();
 								this->StartMode = (StackMill3DS::App->Core->Phase((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black) == StackMill::Phases::Set);
-								
+
 								if (this->StartMode) this->SelectionMode = 1;
 								this->CheckStatus();
 								break;
 
 							case StackMill::PlayStatus::Match:
-								this->Preview = StackMill3DS::App->Core->RemoveableStones((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::Black : StackMill::GameStone::White);
-								this->RemoveMode = true;
+								GameTab::Preview = StackMill3DS::App->Core->RemoveableStones((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::Black : StackMill::GameStone::White);
+								StackMill3DS::App->Core->InRemove(true);
 								break;
 
 							case StackMill::PlayStatus::Invalid:
@@ -454,9 +456,9 @@ void GameTab::PlayerTurn() {
 			if (!this->StartMode) {
 				if (!this->SelectionMode) {
 					if (StackMill3DS::App->Core->Good(this->SelectedStone, (StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black)) {
-						this->Preview = StackMill3DS::App->Core->PlayablePositions(this->SelectedStone, StackMill3DS::App->Core->Phase((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black));
+						GameTab::Preview = StackMill3DS::App->Core->PlayablePositions(this->SelectedStone, StackMill3DS::App->Core->Phase((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black));
 
-						if (!this->Preview.empty()) {
+						if (!GameTab::Preview.empty()) {
 							this->SelectionMode = 1;
 							this->Selection = this->SelectedStone;
 						};
@@ -472,7 +474,7 @@ void GameTab::PlayerTurn() {
 				if (!this->StartMode) {
 					if (this->SelectionMode) {
 						this->SelectionMode = 0;
-						this->Preview.clear();
+						GameTab::Preview.clear();
 					};
 
 					return;
@@ -482,7 +484,7 @@ void GameTab::PlayerTurn() {
 
 			/* Check if the specific play can be done. */
 			if (StackMill3DS::App->Core->CanDoSpecifiedPlay(this->SelectedStone, this->Selection, StackMill3DS::App->Core->Phase((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black))) {
-				
+
 				/* Here the animation. */
 				switch(StackMill3DS::App->Core->Phase((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black)) {
 					case StackMill::Phases::Set:
@@ -498,7 +500,7 @@ void GameTab::PlayerTurn() {
 						break;
 				};
 
-				
+
 				const StackMill::PlayStatus Status = StackMill3DS::App->Core->Play(this->SelectedStone, this->Selection);
 
 				/* Here the PlayStatus Handle. */
@@ -512,8 +514,8 @@ void GameTab::PlayerTurn() {
 						break;
 
 					case StackMill::PlayStatus::Match:
-						this->Preview = StackMill3DS::App->Core->RemoveableStones((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::Black : StackMill::GameStone::White);
-						this->RemoveMode = true;
+						GameTab::Preview = StackMill3DS::App->Core->RemoveableStones((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::Black : StackMill::GameStone::White);
+						StackMill3DS::App->Core->InRemove(true);
 						break;
 
 					case StackMill::PlayStatus::Invalid:
@@ -527,7 +529,7 @@ void GameTab::PlayerTurn() {
 
 /* The AI Handler. */
 void GameTab::AITurn() {
-	this->Preview.clear();
+	GameTab::Preview.clear();
 
 	/* Do the turn. */
 	std::pair<int8_t, int8_t> Turn = (SettingsTab::AI == 1 ? StackMill3DS::App->Core->AIRandomPlay() : StackMill3DS::App->Core->AI5050());
@@ -610,12 +612,12 @@ void GameTab::AITurn() {
 		};
 	};
 
-	this->Preview.clear();
+	GameTab::Preview.clear();
 };
 
 
 void GameTab::Handler() {
-	if (Tab::TabSwitch) return; // No Input.
+	if (Tab::TabSwitch || SettingsTab::Swipe) return; // No Input.
 
 	/* If Player 2, it's Player 2 (If 0) or AI's mode (If 1 or 2). */
 	if (StackMill3DS::App->Core->CurrentPlayer() == 2) {
@@ -674,6 +676,7 @@ void GameTab::Move() {
 			C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 
 			StackMill3DS::App->DrawTop();
+			StackMill3DS::App->GData->DrawBottom();
 			StackMill3DS::App->DrawTab();
 			StackMill3DS::App->GData->DrawSprite(sprites_field_idx, 50, 20);
 
@@ -731,6 +734,7 @@ void GameTab::Remove() {
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 
 		StackMill3DS::App->DrawTop();
+		StackMill3DS::App->GData->DrawBottom();
 		StackMill3DS::App->DrawTab();
 		StackMill3DS::App->GData->DrawSprite(sprites_field_idx, 50, 20);
 
@@ -784,6 +788,7 @@ void GameTab::Place() {
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 
 		StackMill3DS::App->DrawTop();
+		StackMill3DS::App->GData->DrawBottom();
 		StackMill3DS::App->DrawTab();
 		StackMill3DS::App->GData->DrawSprite(sprites_field_idx, 50, 20);
 
@@ -855,6 +860,7 @@ void GameTab::Jump() {
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 
 		StackMill3DS::App->DrawTop();
+		StackMill3DS::App->GData->DrawBottom();
 		StackMill3DS::App->DrawTab();
 		StackMill3DS::App->GData->DrawSprite(sprites_field_idx, 50, 20);
 
@@ -912,6 +918,7 @@ void GameTab::PopupPrompt() {
 
 		StackMill3DS::App->DrawTop();
 		Gui::Draw_Rect(0, 0, 400, 240, C2D_Color32(0, 0, 0, Alpha)); // Dim the top screen with the Alpha.
+		StackMill3DS::App->GData->DrawBottom();
 		StackMill3DS::App->DrawTab();
 		StackMill3DS::App->GData->DrawSprite(sprites_field_idx, 50, 20);
 
@@ -937,23 +944,23 @@ void GameTab::PopupPrompt() {
 		/* Show the winner. */
 		switch(this->Winner) {
 			case 0:
-				Gui::DrawStringCentered(0, 50 + PromptPos, 0.5f, TEXT_COLOR, "This match is a tie!");
+				Gui::DrawStringCentered(0, 50 + PromptPos, 0.5f, TEXT_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::MatchTie));
 				break;
 
 			case 1:
 			case 2:
-				Gui::DrawStringCentered(0, 50 + PromptPos, 0.5f, TEXT_COLOR, "Player " + std::to_string(this->Winner) + " wins!");
+				Gui::DrawStringCentered(0, 50 + PromptPos, 0.5f, TEXT_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Player) + " " + std::to_string(this->Winner) + " " + StackMill3DS::App->LH->Translation(LangHandler::Strings::Wins));
 				break;
 
 		};
 
 
-		Gui::DrawStringCentered(0, 70 + PromptPos, 0.5f, TEXT_COLOR, "Do you want to play another match?");
+		Gui::DrawStringCentered(0, 70 + PromptPos, 0.5f, TEXT_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::AnotherRound));
 
 		/* Display Prompt Buttons. */
 		for (int8_t Idx = 0; Idx < 2; Idx++) {
 			Gui::Draw_Rect(this->Prompt[Idx].x, this->Prompt[Idx].y + PromptPos, this->Prompt[Idx].w, this->Prompt[Idx].h, BAR_COLOR);
-			Gui::DrawStringCentered(this->Prompt[Idx].x - 160 + this->Prompt[Idx].w / 2, this->Prompt[Idx].y + 15 + PromptPos, 0.6f, TEXT_COLOR, (Idx == 0 ? "\uE001 No" : "\uE000 Yes"), this->Prompt[Idx].w - 10);
+			Gui::DrawStringCentered(this->Prompt[Idx].x - 160 + this->Prompt[Idx].w / 2, this->Prompt[Idx].y + 15 + PromptPos, 0.6f, TEXT_COLOR, (Idx == 0 ? StackMill3DS::App->LH->Translation(LangHandler::Strings::No) : StackMill3DS::App->LH->Translation(LangHandler::Strings::Yes)), this->Prompt[Idx].w - 10);
 		};
 
 		C3D_FrameEnd(0);
