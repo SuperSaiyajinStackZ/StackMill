@@ -29,17 +29,21 @@
 
 #include <string>
 
+
 class LangHandler {
 public:
 	enum class Strings : int8_t {
-		Game = 0, Settings = 1, Credits = 2, GameSettings = 3, Language = 4, Player = 5, Splash = 6, DevBy = 7,
-		Graphics = 8, StonesAvailable = 9, RemoveStone = 10, SetStone = 11, MoveStone = 12, JumpStone = 13, MatchTie = 14,
-		Wins = 15, AnotherRound = 16, Yes = 17, No = 18, SmilCore = 19, UnivCore = 20,
+		Game = 0, Settings = 1, Credits = 2, GameSettings = 3, Language = 4, ImportExport = 5,
+		Player1Color = 6, Player2Color = 7, PreviewColor = 8, Computer = 9, ImportGame = 10, ExportGame = 11,
 
-		Rules1 = 21, Rules2 = 22, Rules3 = 23, Rules4 = 24, Rules5 = 25, Rules6 = 26, Rules7 = 27, // Buttons.
-		Rules_1 = 28, Rules_2 = 29, Rules_3 = 30, Rules_4 = 31, Rules_5 = 32, Rules_6 = 33, Rules_7 = 34, // Top Bar.
-		Rules_1T = 35, Rules_2T = 36, Rules_3T = 37, Rules_4T = 38, Rules_5T = 39, Rules_6T = 40, Rules_7T = 41, // Top Bar.
-		ImportExport = 42, ImportGame = 43, ExportGame = 44, Player1Color = 45, Player2Color = 46, HighlightColor = 47, Computer = 48
+		Splash = 12, DevBy = 13, Graphics = 14, SmilCore = 15, UnivCore = 16,
+		Player = 17, StonesAvailable = 18, RemoveStone = 19, SetStone = 20, MoveStone = 21, JumpStone = 22, MatchTie = 23,
+		Wins = 24, NextRound = 25, Yes = 26, No = 27,
+
+		Rules1 = 28, Rules2 = 29, Rules3 = 30, Rules4 = 31, Rules5 = 32, Rules6 = 33, Rules7 = 34,
+		Rules_1 = 35, Rules_2 = 36, Rules_3 = 37, Rules_4 = 38, Rules_5 = 39, Rules_6 = 40, Rules_7 = 41,
+
+		Rules_1T = 42, Rules_2T = 43, Rules_3T = 44, Rules_4T = 45, Rules_5T = 46, Rules_6T = 47, Rules_7T = 48
 	};
 
 	enum class Langs : int8_t { English = 0, German = 1, Japanese = 2 };
@@ -55,13 +59,16 @@ private:
 	const std::string TranslationStrings[2][49] = {
 		/* English. */
 		{
-			"Game", "Settings", "Credits", "Game Settings", "Language", "Player",
+			"Game", "Settings", "Credits", "Game Settings", "Language", "Import / Export",
+			"Player 1 Stone Color", "Player 2 Stone Color", "Preview Play Color", "Computer Opponent (Disabled, Random, 50:50)",
+			"Import Game", "Export Game",
 			"StackMill developed by SuperSaiyajinStackZ.\nCopyright (c) 2021",
 			"StackMill developed by SuperSaiyajinStackZ.", "Graphics: SuperSaiyajinStackZ",
-			"Stones available: ", "Remove a Stone from your opponent.", "Set a Stone to a free intersection.",
+			"StackMill-Core: SuperSaiyajinStackZ", "Universal-Core: Universal-Team",
+			"Player", "Stones available: ", "Remove a Stone from your opponent.", "Set a Stone to a free intersection.",
 			"Move a Stone around.", "Jump a Stone to a free intersection.",
 			"This match is a tie!", "wins!", "Do you want to play another match?", "\uE000 Yes", "\uE001 No",
-			"StackMill-Core: SuperSaiyajinStackZ", "Universal-Core: Universal-Team",
+
 			"Main", "How to Play", "Phase 1", "Phase 2", "Phase 3", "Win Conditions", "Instructions",
 
 			"Main ( 1 / 7 )", "How to Play ( 2 / 7 )", "Phase 1: Placing Stones ( 3 / 7 )", "Phase 2: Moving Stones ( 4 / 7 )",
@@ -115,21 +122,23 @@ private:
 			"- Phase 1: Tap a intersection from the lines to play a Stone.\n\n"
 			"- Phase 2 & 3: Tap a Stone and tap on one of the highlighted Intersections to move / jump the Stone.\n\n"
 			"- Remove: Tap a highlighted Stone to remove it.\n\n"
-			"Keep in mind, that you can also use the D-Pad optionally, if you don't want to use touch.",
-
-			"Import / Export", "Import Game", "Export Game",
-			"Player 1 Stone Color", "Player 2 Stone Color", "Preview Play Color", "Computer Opponent (Disabled, Random, 50:50)"
+			"Keep in mind, that you can also use the D-Pad optionally, if you don't want to use touch."
 		},
 
 		/* German. */
 		{
-			"Spiel", "Einstellungen", "Credits", "Spiel-Einstellungen", "Sprache", "Spieler",
+			"Spiel", "Einstellungen", "Credits", "Spiel-Einstellungen", "Sprache",
+			"Import / Export",
+			"Spieler 1 Steinfarbe", "Spieler 2 Steinfarbe", "Spielvorschau-Farbe", "Computer Gegner (Deaktiviert, Zufall, 50:50)",
+			"Spiel Importieren", "Spiel Exportieren",
 			"StackMill entwickelt von SuperSaiyajinStackZ.\nCopyright (c) 2021",
 			"StackMill entwickelt von SuperSaiyajinStackZ.", "Grafiken: SuperSaiyajinStackZ",
-			"Steine verfügbar: ", "Entferne einen Stein deines Gegners.", "Setze einen Stein zu einem freien Schnittpunkt.",
+			"StackMill-Core: SuperSaiyajinStackZ", "Universal-Core: Universal-Team",
+
+			"Spieler", "Steine verfügbar: ", "Entferne einen Stein deines Gegners.", "Setze einen Stein zu einem freien Schnittpunkt.",
 			"Bewege einen Stein.", "Springe einen Stein zu einem freien Schnittpunkt.",
 			"Dieses Spiel ist ein Unentschieden!", "gewinnt!", "Willst du eine weitere Runde spielen?", "\uE000 Ja", "\uE001 Nein",
-			"StackMill-Core: SuperSaiyajinStackZ", "Universal-Core: Universal-Team",
+
 			"Haupt", "Spielanleitung", "Phase 1", "Phase 2", "Phase 3", "Gewinnbedingungen", "Anweisungen",
 
 			"Haupt ( 1 / 7 )", "Spielanleitung ( 2 / 7 )", "Phase 1: Steine Platzieren ( 3 / 7 )", "Phase 2: Steine bewegen ( 4 / 7 )",
@@ -154,7 +163,7 @@ private:
 			"Das Spiel besitzt 3 Phasen, die nächsten Seiten erklären die Phasen.",
 
 			/* Rule 3. */
-			"Dies ist die erste Phase von Spiel, welches der fall sein wird, bis alle 9 Steine gespielt worden sind.\n\n"
+			"Dies ist die erste Phase des Spiels, welches der fall sein wird, bis alle 9 Steine gespielt worden sind.\n\n"
 			"Der erste Spieler startet mit dem platzieren des ersten Steins an einem Schnittpunkt der Linien. Danach macht der zweite Spieler das selbe bis alle 9 Steine gespielt worden sind.\n\n"
 			"Das Ziel in dieser Phase ist es eine gute Form zu bilden für die nächste Phase, damit du einfach deine Steine bewegen kannst.\n\n"
 			"Falls alle Steine gespielt worden sind, geht es mit der nächsten Phase weiter: Bewegen.",
@@ -183,10 +192,7 @@ private:
 			"- Phase 1: Berühre einen Schnittpunkt um einen Stein zu platzieren.\n\n"
 			"- Phase 2 & 3: Berühre einen Stein und dann eine der hervorgehobenen Schnittpunkte zum bewegen / springen eines Steines.\n\n"
 			"- Entfernen: Berühre einen hervorgehobenen Stein um ihn zu entfernen.\n\n"
-			"Behalte im Kopf, dass du ebenfalls das Steuerkreuz benutzen kannst, falls du nicht den touchscreen benutzen willst.",
-
-			"Import / Export", "Spiel Importieren", "Spiel Exportieren",
-			"Spieler 1 Steinfarbe", "Spieler 2 Steinfarbe", "Spielvorschau-Farbe", "Computer Gegner (Deaktiviert, Zufall, 50:50)"
+			"Behalte jedoch im Kopf, dass du ebenfalls das Steuerkreuz benutzen kannst, falls du nicht den touchscreen benutzen willst."
 		}
 	};
 };

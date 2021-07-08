@@ -954,8 +954,7 @@ void GameTab::PopupPrompt() {
 
 		};
 
-
-		Gui::DrawStringCentered(0, 70 + PromptPos, 0.5f, TEXT_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::AnotherRound));
+		Gui::DrawStringCentered(0, 70 + PromptPos, 0.5f, TEXT_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::NextRound));
 
 		/* Display Prompt Buttons. */
 		for (int8_t Idx = 0; Idx < 2; Idx++) {

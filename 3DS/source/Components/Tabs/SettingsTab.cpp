@@ -72,7 +72,7 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 				if (this->SelectedOption == 1) Gui::drawGrid(5 + Tab::SettingsOffset, 80 + AddOffs, 310, 50, BAR_COLOR_OUTLINE);
 
 				/* Possibly Play Color. */
-				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 135 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::HighlightColor));
+				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 135 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::PreviewColor));
 				for (int8_t Idx = 0; Idx < 10; Idx++) {
 					StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 155 + AddOffs);
 				};
@@ -192,7 +192,6 @@ void SettingsTab::MainHandle() {
 		if (this->SelectedOption > 0) this->SelectedOption--;
 	};
 };
-
 
 
 void SettingsTab::GameSettingsHandle() {
