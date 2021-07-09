@@ -56,11 +56,11 @@ public:
 private:
 	LangHandler::Langs ActiveLang = LangHandler::Langs::English;
 
-	const std::string TranslationStrings[2][49] = {
+	const std::string TranslationStrings[3][49] = {
 		/* English. */
 		{
 			"Game", "Settings", "Credits", "Game Settings", "Language", "Import / Export",
-			"Player 1 Stone Color", "Player 2 Stone Color", "Preview Play Color", "Computer Opponent (Disabled, Random, 50:50)",
+			"Player 1 Stone Color", "Player 2 Stone Color", "Play Preview Color", "Computer Opponent (Disabled, Random, 50:50)",
 			"Import Game", "Export Game",
 			"StackMill developed by SuperSaiyajinStackZ.\nCopyright (c) 2021",
 			"StackMill developed by SuperSaiyajinStackZ.", "Graphics: SuperSaiyajinStackZ",
@@ -75,40 +75,39 @@ private:
 			"Phase 3: 'Flying' / Jumping Stones ( 5 / 7 )", "Win conditions ( 6 / 7 )", "Instructions ( 7 / 7 )",
 
 			/* Rule 1. */
-			"StackMill is a clone of the Mill game.\n\n"
-			"The game is also known under the following Synonym(s):\n"
-			"Nine men's morris, or Nine-man morris\n"
-			"Mill, mills, or the mill game\n"
-			"Merels or merrills\n"
-			"Merelles, marelles, or morelles\n"
-			"Ninepenny marl\n"
-			"Cowboy checkers\n\n"
+			"The game is also known under the following Synonyms:\n"
+			"Nine Men's Morris, Nine-Man Morris,\n"
+			"Mill, Mills, The Mill Game,\n"
+			"Merels, Merrills,\n"
+			"Merelles, Marelles, Morelles,\n"
+			"Ninepenny Marl,\n"
+			"and Cowboy Checkers.\n\n"
 			"Check out the other pages to read more about how the game works or also see the wikipedia site here: https://en.wikipedia.org/wiki/Nine_men%27s_morris.",
 
 			/* Rule 2. */
 			"Shortly explained the rules:\n"
 			"- Both Players try to get 3 Stones in a row to form a so called 'Mill'.\n\n"
 			"- After a Mill is formed, the Player can remove a Stone from the opponent.\n\n"
-			"Keep in mind however, that you can not remove a Stone from a formed Mill from your opponent, except all the Stones are inside a Mill.\n\n"
+			"Keep in mind however, you cannot remove a Stone from a formed Mill unless all of the Stones are inside a Mill.\n\n"
 			"The game contains 3 Phases, the next pages will explain those Phases.",
 
 			/* Rule 3. */
 			"This is the first Phase of the game which will be the case until all 9 Stones have been played.\n\n"
 			"The first Player starts by placing a Stone on an intersection of the lines. Then the second Player does the same until all 9 Stones have been played.\n\n"
-			"The goal in this Phase is to form a good way for the next Phase, so you can easilly move the Stones around.\n\n"
+			"The goal in this Phase is to form a good layout for the next Phase, so you can easily move the Stones around.\n\n"
 			"If all Stones are played, then the Game Phase will switch to the second Phase: Move.",
 
 			/* Rule 4. */
 			"This is the second Phase of the game which will be the case until a Player only has 3 Stones left.\n\n"
 			"The first Player starts by moving a Stone to the left, right, up or down. Then the next Player will do the same as well.\n\n"
-			"The same process happens the whole time now, and the goal in this Phase is to move the Stones in a good way, so the opponent possibly can not move anymore or will have 3 or less Stones.\n\n"
+			"That process is now repeated for the rest of the Phase, and the goal in this Phase is to move the Stones such that the opponent cannot possibly move anymore or will have 3 or fewer Stones.\n\n"
 			"If a Player only has 3 Stones left, then it will switch to an exclusive Phase for that Player, and the Phase is: Jump.",
 
 			/* Rule 5. */
 			"This is the last Phase and is exclusive for Players with 3 Stones left.\n\n"
 			"The Player can now jump Stones to any available Position.\n"
-			"With this way, the Player is basically on the limits, because when the other Player reached a Mill, the Player lose.\n\n"
-			"The goal of this Phase is to stop your opponent from forming Mills and try to reach a tie, by reducing the Stones from the opponent to 3 as well.\n\n"
+			"This is to give the Player a chance to recover, as the other Player only needs to reach one more Mill to win the game.\n\n"
+			"The goal of this Phase is to stop your opponent from forming Mills and try to reach a tie, by reducing the opponent's Stones to 3 as well.\n\n"
 			"The next page contains possible ways how to win a match",
 
 			/* Rule 6. */
@@ -147,10 +146,10 @@ private:
 			/* Rule 1. */
 			"StackMill ist ein klon des Mühlen Spiels.\n\n"
 			"Das Spiel ist ebenfalls unter den folgenden Synonymen bekannt:\n"
-			"Nine men's morris, oder Nine-man morris\n"
-			"Mill, mills, oder the mill game\n"
-			"Merels oder merrills\n"
-			"Merelles, marelles, oder morelles\n"
+			"Nine men's morris, Nine-man morris\n"
+			"Mill, mills, the mill game\n"
+			"Merels merrills\n"
+			"Merelles, marelles, morelles\n"
 			"Ninepenny marl\n"
 			"Cowboy checkers\n\n"
 			"Schau dir die anderen Seiten an um zu erfahren wie das Spiel funktioniert oder schau dir die Wikipedia Seite hier an: https://de.wikipedia.org/wiki/M%C3%BChle_(Spiel).",
@@ -193,6 +192,74 @@ private:
 			"- Phase 2 & 3: Berühre einen Stein und dann eine der hervorgehobenen Schnittpunkte zum bewegen / springen eines Steines.\n\n"
 			"- Entfernen: Berühre einen hervorgehobenen Stein um ihn zu entfernen.\n\n"
 			"Behalte jedoch im Kopf, dass du ebenfalls das Steuerkreuz benutzen kannst, falls du nicht den touchscreen benutzen willst."
+		},
+
+		/* Japanese. */
+		{
+			"ゲーム", "設定", "クレジット", "ゲーム設定", "言語", "インポート・エクスポート",
+			"プレイヤー1の石の色", "プレイヤー2の石の色", "プレイプレビューの色", "コンピューター対戦相手（無効、ランダム、50:50）",
+			"ゲームをインポート", "ゲームをエクスポート",
+			"StackMillはSuperSaiyajinStackZによって開発しました。\n著作権 © 2021",
+			"StackMillはSuperSaiyajinStackZによって開発しました。", "グラフィックス: SuperSaiyajinStackZ",
+			"StackMill-Core: SuperSaiyajinStackZ", "Universal-Core: Universal-Team",
+			"プレイヤー", "利用可能な石: ", "対戦相手から石を取り除く。", "自由な交差点に石を置きます。",
+			"石を動かします。", "石を自由な交差点にジャンプします。",
+			"この試合は引き分けです！", "が勝ちます！", "もう1つの試合がしたいですか？", "\uE000 はい", "\uE001 いいえ",
+
+			"メイン", "プレイ方法", "第1段階", "第2段階", "第3段階", "勝利条件", "手順",
+
+			"メイン（1/7）", "プレイ方法（2/7）", "第1段階: 石を置く（3/7）", "第2段階: 石を動かす（4/7）",
+			"第3段階: 「フライング」／石をジャンプ（5/7）", "勝利条件（6/7）", "手順（7/7）",
+
+			/* Rule 1. */
+			"StackMillは『ミル(Mill)』ゲームのクローンです。\n\n"
+			"英語にはゲームが以下の同意語でも知られています:\n"
+			"Nine Men's Morris、Nine-Man Morris、\n"
+			"Mill、Mills、The Mill Game、\n"
+			"Merels、Merrills、\n"
+			"Merelles、Marelles、Morelles、\n"
+			"Ninepenny Marl、\n"
+			"およびCowboy Checkers。\n\n"
+			"ゲームの仕組みについて詳しくは、\n他のページまたは次のウィキペディアのページもご覧ください: https://ja.wikipedia.org/wiki/ナイン・メンズ・モリス",
+
+			/* Rule 2. */
+			"簡単に説明すると、ルールは:\n"
+			"- 両方のプレイヤーは、いわゆる「ミル」を形成するために\n3つの石を続けて取得しようします。\n\n"
+			"- ミルが形成された後に、プレイヤーが対戦相手から\n石を取り除くことができます。\n\n"
+			"ただし、すべての石がミルの中に入っていない限り、\n形成されたミルから石を取り除くことができませんにご注意してください。\n\n"
+			"ゲームに3段階があり、次のページではその段階について説明します。",
+
+			/* Rule 3. */
+			"これはゲームの最初の段階であり、\n9つの石がすべてプレイされるまで続きます。\n\n"
+			"最初のプレイヤーは線の交差点に石を置くことから始めます。\n次に2番目のプレイヤーは9つの石がすべて\nプレイされるまで同じことを行います。\n\n"
+			"この段階の目標は、次の段階に向けて良い配置を形成することです。\nこれにより、石を簡単に動かされます。\n\n"
+			"すべての石がプレイされると、ゲーム段階は第2段階に切り替わります: 動かす",
+
+			/* Rule 4. */
+			"これはゲームの第2段階であり、\nどちらかのプレイヤーの石が3つしか残っていないまで続きます。\n\n"
+			"最初のプレイヤーは石を左・右・上・下で動かすことから始めます。\nづきに2番目のプレイヤーは同じことを行います。\n\n"
+			"それは段階の終わりまで繰り返し、\n段階の目標は対戦相手がこれ以上動かすことができないように、\nまたは3つ以下の石を持つように石を動かすことです。\n\n"
+			"プレイヤーの石が3つしか残っていないと、\nそのプレイヤー専用の段階に切り替わります。その段階は: ジャンプ",
+
+			/* Rule 5. */
+			"これはゲームの最終の段階であり、\n3つの石しか残っていないプレイヤーで専用です。\n\n"
+			"今では、プレイヤーは石を利用可能な任意の\n位置にジャンプすることができます。\n"
+			"これは、他のプレイヤーがゲーム勝つにもう1つのミルに到達する\nだけでため、プレイヤーにカムバックする機会を与えるためです。\n\n"
+			"この段階の目標は、対戦相手がミルを形成するを防ぎ、\n対戦相手の石を3つに減らすことで引き分けに到達しようとすることです。\n\n"
+			"次のページには、試合に勝つための可能な方法が含まれています。",
+
+			/* Rule 6. */
+			"試合に勝つには、次のいずれかの条件が発生する必要があります:\n\n"
+			"- 対戦相手は有効なターンを行うことができなかったため、\n閉じ込められました。\n\n"
+			"- 対戦相手の石が3つしか残っていて、\nミルを形成した場合には、1つの石を奪うと、\n対戦相手はもうミルを形成できなくなります。\n\n"
+			"ただし、両方のプレイヤーの石が3つしか残っていないと、\n引き分け可能性がありますにご注意してください。",
+
+			/* Rule 7. */
+			"ゲームをプレイする手順はとても簡単です。\n\n"
+			"- 第1段階: 交差点をタップして石をプレイします。\n\n"
+			"- 第2と第3段階: 石をタップし、強調表示される交差点を1つタップして、\n石を動かします・ジャンプします。\n\n"
+			"- 取り除く: 強調表示される石をタップして取り除きます。\n\n"
+			"タッチを使用したくない場合は、\nオプションで十字キーを使用できますにご注意してください。"
 		}
 	};
 };

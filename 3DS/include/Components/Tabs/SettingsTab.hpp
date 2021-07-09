@@ -63,9 +63,10 @@ private:
 
 
 	void LanguageHandle();
-	static constexpr Structs::ButtonPos LanguagePos[2] = {
+	static constexpr Structs::ButtonPos LanguagePos[3] = {
 		{ 37, 32, 18, 18 }, // English.
-		{ 37, 72, 18, 18 } // Deutsch.
+		{ 37, 72, 18, 18 }, // Deutsch.
+		{ 37, 112, 18, 18 } // 日本語 (Japanese).
 	};
 
 

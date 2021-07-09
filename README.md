@@ -81,3 +81,7 @@ Once you've cloned the repository (with submodules), simply run `make` in the `3
 
 ### Others
 - [Universal-Team](https://github.com/Universal-Team): Universal-Core.
+
+### Translators
+- [SuperSaiyajinStackZ](https://github.com/SuperSaiyajinStackZ): German & English.
+- [Pk11](https://github.com/Epicpkmn11): Japanese & English.
