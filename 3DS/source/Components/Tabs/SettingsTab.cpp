@@ -153,7 +153,7 @@ void SettingsTab::MainHandle() {
 		for (int8_t Idx = 1; Idx < 4; Idx++) {
 			if (Common::Touching(StackMill3DS::App->T, this->MainPos[Idx - 1])) {
 				this->Menu = (SettingsTab::SubMenu)Idx;
-				this->In = true, this->SelectedOption = (this->Menu == SettingsTab::SubMenu::Language ? StackMill3DS::App->LH->GetLang() : 0);
+				this->In = true, this->SelectedOption = 0, this->Language = StackMill3DS::App->LH->GetLang();
 				SettingsTab::Swipe = true;
 				break;
 			};
@@ -177,7 +177,7 @@ void SettingsTab::MainHandle() {
 
 			case 2:
 				this->Menu = SettingsTab::SubMenu::ImportExport;
-				this->In = true, this->SelectedOption = 0;
+				this->In = true, this->Language = StackMill3DS::App->LH->GetLang();
 				SettingsTab::Swipe = true;
 				break;
 		};
