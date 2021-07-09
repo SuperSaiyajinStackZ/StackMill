@@ -1,6 +1,6 @@
 # StackMill
 <p align="center">
-	<a href="https://github.com/SuperSaiyajinStackZ/StackMill/releases/latest"><img src="https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/logos/v0.1.0-v0.2.0/ReadMeCover.png"></a><br>
+	<a href="https://github.com/SuperSaiyajinStackZ/StackMill/releases/latest"><img src="https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/logos/v0.1.0-v0.3.0/ReadMeCover.png"></a><br>
 	<b>A clone of the mill game for Nintendo 3DS.</b><br>
 </p>
 
@@ -38,7 +38,11 @@ StackMill includes the following features right now:
 ![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/rules7.png)
 
 ### Settings Tab
-![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/settingsTab.png)
+![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/settingsTabMain.png)
+![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/settingsTabGameSettings.png)
+![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/settingsTabLanguage.png)
+![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/settingsTabImportExport.png)
+
 
 ### Splash
 ![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/splash.png)

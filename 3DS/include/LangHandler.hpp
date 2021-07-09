@@ -75,6 +75,7 @@ private:
 			"Phase 3: 'Flying' / Jumping Stones ( 5 / 7 )", "Win conditions ( 6 / 7 )", "Instructions ( 7 / 7 )",
 
 			/* Rule 1. */
+			"StackMill is a clone of the Mill game.\n\n"
 			"The game is also known under the following Synonyms:\n"
 			"Nine Men's Morris, Nine-Man Morris,\n"
 			"Mill, Mills, The Mill Game,\n"
@@ -126,8 +127,7 @@ private:
 
 		/* German. */
 		{
-			"Spiel", "Einstellungen", "Credits", "Spiel-Einstellungen", "Sprache",
-			"Import / Export",
+			"Spiel", "Einstellungen", "Credits", "Spiel-Einstellungen", "Sprache", "Import / Export",
 			"Spieler 1 Steinfarbe", "Spieler 2 Steinfarbe", "Spielvorschau-Farbe", "Computer Gegner (Deaktiviert, Zufall, 50:50)",
 			"Spiel Importieren", "Spiel Exportieren",
 			"StackMill entwickelt von SuperSaiyajinStackZ.\nCopyright (c) 2021",
@@ -151,7 +151,7 @@ private:
 			"Merels merrills\n"
 			"Merelles, marelles, morelles\n"
 			"Ninepenny marl\n"
-			"Cowboy checkers\n\n"
+			"und Cowboy checkers.\n\n"
 			"Schau dir die anderen Seiten an um zu erfahren wie das Spiel funktioniert oder schau dir die Wikipedia Seite hier an: https://de.wikipedia.org/wiki/M%C3%BChle_(Spiel).",
 
 			/* Rule 2. */
