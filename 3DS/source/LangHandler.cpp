@@ -25,10 +25,29 @@
 */
 
 #include "LangHandler.hpp"
+#include <3ds.h>
 
 
-LangHandler::LangHandler(const LangHandler::Langs Lng) { this->LoadLang(Lng); };
+LangHandler::LangHandler() {
+	uint8_t Lang = 1;
+	CFGU_GetSystemLanguage(&Lang); // Get System Language.
+
+	switch(Lang) {
+		case 0:
+			this->ActiveLang = LangHandler::Langs::Japanese;
+			break;
+
+		case 1:
+		default:
+			this->ActiveLang = LangHandler::Langs::English;
+			break;
+
+		case 3:
+			this->ActiveLang = LangHandler::Langs::German;
+			break;
+	};
+};
+
+
 void LangHandler::LoadLang(const LangHandler::Langs Lng) { this->ActiveLang = Lng; };
-
-
 std::string LangHandler::Translation(const LangHandler::Strings STR) const { return this->TranslationStrings[(int8_t)this->ActiveLang][(int8_t)STR]; };

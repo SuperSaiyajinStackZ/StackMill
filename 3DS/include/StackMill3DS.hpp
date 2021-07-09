@@ -53,13 +53,19 @@ public:
 
 	uint32_t Down = 0, Repeat = 0;
 	touchPosition T;
-	bool Running = true;
+	bool Running = true, ConfigChanged = false;
 	uint8_t FadeAlpha = 255;
+
+	void LoadConfig();
+	void SaveConfig();
 private:
 	std::unique_ptr<GameTab> Game = nullptr;
 	std::unique_ptr<SettingsTab> Settings = nullptr;
 	std::unique_ptr<Tab> _Tab = nullptr;
 	std::unique_ptr<CreditsTab> Credits = nullptr;
+
+	static constexpr int ConfigVer = 1; // Increase by config changes.
+	static constexpr int ConfigSize = 0xA;
 };
 
 #endif

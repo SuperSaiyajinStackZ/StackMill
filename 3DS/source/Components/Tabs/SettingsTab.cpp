@@ -210,6 +210,7 @@ void SettingsTab::GameSettingsHandle() {
 				for (int8_t Idx2 = 0; Idx2 < 3; Idx2++) {
 					if (StackMill3DS::App->T.py >= (45 + (Idx2 * 55)) && StackMill3DS::App->T.py <= (45 + (Idx2 * 55) + 20)) {
 						SettingsTab::StoneColors[Idx2] = Idx;
+						StackMill3DS::App->ConfigChanged = true;
 						return;
 					};
 				};
@@ -220,6 +221,7 @@ void SettingsTab::GameSettingsHandle() {
 		for (int8_t Idx = 0; Idx < 3; Idx++) {
 			if (StackMill3DS::App->T.px >= this->XPos[4 + Idx] - 15 && StackMill3DS::App->T.px <= this->XPos[4 + Idx] - 15 + 20 && StackMill3DS::App->T.py >= 210 && StackMill3DS::App->T.py <= 230) {
 				SettingsTab::AI = Idx;
+				StackMill3DS::App->ConfigChanged = true;
 				return;
 			};
 		};
@@ -236,18 +238,30 @@ void SettingsTab::GameSettingsHandle() {
 	/* Color Switch & AI Switch. */
 	if (StackMill3DS::App->Repeat & KEY_RIGHT) {
 		if (this->SelectedOption < 3) {
-			if (SettingsTab::StoneColors[this->SelectedOption] < 9) SettingsTab::StoneColors[this->SelectedOption]++;
+			if (SettingsTab::StoneColors[this->SelectedOption] < 9) {
+				SettingsTab::StoneColors[this->SelectedOption]++;
+				StackMill3DS::App->ConfigChanged = true;
+			};
 
 		} else {
-			if (SettingsTab::AI < 2) SettingsTab::AI++;
+			if (SettingsTab::AI < 2) {
+				SettingsTab::AI++;
+				StackMill3DS::App->ConfigChanged = true;
+			};
 		};
 	};
 	if (StackMill3DS::App->Repeat & KEY_LEFT) {
 		if (this->SelectedOption < 3) {
-			if (SettingsTab::StoneColors[this->SelectedOption] > 0) SettingsTab::StoneColors[this->SelectedOption]--;
+			if (SettingsTab::StoneColors[this->SelectedOption] > 0) {
+				SettingsTab::StoneColors[this->SelectedOption]--;
+				StackMill3DS::App->ConfigChanged = true;
+			};
 
 		} else {
-			if (SettingsTab::AI > 0) SettingsTab::AI--;
+			if (SettingsTab::AI > 0) {
+				SettingsTab::AI--;
+				StackMill3DS::App->ConfigChanged = true;
+			};
 		};
 	};
 };
@@ -270,6 +284,7 @@ void SettingsTab::LanguageHandle() {
 	if (StackMill3DS::App->Down & KEY_A) {
 		/* Load Language. */
 		StackMill3DS::App->LH->LoadLang((LangHandler::Langs)this->Language);
+		StackMill3DS::App->ConfigChanged = true;
 
 		this->In = false, this->SelectedOption = 1;
 		SettingsTab::Swipe = true;
@@ -279,8 +294,10 @@ void SettingsTab::LanguageHandle() {
 		for (int8_t Idx = 0; Idx < 3; Idx++) {
 			if (Common::Touching(StackMill3DS::App->T, this->LanguagePos[Idx])) {
 				this->Language = Idx;
+
 				/* Load Language. */
 				StackMill3DS::App->LH->LoadLang((LangHandler::Langs)this->Language);
+				StackMill3DS::App->ConfigChanged = true;
 
 				this->In = false, this->SelectedOption = 1;
 				SettingsTab::Swipe = true;

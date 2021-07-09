@@ -48,11 +48,12 @@ public:
 
 	enum class Langs : int8_t { English = 0, German = 1, Japanese = 2 };
 
-	LangHandler(const LangHandler::Langs Lng);
+	LangHandler();
 	void LoadLang(const LangHandler::Langs Lng);
 
 	std::string Translation(const LangHandler::Strings STR) const;
 	int8_t GetLang() const { return (int8_t)this->ActiveLang; };
+	LangHandler::Langs GetLangEnum() const { return this->ActiveLang; };
 private:
 	LangHandler::Langs ActiveLang = LangHandler::Langs::English;
 
@@ -237,7 +238,7 @@ private:
 
 			/* Rule 4. */
 			"これはゲームの第2段階であり、\nどちらかのプレイヤーの石が3つしか残っていないまで続きます。\n\n"
-			"最初のプレイヤーは石を左・右・上・下で動かすことから始めます。\nづきに2番目のプレイヤーは同じことを行います。\n\n"
+			"最初のプレイヤーは石を左・右・上・下で動かすことから始めます。\n次に2番目のプレイヤーは同じことを行います。\n\n"
 			"それは段階の終わりまで繰り返し、\n段階の目標は対戦相手がこれ以上動かすことができないように、\nまたは3つ以下の石を持つように石を動かすことです。\n\n"
 			"プレイヤーの石が3つしか残っていないと、\nそのプレイヤー専用の段階に切り替わります。その段階は: ジャンプ",
 
