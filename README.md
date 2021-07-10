@@ -16,7 +16,15 @@ StackMill includes the following features right now:
 
 * Select a color from 10 for the Stones from Player 1, Player 2 and a highlighted color for possible plays.
 
-* Play together with a friend on a single console, with a random Computer / AI or with a 50:50 Computer / AI. The random AI is enabled by default, so if you want to play with a friend, disable it in the second tab `Settings`, so that `Computer Opponent` has the Red Stone.
+* Multi Language support. Currently supporting English, German and Japanese.
+
+* Importing / Exporting the current match's data, so you can save important matches whenever you want and load them whenever you want.
+
+* Play together with a friend on a single console, with a random Computer / AI or with a 50:50 Computer / AI. The random AI is enabled by default, so if you want to play with a friend, disable it in the second tab `Settings` -> `Game Settings`, so that `Computer Opponent` has the Red Stone.
+
+## Game Data Structure
+You want to learn more about the GameData Structure? Then checkout the [GameDataStructure](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/GameDataStructure.md).
+
 
 ## Screenshots
 
