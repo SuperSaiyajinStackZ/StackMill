@@ -29,10 +29,10 @@
 
 
 void CreditsTab::Draw() {
-	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 35, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::DevBy));
-	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 55, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::SmilCore));
-	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 70, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Graphics));
-	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 85, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::UnivCore));
+	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 35, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::DevBy), 310);
+	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 55, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::SmilCore), 310);
+	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 70, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Graphics), 310);
+	Gui::DrawStringCentered(0 + Tab::CreditsOffset, 85, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::UnivCore), 310);
 
 	StackMill3DS::App->GData->DrawSprite(sprites_StackZ_idx, 110 + Tab::CreditsOffset, 105);
 };

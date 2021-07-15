@@ -68,31 +68,31 @@ void StackMill3DS::DrawTop() {
 	/* Player 1. */
 	this->GData->DrawPlayer(true, 40, 40);
 	Gui::Draw_Rect(37, 169, 106, 20, BAR_COLOR);
-	Gui::DrawString(68, 172, 0.45f, TEXT_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " 1", 100);
+	Gui::DrawString(39, 172, 0.45f, TEXT_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " 1", 100);
 	Gui::DrawString(33, 200, 0.45f, C2D_Color32(0, 0, 0, 200), this->LH->Translation(LangHandler::Strings::StonesAvailable) + std::to_string(this->Core->Available(StackMill::GameStone::White)), 120);
 
 	/* Player 2. */
 	this->GData->DrawPlayer(false, 260, 40);
 	Gui::Draw_Rect(257, 169, 106, 20, BAR_COLOR);
-	Gui::DrawString(287, 172, 0.45f, TEXT_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " 2", 100);
+	Gui::DrawString(259, 172, 0.45f, TEXT_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " 2", 100);
 	Gui::DrawString(253, 200, 0.45f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::StonesAvailable) + std::to_string(this->Core->Available(StackMill::GameStone::Black)), 120);
 
 
 	if (this->Core->InRemove()) { // Removing a stone.
-		Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " " + std::to_string(this->Core->CurrentPlayer()) + ": " + this->LH->Translation(LangHandler::Strings::RemoveStone));
+		Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " " + std::to_string(this->Core->CurrentPlayer()) + ": " + this->LH->Translation(LangHandler::Strings::RemoveStone), 395);
 
 	} else { // The phase display.
 		switch(this->Core->Phase((this->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black)) {
 			case StackMill::Phases::Set:
-				Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " " + std::to_string(this->Core->CurrentPlayer()) + ": " + this->LH->Translation(LangHandler::Strings::SetStone));
+				Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " " + std::to_string(this->Core->CurrentPlayer()) + ": " + this->LH->Translation(LangHandler::Strings::SetStone), 395);
 				break;
 
 			case StackMill::Phases::Move:
-				Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " " + std::to_string(this->Core->CurrentPlayer()) + ": " + this->LH->Translation(LangHandler::Strings::MoveStone));
+				Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::Player) + " " + std::to_string(this->Core->CurrentPlayer()) + ": " + this->LH->Translation(LangHandler::Strings::MoveStone), 395);
 				break;
 
 			case StackMill::Phases::Jump:
-				Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::Player) + ": " + this->LH->Translation(LangHandler::Strings::JumpStone));
+				Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::Player) + ": " + this->LH->Translation(LangHandler::Strings::JumpStone), 395);
 				break;
 		};
 	};

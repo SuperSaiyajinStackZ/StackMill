@@ -52,7 +52,7 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 			/* Game Settings. */
 			case SettingsTab::SubMenu::GameSettings:
 				/* Player 1 Stone Color. */
-				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 25 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Player1Color));
+				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 25 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Player1Color), 310);
 				for (int8_t Idx = 0; Idx < 10; Idx++) {
 					StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 45 + AddOffs);
 				};
@@ -61,7 +61,7 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 				if (this->SelectedOption == 0) Gui::drawGrid(5 + Tab::SettingsOffset, 25 + AddOffs, 310, 50, BAR_COLOR_OUTLINE);
 
 				/* Player 2 Stone Color. */
-				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 80 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Player2Color));
+				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 80 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Player2Color), 310);
 				for (int8_t Idx = 0; Idx < 10; Idx++) {
 					StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 100 + AddOffs);
 				};
@@ -70,7 +70,7 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 				if (this->SelectedOption == 1) Gui::drawGrid(5 + Tab::SettingsOffset, 80 + AddOffs, 310, 50, BAR_COLOR_OUTLINE);
 
 				/* Possibly Play Color. */
-				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 135 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::PreviewColor));
+				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 135 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::PreviewColor), 310);
 				for (int8_t Idx = 0; Idx < 10; Idx++) {
 					StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 155 + AddOffs);
 				};
@@ -79,7 +79,7 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 				if (this->SelectedOption == 2) Gui::drawGrid(5 + Tab::SettingsOffset, 135 + AddOffs, 310, 50, BAR_COLOR_OUTLINE);
 
 				/* AI. */
-				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 190 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Computer));
+				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 190 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Computer), 310);
 				StackMill3DS::App->GData->DrawStone(9, this->XPos[4] - 15 + Tab::SettingsOffset, 210 + AddOffs); // Red.
 				StackMill3DS::App->GData->DrawStone(4, this->XPos[5] - 15 + Tab::SettingsOffset, 210 + AddOffs); // Yellow.
 				StackMill3DS::App->GData->DrawStone(7, this->XPos[6] - 15 + Tab::SettingsOffset, 210 + AddOffs); // Green.
@@ -102,9 +102,9 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 					if (this->Language == Lang) StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->LanguagePos[Lang].x + 6 + Tab::SettingsOffset, this->LanguagePos[Lang].y + 6 + AddOffs);
 				};
 
-				Gui::DrawString(this->LanguagePos[0].x + 25 + Tab::SettingsOffset, this->LanguagePos[0].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "English", 320);
-				Gui::DrawString(this->LanguagePos[1].x + 25 + Tab::SettingsOffset, this->LanguagePos[1].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "Deutsch", 320);
-				Gui::DrawString(this->LanguagePos[2].x + 25 + Tab::SettingsOffset, this->LanguagePos[2].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "日本語", 320);
+				Gui::DrawString(this->LanguagePos[0].x + 25 + Tab::SettingsOffset, this->LanguagePos[0].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "English");
+				Gui::DrawString(this->LanguagePos[1].x + 25 + Tab::SettingsOffset, this->LanguagePos[1].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "Deutsch");
+				Gui::DrawString(this->LanguagePos[2].x + 25 + Tab::SettingsOffset, this->LanguagePos[2].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "日本語");
 			};
 			break;
 
