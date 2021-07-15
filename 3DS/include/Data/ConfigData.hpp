@@ -24,46 +24,23 @@
 *         reasonable ways as different from the original version.
 */
 
-#ifndef _STACKMILL_3DS_HPP
-#define _STACKMILL_3DS_HPP
+#ifndef _STACKMILL_CONFIGDATA_HPP
+#define _STACKMILL_CONFIGDATA_HPP
 
-#include "ConfigData.hpp"
-#include "CreditsTab.hpp"
-#include "GameTab.hpp"
-#include "GFXData.hpp"
-#include "LangHandler.hpp"
-#include "SettingsTab.hpp"
-#include "StackMill.hpp"
-#include "Tab.hpp"
-#include <3ds.h>
+#include <string>
 
-class StackMill3DS {
+class ConfigData {
 public:
-	enum class Tabs : int8_t { Game = 0, Settings = 1, Credits = 2 };
-	int Handler();
-	void Draw();
-	void DrawTop();
-	void DrawTab();
-	void InitApp();
+	ConfigData() { this->LoadConfig(); };
 
-	static std::unique_ptr<StackMill3DS> App;
-	std::unique_ptr<GFXData> GData = nullptr;
-	std::unique_ptr<LangHandler> LH = nullptr;
-	std::unique_ptr<StackMill> Core = nullptr;
-	Tabs ActiveTab = Tabs::Game;
+	void LoadConfig();
+	void SaveConfig();
 
-	uint32_t Down = 0, Repeat = 0;
-	touchPosition T;
-	bool Running = true;
-	uint8_t FadeAlpha = 255;
-
-	void ConfigChanged() { this->CData->SetChanged(); };
+	void SetChanged() { this->ConfigChanged = true; };
 private:
-	std::unique_ptr<GameTab> Game = nullptr;
-	std::unique_ptr<SettingsTab> Settings = nullptr;
-	std::unique_ptr<Tab> _Tab = nullptr;
-	std::unique_ptr<CreditsTab> Credits = nullptr;
-	std::unique_ptr<ConfigData> CData = nullptr;
+	static constexpr int ConfigVer = 1; // Increase by config changes.
+	static constexpr int ConfigSize = 0xA;
+	bool ConfigChanged = false;
 };
 
 #endif

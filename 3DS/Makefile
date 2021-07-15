@@ -56,10 +56,10 @@ VERSION_STRING := "v$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_MICRO)"
 TARGET		:=	StackMill
 BUILD		:=	build
 UNIVCORE	:= 	Universal-Core
-SOURCES		:=	$(UNIVCORE) source source/Components source/Components/Tabs
+SOURCES		:=	$(UNIVCORE) source source/Components source/Components/Tabs source/Data
 
 DATA		:=	data
-INCLUDES	:=	$(UNIVCORE) include include/Components include/Components/Tabs
+INCLUDES	:=	$(UNIVCORE) include include/Components include/Components/Tabs include/Data
 
 GRAPHICS	:=	assets/gfx
 ROMFS		:=	romfs
