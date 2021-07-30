@@ -662,7 +662,7 @@ void GameTab::Move() {
 			/* Destination is larger than the start, so go down. */
 			if (this->Fields[this->SelectedStone].y < this->Fields[this->Selection].y) {
 				ToMove = this->Fields[this->Selection].y - this->Fields[this->SelectedStone].y;
-				Direction = 2; // DOWN.
+				Direction = 2; // ↓
 
 			} else { // Destination is smaller than the start, so go up.
 				ToMove = this->Fields[this->SelectedStone].y - this->Fields[this->Selection].y;
@@ -698,7 +698,7 @@ void GameTab::Move() {
 							StackMill3DS::App->GData->DrawStone(SettingsTab::StoneColors[StackMill3DS::App->Core->Field(Idx) == StackMill::GameStone::Black], this->Fields[Idx].x + Pos, this->Fields[Idx].y);
 							break;
 
-						case 2: // DOWN
+						case 2: // ↓
 							StackMill3DS::App->GData->DrawStone(SettingsTab::StoneColors[StackMill3DS::App->Core->Field(Idx) == StackMill::GameStone::Black], this->Fields[Idx].x, this->Fields[Idx].y + Pos);
 							break;
 

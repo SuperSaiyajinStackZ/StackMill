@@ -135,23 +135,23 @@ std::vector<int8_t> StackMill::PlayablePositions(const int8_t StonePosition, con
 			switch(StonePosition) {
 				case 0:
 					if (this->_Field[1] == StackMill::GameStone::None) Positions.push_back(1); // ->
-					if (this->_Field[7] == StackMill::GameStone::None) Positions.push_back(7); // DOWN
+					if (this->_Field[7] == StackMill::GameStone::None) Positions.push_back(7); // ↓
 					break;
 
 				case 1:
 					if (this->_Field[0] == StackMill::GameStone::None) Positions.push_back(0); // <-
 					if (this->_Field[2] == StackMill::GameStone::None) Positions.push_back(2); // ->
-					if (this->_Field[9] == StackMill::GameStone::None) Positions.push_back(9); // DOWN
+					if (this->_Field[9] == StackMill::GameStone::None) Positions.push_back(9); // ↓
 					break;
 
 				case 2:
 					if (this->_Field[1] == StackMill::GameStone::None) Positions.push_back(1); // <-
-					if (this->_Field[3] == StackMill::GameStone::None) Positions.push_back(3); // DOWN
+					if (this->_Field[3] == StackMill::GameStone::None) Positions.push_back(3); // ↓
 					break;
 
 				case 3:
 					if (this->_Field[2] == StackMill::GameStone::None) Positions.push_back(2); // ^
-					if (this->_Field[4] == StackMill::GameStone::None) Positions.push_back(4); // DOWN
+					if (this->_Field[4] == StackMill::GameStone::None) Positions.push_back(4); // ↓
 					if (this->_Field[11] == StackMill::GameStone::None) Positions.push_back(11); // <-
 					break;
 
@@ -173,31 +173,31 @@ std::vector<int8_t> StackMill::PlayablePositions(const int8_t StonePosition, con
 
 				case 7:
 					if (this->_Field[0] == StackMill::GameStone::None) Positions.push_back(0); // ^
-					if (this->_Field[6] == StackMill::GameStone::None) Positions.push_back(6); // DOWN
+					if (this->_Field[6] == StackMill::GameStone::None) Positions.push_back(6); // ↓
 					if (this->_Field[15] == StackMill::GameStone::None) Positions.push_back(15); // ->
 					break;
 
 				case 8:
 					if (this->_Field[9] == StackMill::GameStone::None) Positions.push_back(9); // ->
-					if (this->_Field[15] == StackMill::GameStone::None) Positions.push_back(15); // DOWN
+					if (this->_Field[15] == StackMill::GameStone::None) Positions.push_back(15); // ↓
 					break;
 
 				case 9:
 					if (this->_Field[1] == StackMill::GameStone::None) Positions.push_back(1); // ^
 					if (this->_Field[8] == StackMill::GameStone::None) Positions.push_back(8); // <-
 					if (this->_Field[10] == StackMill::GameStone::None) Positions.push_back(10); // ->
-					if (this->_Field[17] == StackMill::GameStone::None) Positions.push_back(17); // DOWN
+					if (this->_Field[17] == StackMill::GameStone::None) Positions.push_back(17); // ↓
 					break;
 
 				case 10:
 					if (this->_Field[9] == StackMill::GameStone::None) Positions.push_back(9); // <-
-					if (this->_Field[11] == StackMill::GameStone::None) Positions.push_back(11); // DOWN
+					if (this->_Field[11] == StackMill::GameStone::None) Positions.push_back(11); // ↓
 					break;
 
 				case 11:
 					if (this->_Field[3] == StackMill::GameStone::None) Positions.push_back(3); // ->
 					if (this->_Field[10] == StackMill::GameStone::None) Positions.push_back(10); // ^
-					if (this->_Field[12] == StackMill::GameStone::None) Positions.push_back(12); // DOWN
+					if (this->_Field[12] == StackMill::GameStone::None) Positions.push_back(12); // ↓
 					if (this->_Field[19] == StackMill::GameStone::None) Positions.push_back(19); // <-
 					break;
 
@@ -207,7 +207,7 @@ std::vector<int8_t> StackMill::PlayablePositions(const int8_t StonePosition, con
 					break;
 
 				case 13:
-					if (this->_Field[5] == StackMill::GameStone::None) Positions.push_back(5); // DOWN
+					if (this->_Field[5] == StackMill::GameStone::None) Positions.push_back(5); // ↓
 					if (this->_Field[12] == StackMill::GameStone::None) Positions.push_back(12); // ->
 					if (this->_Field[14] == StackMill::GameStone::None) Positions.push_back(14); // <-
 					if (this->_Field[21] == StackMill::GameStone::None) Positions.push_back(21); // ^
@@ -221,14 +221,14 @@ std::vector<int8_t> StackMill::PlayablePositions(const int8_t StonePosition, con
 				case 15:
 					if (this->_Field[7] == StackMill::GameStone::None) Positions.push_back(7); // <-
 					if (this->_Field[8] == StackMill::GameStone::None) Positions.push_back(8); // ^
-					if (this->_Field[14] == StackMill::GameStone::None) Positions.push_back(14); // DOWN
+					if (this->_Field[14] == StackMill::GameStone::None) Positions.push_back(14); // ↓
 					if (this->_Field[23] == StackMill::GameStone::None) Positions.push_back(23); // ->
 					break;
 
 
 				case 16:
 					if (this->_Field[17] == StackMill::GameStone::None) Positions.push_back(17); // ->
-					if (this->_Field[23] == StackMill::GameStone::None) Positions.push_back(23); // DOWN
+					if (this->_Field[23] == StackMill::GameStone::None) Positions.push_back(23); // ↓
 					break;
 
 				case 17:
@@ -239,13 +239,13 @@ std::vector<int8_t> StackMill::PlayablePositions(const int8_t StonePosition, con
 
 				case 18:
 					if (this->_Field[17] == StackMill::GameStone::None) Positions.push_back(17); // <-
-					if (this->_Field[19] == StackMill::GameStone::None) Positions.push_back(19); // DOWN
+					if (this->_Field[19] == StackMill::GameStone::None) Positions.push_back(19); // ↓
 					break;
 
 				case 19:
 					if (this->_Field[11] == StackMill::GameStone::None) Positions.push_back(11); // ->
 					if (this->_Field[18] == StackMill::GameStone::None) Positions.push_back(18); // ^
-					if (this->_Field[20] == StackMill::GameStone::None) Positions.push_back(20); // DOWN
+					if (this->_Field[20] == StackMill::GameStone::None) Positions.push_back(20); // ↓
 					break;
 
 				case 20:
@@ -254,7 +254,7 @@ std::vector<int8_t> StackMill::PlayablePositions(const int8_t StonePosition, con
 					break;
 
 				case 21:
-					if (this->_Field[13] == StackMill::GameStone::None) Positions.push_back(13); // DOWN
+					if (this->_Field[13] == StackMill::GameStone::None) Positions.push_back(13); // ↓
 					if (this->_Field[20] == StackMill::GameStone::None) Positions.push_back(20); // ->
 					if (this->_Field[22] == StackMill::GameStone::None) Positions.push_back(22); // <-
 					break;
@@ -267,7 +267,7 @@ std::vector<int8_t> StackMill::PlayablePositions(const int8_t StonePosition, con
 				case 23:
 					if (this->_Field[15] == StackMill::GameStone::None) Positions.push_back(15); // <-
 					if (this->_Field[16] == StackMill::GameStone::None) Positions.push_back(16); // ^
-					if (this->_Field[22] == StackMill::GameStone::None) Positions.push_back(22); // DOWN
+					if (this->_Field[22] == StackMill::GameStone::None) Positions.push_back(22); // ↓
 					break;
 			};
 	};
