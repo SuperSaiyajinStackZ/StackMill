@@ -619,15 +619,20 @@ void GameTab::AITurn() {
 void GameTab::Handler() {
 	if (Tab::TabSwitch || SettingsTab::Swipe) return; // No Input.
 
-	/* If Player 2, it's Player 2 (If 0) or AI's mode (If 1 or 2). */
-	if (StackMill3DS::App->Core->CurrentPlayer() == 2) {
-		if (SettingsTab::AI > 0) {
-			this->AITurn();
-			return; // Return so we don't go to the Player Logic.
-		};
-	};
+	if (StackMill3DS::App->Down & KEY_START && StackMill3DS::App->Down & KEY_X) this->AIvsAI = !this->AIvsAI;
 
-	this->PlayerTurn();
+	if (this->AIvsAI) this->AITurn();
+	else {
+		/* If Player 2, it's Player 2 (If 0) or AI's mode (If 1 or 2). */
+		if (StackMill3DS::App->Core->CurrentPlayer() == 2) {
+			if (SettingsTab::AI > 0) {
+				this->AITurn();
+				return; // Return so we don't go to the Player Logic.
+			};
+		};
+
+		this->PlayerTurn();
+	};
 };
 
 

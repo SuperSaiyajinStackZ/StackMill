@@ -42,6 +42,7 @@ private:
 
 	bool ShowPointer = true;
 	bool StoneSelect = false, StartMode = true;
+	bool AIvsAI = false;
 	int8_t Selection = 0, SelectedStone = 0, SelectionMode = 1, Winner = 0;
 
 	void Up(int8_t &Slt);
