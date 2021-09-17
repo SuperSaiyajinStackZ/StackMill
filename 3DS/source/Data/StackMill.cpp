@@ -97,12 +97,12 @@ bool StackMill::CanDoSpecifiedPlay(const int8_t OldPos, const int8_t NewPos, con
 				/* Go through all the Positions and check if the New Position is included. */
 				for (int8_t Idx = 0; Idx < (int8_t)PossiblePositions.size(); Idx++) {
 					if (PossiblePositions[Idx] == NewPos) return true; // Included!
-				};
-			};
-		};
+				}
+			}
+		}
 
 		break;
-	};
+	}
 
 	return false;
 };
@@ -124,7 +124,7 @@ std::vector<int8_t> StackMill::PlayablePositions(const int8_t StonePosition, con
 			/* Check if Index is empty, if so, push that index back. */
 			for (int8_t Idx = 0; Idx < 24; Idx++) {
 				if (this->_Field[Idx] == StackMill::GameStone::None) Positions.push_back(Idx);
-			};
+			}
 			break;
 
 		/* Phase: Move a stone for 1 position. */
@@ -269,8 +269,8 @@ std::vector<int8_t> StackMill::PlayablePositions(const int8_t StonePosition, con
 					if (this->_Field[16] == StackMill::GameStone::None) Positions.push_back(16); // ^
 					if (this->_Field[22] == StackMill::GameStone::None) Positions.push_back(22); // ↓
 					break;
-			};
-	};
+			}
+	}
 
 	Positions.shrink_to_fit();
 	return Positions;
@@ -291,8 +291,8 @@ bool StackMill::Match(const int8_t StoneIdx, const StackMill::GameStone Stone) {
 		for (int8_t Idx = 0; Idx < 16; Idx++) {
 			if (this->Fields[Idx].Stones[0] == StoneIdx || this->Fields[Idx].Stones[1] == StoneIdx || this->Fields[Idx].Stones[2] == StoneIdx) {
 				Includes.push_back(Idx);
-			};
-		};
+			}
+		}
 
 		Includes.shrink_to_fit(); // No need for useless allocation.
 
@@ -301,8 +301,8 @@ bool StackMill::Match(const int8_t StoneIdx, const StackMill::GameStone Stone) {
 			if (this->_Field[this->Fields[Includes[I]].Stones[0]] == Stone && // Check first stone.
 				this->_Field[this->Fields[Includes[I]].Stones[1]] == Stone && // Check second stone.
 				this->_Field[this->Fields[Includes[I]].Stones[2]] == Stone) return true; // And the last and if it matches, return true.
-		};
-	};
+		}
+	}
 
 	return false;
 };
@@ -330,8 +330,8 @@ StackMill::RemoveState StackMill::StoneRemove(const int8_t StoneIdx, const Stack
 			if (Removeables[Idx] == StoneIdx) {
 				Included = true; // It is included, so we can continue.
 				break;
-			};
-		};
+			}
+		}
 
 		if (Included) { // If the StoneIdx is included -> Continue.
 			int8_t RemoveIdx = -1;
@@ -341,8 +341,8 @@ StackMill::RemoveState StackMill::StoneRemove(const int8_t StoneIdx, const Stack
 				if (this->Players[Stone == StackMill::GameStone::Black]->Position(Idx) == StoneIdx) {
 					RemoveIdx = Idx;
 					break;
-				};
-			};
+				}
+			}
 
 			/* Only do this, if stone can actually be removed. */
 			if (RemoveIdx != -1) {
@@ -353,9 +353,9 @@ StackMill::RemoveState StackMill::StoneRemove(const int8_t StoneIdx, const Stack
 				/* In case only 3 Stones are available -> Switch to the Jump Phase. */
 				if (this->Players[Stone == StackMill::GameStone::Black]->Available() == 3) this->Players[Stone == StackMill::GameStone::Black]->Phase(StackMill::Phases::Jump);
 				return (this->Players[Stone == StackMill::GameStone::Black]->Available() < 3 ? StackMill::RemoveState::Lost : StackMill::RemoveState::Removed);
-			};
-		};
-	};
+			}
+		}
+	}
 
 	return StackMill::RemoveState::Invalid;
 };
@@ -383,8 +383,8 @@ std::vector<int8_t> StackMill::RemoveableStones(const StackMill::GameStone Stone
 			for (int8_t Idx2 = 0; Idx2 < 16; Idx2++) {
 				if (this->Fields[Idx2].Stones[0] == Index || this->Fields[Idx2].Stones[1] == Index || this->Fields[Idx2].Stones[2] == Index) {
 					PotentialMills.push_back(Idx2);
-				};
-			};
+				}
+			}
 
 			PotentialMills.shrink_to_fit();
 			if (PotentialMills.empty()) continue; // Go to the next stone.
@@ -396,13 +396,13 @@ std::vector<int8_t> StackMill::RemoveableStones(const StackMill::GameStone Stone
 					this->_Field[this->Fields[PotentialMills[Idx2]].Stones[2]] == Stone) { // Check third Match position.
 						Contains = true; // If it contains it, set that it contains it.
 						break;
-				};
-			};
+				}
+			}
 
 			/* If it doesn't contain it, that stone can be removed freely. */
 			if (!Contains) Stones.push_back(Index);
-		};
-	};
+		}
+	}
 
 	/* Additional checks, in case the remove-able stones are empty. */
 	if (Stones.empty()) {
@@ -412,8 +412,8 @@ std::vector<int8_t> StackMill::RemoveableStones(const StackMill::GameStone Stone
 
 			/* If 0 or larger -> Push it back to the remove-able stone positions, because all are mills and you can remove any from them. */
 			if (Index > -1) Stones.push_back(Index);
-		};
-	};
+		}
+	}
 
 	Stones.shrink_to_fit(); // Get rid of useless allocation.
 	return Stones;
@@ -451,8 +451,8 @@ StackMill::PlayStatus StackMill::Play(const int8_t OldPos, const int8_t NewPos) 
 
 			} else {
 				return StackMill::PlayStatus::Normal;
-			};
-		};
+			}
+		}
 
 	/* The Phase is Move OR Jump, both of them do not rely on new setted stones anymore and instead change the available ones. */
 	} else {
@@ -463,8 +463,8 @@ StackMill::PlayStatus StackMill::Play(const int8_t OldPos, const int8_t NewPos) 
 			if (this->Players[this->CPlayer - 1]->Position(I) == OldPos) {
 				StonePos = I;
 				break;
-			};
-		};
+			}
+		}
 
 		/* If the previous check was successful, then we can go ahead. */
 		if (StonePos != -1) {
@@ -485,10 +485,10 @@ StackMill::PlayStatus StackMill::Play(const int8_t OldPos, const int8_t NewPos) 
 
 				} else {
 					return StackMill::PlayStatus::Normal;
-				};
-			};
-		};
-	};
+				}
+			}
+		}
+	}
 
 	return StackMill::PlayStatus::Invalid; // If something went wrong, returns Invalid.
 };
@@ -509,8 +509,8 @@ bool StackMill::CanPlay() {
 
 			/* In case it's not empty, we can play. */
 			if (!Plays.empty()) return true;
-		};
-	};
+		}
+	}
 
 	return false; // If nothing is play-able, return false.
 };
@@ -528,11 +528,10 @@ std::pair<int8_t, int8_t> StackMill::AIRandomPlay() {
 	switch(this->Phase((this->CPlayer == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black)) {
 		/* Player Phase: Set a stone to a free spot. */
 		case StackMill::Phases::Set:
-
 			/* Check all Field position for free spots and push them back to the PossiblePlays vector. */
 			for (int8_t Idx = 0; Idx < 24; Idx++) {
 				if (this->Field(Idx) == StackMill::GameStone::None) PossiblePlays.push_back(Idx);
-			};
+			}
 
 			/* Choose a random free spot. */
 			PossiblePlays.shrink_to_fit();
@@ -541,15 +540,14 @@ std::pair<int8_t, int8_t> StackMill::AIRandomPlay() {
 
 		/* Player Phase: Move a stone for 1 spot. */
 		case StackMill::Phases::Move:
-
 			/* Check all available Stones for play-abilities and push them to the PossiblePlays vector. */
 			for (int8_t Idx = 0; Idx < 9; Idx++) {
 				if (this->Players[this->CPlayer - 1]->Position(Idx) > -1) {
 					if (!this->PlayablePositions(this->Players[this->CPlayer - 1]->Position(Idx), StackMill::Phases::Move).empty()) {
 						PossiblePlays.push_back(this->Players[this->CPlayer - 1]->Position(Idx));
-					};
-				};
-			};
+					}
+				}
+			}
 
 			/* Choose a random Stone that is play-able. */
 			PossiblePlays.shrink_to_fit();
@@ -563,11 +561,10 @@ std::pair<int8_t, int8_t> StackMill::AIRandomPlay() {
 
 		/* Player Phase: Jump to a free spot. */
 		case StackMill::Phases::Jump:
-
 			/* Check all Field position for free spots and push them back to the PossiblePlays vector. */
 			for (int8_t Idx = 0; Idx < 24; Idx++) {
 				if (this->Field(Idx) == StackMill::GameStone::None) PossiblePlays.push_back(Idx);
-			};
+			}
 
 			/* Choose a random free spot. */
 			PossiblePlays.shrink_to_fit();
@@ -578,14 +575,14 @@ std::pair<int8_t, int8_t> StackMill::AIRandomPlay() {
 			for (int8_t Idx = 0; Idx < 9; Idx++) {
 				if (this->Players[this->CPlayer - 1]->Position(Idx) > -1) {
 					PossiblePlays.push_back(this->Players[this->CPlayer - 1]->Position(Idx));
-				};
-			};
+				}
+			}
 
 			/* Choose a random Stone that is play-able. */
 			PossiblePlays.shrink_to_fit();
 			if (!PossiblePlays.empty()) Play.first = PossiblePlays[rand() % (int8_t)PossiblePlays.size()];
 			break;
-	};
+	}
 
 	return Play;
 };
@@ -617,10 +614,10 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 						/* The opponent aka player has a dangerous situation for the Computer / AI, cause a match is possible with the next Stone. */
 						if (this->Match(Idx, this->_Field[Idx])) {
 							Danger = true, DangerIdx = Idx;
-						};
+						}
 
 						this->_Field[Idx] = StackMill::GameStone::None; // Reset again, because we don't play there actually.
-					};
+					}
 
 					if (!CanMatch) {
 						/* Set the stone temporarely here to check for a match. */
@@ -629,12 +626,12 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 						/* The Computer / AI can do a match. */
 						if (this->Match(Idx, this->_Field[Idx])) {
 							CanMatch = true, MatchIdx = Idx;
-						};
+						}
 
 						this->_Field[Idx] = StackMill::GameStone::None; // Reset again, because we don't play there actually.
-					};
-				};
-			};
+					}
+				}
+			}
 
 			PossiblePlays.shrink_to_fit(); // Get rid of useless allocation.
 
@@ -648,9 +645,10 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 			else if (DangerCounter) Play.second = DangerIdx;
 			else {
 				if (!PossiblePlays.empty()) Play.second = PossiblePlays[(rand() % (int8_t)PossiblePlays.size())];
-			};
-		};
-		break;
+			}
+
+			break;
+		}
 
 		/* Player Phase: Move a stone for 1 spot. */
 		case StackMill::Phases::Move: {
@@ -666,8 +664,8 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 				if (this->Players[this->CPlayer == 2]->Position(Idx) > -1) {
 					if (!this->PlayablePositions(this->Players[this->CPlayer == 2]->Position(Idx), StackMill::Phases::Move).empty()) {
 						PossiblePlays.push_back(this->Players[this->CPlayer == 2]->Position(Idx));
-					};
-				};
+					}
+				}
 
 				/*
 					Do the same for the opponent, AKA: Player.
@@ -677,9 +675,9 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 				if (this->Players[this->CPlayer == 1]->Position(Idx) > -1) {
 					if (!this->PlayablePositions(this->Players[this->CPlayer == 1]->Position(Idx), this->Players[this->CPlayer == 1]->Phase()).empty()) {
 						OpponentPossiblePlays.push_back(this->Players[this->CPlayer == 1]->Position(Idx));
-					};
-				};
-			};
+					}
+				}
+			}
 
 			/* No useless allocation. */
 			PossiblePlays.shrink_to_fit(); OpponentPossiblePlays.shrink_to_fit();
@@ -698,7 +696,7 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 					/* The Computer / AI can do a match. */
 					if (this->Match(Checks[Idx2], this->_Field[Checks[Idx2]])) {
 						CanMatch = true, MatchIdx = { PossiblePlays[Idx], Checks[Idx2] };
-					};
+					}
 
 					/* Reset temporarely stuff. */
 					this->_Field[PossiblePlays[Idx]] = this->_Field[Checks[Idx2]];
@@ -706,7 +704,7 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 				}
 
 				if (CanMatch) break;
-			};
+			}
 
 			/* Do the same for the Opponent AKA Player. */
 			for (int8_t Idx = 0; Idx < (int8_t)OpponentPossiblePlays.size(); Idx++) {
@@ -721,7 +719,7 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 					/* The Opponent AKA Player can do a match. */
 					if (this->Match(Checks[Idx2], this->_Field[Checks[Idx2]])) {
 						Danger = true, DangerIdx = { OpponentPossiblePlays[Idx], Checks[Idx2] };
-					};
+					}
 
 					/* Reset temporarely stuff. */
 					this->_Field[OpponentPossiblePlays[Idx]] = this->_Field[Checks[Idx2]];
@@ -729,7 +727,7 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 				}
 
 				if (Danger) break;
-			};
+			}
 
 			/* If one of those fit, do 50:50 chance for a match or counter. */
 			bool MatchCounter = false, DangerCounter = false;
@@ -753,11 +751,11 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 							MatchIdx = { PossiblePlays[Idx], Checks[Idx2] };
 							CanBlock = true;
 							break;
-						};
-					};
+						}
+					}
 
 					if (CanBlock) break;
-				};
+				}
 
 				if (CanBlock) Play = MatchIdx;
 
@@ -770,10 +768,11 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 					PossiblePlays = this->PlayablePositions(Play.first, StackMill::Phases::Move);
 					PossiblePlays.shrink_to_fit();
 					if (!PossiblePlays.empty()) Play.second = PossiblePlays[rand() % (int8_t)PossiblePlays.size()];
-				};
-			};
-		};
-		break;
+				}
+			}
+
+			break;
+		}
 
 		/* Player Phase: Jump to a free spot. */
 		case StackMill::Phases::Jump: {
@@ -789,8 +788,8 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 				if (this->Players[this->CPlayer == 2]->Position(Idx) > -1) {
 					if (!this->PlayablePositions(this->Players[this->CPlayer == 2]->Position(Idx), StackMill::Phases::Jump).empty()) {
 						PossiblePlays.push_back(this->Players[this->CPlayer == 2]->Position(Idx));
-					};
-				};
+					}
+				}
 
 
 				/*
@@ -801,9 +800,9 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 				if (this->Players[this->CPlayer == 1]->Position(Idx) > -1) {
 					if (!this->PlayablePositions(this->Players[this->CPlayer == 1]->Position(Idx), this->Players[this->CPlayer == 1]->Phase()).empty()) {
 						OpponentPossiblePlays.push_back(this->Players[this->CPlayer == 1]->Position(Idx));
-					};
-				};
-			};
+					}
+				}
+			}
 
 			/* No useless allocation. */
 			PossiblePlays.shrink_to_fit(); OpponentPossiblePlays.shrink_to_fit();
@@ -822,7 +821,7 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 					/* The Computer / AI can do a match. */
 					if (this->Match(Checks[Idx2], this->_Field[Checks[Idx2]])) {
 						CanMatch = true, MatchIdx = { PossiblePlays[Idx], Checks[Idx2] };
-					};
+					}
 
 					/* Reset temporarely stuff. */
 					this->_Field[PossiblePlays[Idx]] = this->_Field[Checks[Idx2]];
@@ -830,7 +829,7 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 				}
 
 				if (CanMatch) break;
-			};
+			}
 
 			/* Do the same for the Opponent AKA Player. */
 			for (int8_t Idx = 0; Idx < (int8_t)OpponentPossiblePlays.size(); Idx++) {
@@ -845,7 +844,7 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 					/* The Opponent AKA Player can do a match. */
 					if (this->Match(Checks[Idx2], this->_Field[Checks[Idx2]])) {
 						Danger = true, DangerIdx = { OpponentPossiblePlays[Idx], Checks[Idx2] };
-					};
+					}
 
 					/* Reset temporarely stuff. */
 					this->_Field[OpponentPossiblePlays[Idx]] = this->_Field[Checks[Idx2]];
@@ -853,7 +852,7 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 				}
 
 				if (Danger) break;
-			};
+			}
 
 			/* If one of those fit, do 50:50 chance for a match or counter. */
 			bool MatchCounter = false, DangerCounter = false;
@@ -877,11 +876,11 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 							MatchIdx = { PossiblePlays[Idx], Checks[Idx2] };
 							CanBlock = true;
 							break;
-						};
-					};
+						}
+					}
 
 					if (CanBlock) break;
-				};
+				}
 
 				if (CanBlock) Play = MatchIdx;
 
@@ -894,11 +893,12 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 					PossiblePlays = this->PlayablePositions(Play.first, StackMill::Phases::Jump);
 					PossiblePlays.shrink_to_fit();
 					if (!PossiblePlays.empty()) Play.second = PossiblePlays[rand() % (int8_t)PossiblePlays.size()];
-				};
-			};
-		};
-		break;
-	};
+				}
+			}
+
+			break;
+		}
+	}
 
 	return Play;
 };
@@ -923,8 +923,8 @@ int8_t StackMill::AIStoneRemove() {
 		for (int8_t Idx2 = 0; Idx2 < 16; Idx2++) {
 			if (this->Fields[Idx2].Stones[0] == Removeables[Idx] || this->Fields[Idx2].Stones[1] == Removeables[Idx] || this->Fields[Idx2].Stones[2] == Removeables[Idx]) {
 				Includes.push_back(Idx2);
-			};
-		};
+			}
+		}
 
 		Includes.shrink_to_fit(); // No need for useless allocation.
 
@@ -934,15 +934,15 @@ int8_t StackMill::AIStoneRemove() {
 
 			for (int8_t Idx3 = 0; Idx3 < 3; Idx3++) {
 				if (this->_Field[this->Fields[Includes[Idx2]].Stones[Idx3]] == ((this->CPlayer == 1) ? StackMill::GameStone::Black : StackMill::GameStone::White)) Temp++;
-			};
+			}
 
 			if (Temp > MatchingStones[Idx]) MatchingStones[Idx] = Temp;
-		};
-	};
+		}
+	}
 
 	for (int8_t Idx2 = 0; Idx2 < (int8_t)MatchingStones.size(); Idx2++) {
 		if (MatchingStones[Idx2] > Play) Play = Removeables[Idx2];
-	};
+	}
 
 	return Play;
 };
@@ -984,8 +984,8 @@ bool StackMill::ImportGame(const std::string &Path) {
 					case 0x2:
 						this->_Field[Idx] = StackMill::GameStone::Black;
 						break;
-				};
-			};
+				}
+			}
 
 			/* Init Player. */
 			for (int8_t Idx = 0; Idx < 2; Idx++) this->Players[Idx] = std::make_unique<StackMill::Player>();
@@ -995,7 +995,7 @@ bool StackMill::ImportGame(const std::string &Path) {
 				if (Data[0x1A + Idx] < 24) this->Players[0]->Position(Idx, Data[0x1A + Idx]);
 				else if (Data[0x1A + Idx] == 0x19) this->Players[0]->Position(Idx, -1);
 				else if (Data[0x1A + Idx] == 0x1A) this->Players[0]->Position(Idx, -2);
-			};
+			}
 
 			/* Get Player 1 Phase. */
 			switch(Data[0x23]) {
@@ -1010,7 +1010,7 @@ bool StackMill::ImportGame(const std::string &Path) {
 				case 2: // Jump.
 					this->Players[0]->Phase(StackMill::Phases::Jump);
 					break;
-			};
+			}
 
 
 			/* Get Player 2 Stones. */
@@ -1018,7 +1018,7 @@ bool StackMill::ImportGame(const std::string &Path) {
 				if (Data[0x24 + Idx] < 24) this->Players[1]->Position(Idx, Data[0x24 + Idx]);
 				else if (Data[0x24 + Idx] == 0x19) this->Players[1]->Position(Idx, -1);
 				else if (Data[0x24 + Idx] == 0x1A) this->Players[1]->Position(Idx, -2);
-			};
+			}
 
 			/* Get Player 2 Phase. */
 			switch(Data[0x2D]) {
@@ -1033,13 +1033,13 @@ bool StackMill::ImportGame(const std::string &Path) {
 				case 2: // Jump.
 					this->Players[1]->Phase(StackMill::Phases::Jump);
 					break;
-			};
+			}
 
 			this->GameValid = true;
-		};
+		}
 
 		fclose(GameData);
-	};
+	}
 
 	return this->GameValid;
 };
@@ -1065,8 +1065,8 @@ bool StackMill::ExportGame(const std::string &Path) {
 			case StackMill::GameStone::Black:
 				Data[0x2 + Idx] = 0x2;
 				break;
-		};
-	};
+		}
+	}
 
 
 	/* Get Player 1 Stones. */
@@ -1074,7 +1074,7 @@ bool StackMill::ExportGame(const std::string &Path) {
 		if (this->Players[0]->Position(Idx) >= 0 && this->Players[0]->Position(Idx) < 24) Data[0x1A + Idx] = this->Players[0]->Position(Idx);
 		else if (this->Players[0]->Position(Idx) == -1) Data[0x1A + Idx] = 0x19;
 		else if (this->Players[0]->Position(Idx) == -2) Data[0x1A + Idx] = 0x1A;
-	};
+	}
 
 	/* Get Player 1 Phase. */
 	switch(this->Players[0]->Phase()) {
@@ -1089,7 +1089,7 @@ bool StackMill::ExportGame(const std::string &Path) {
 		case StackMill::Phases::Jump: // Jump.
 			Data[0x23] = 0x2;
 			break;
-	};
+	}
 
 
 	/* Get Player 2 Stones. */
@@ -1097,7 +1097,7 @@ bool StackMill::ExportGame(const std::string &Path) {
 		if (this->Players[1]->Position(Idx) >= 0 && this->Players[1]->Position(Idx) < 24) Data[0x24 + Idx] = this->Players[1]->Position(Idx);
 		else if (this->Players[1]->Position(Idx) == -1) Data[0x24 + Idx] = 0x19;
 		else if (this->Players[1]->Position(Idx) == -2) Data[0x24 + Idx] = 0x1A;
-	};
+	}
 
 	/* Get Player 2 Phase. */
 	switch(this->Players[1]->Phase()) {
@@ -1112,7 +1112,7 @@ bool StackMill::ExportGame(const std::string &Path) {
 		case StackMill::Phases::Jump: // Jump.
 			Data[0x2D] = 0x2;
 			break;
-	};
+	}
 
 
 	/* Handle Writing to the GameDataFile. */
@@ -1121,7 +1121,7 @@ bool StackMill::ExportGame(const std::string &Path) {
 		fwrite(Data.get(), 1, this->DataSize, GameOut);
 		fclose(GameOut);
 		return true;
-	};
+	}
 
 	return false;
 };

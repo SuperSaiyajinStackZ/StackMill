@@ -65,8 +65,8 @@ void Rules::DrawPages(const Rules::HelperPage PG, const int AddOffs) {
 				Gui::DrawStringCentered(0 + AddOffs, 1, 0.6f, TEXT_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Rules_7));
 				Gui::DrawStringCentered(0 + AddOffs, 30, 0.48f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Rules_7T), 395, 0, nullptr, C2D_WordWrap);
 				break;
-		};
-	};
+		}
+	}
 };
 
 
@@ -85,7 +85,7 @@ bool Rules::PageButtonHandle(const int PG) {
 		this->ToSwipe = Cur - PG;
 		this->Direction = false;
 		this->DoSwipe = true;
-	};
+	}
 
 	return true;
 };
@@ -119,7 +119,7 @@ void Rules::DrawBottom() {
 		Gui::drawGrid(this->ButtonPages[Idx].x, this->ButtonPages[Idx].y, this->ButtonPages[Idx].w, this->ButtonPages[Idx].h, BAR_COLOR_OUTLINE);
 		/* If Idx is the current page -> Fill the button with the bar color. */
 		if ((Idx == (int)this->Page)) Gui::Draw_Rect(this->ButtonPages[Idx].x + 1, this->ButtonPages[Idx].y + 1, this->ButtonPages[Idx].w - 2, this->ButtonPages[Idx].h - 2, BAR_COLOR);
-	};
+	}
 
 	Gui::DrawStringCentered(0, this->ButtonPages[0].y + 8, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Rules1), 115);
 	Gui::DrawStringCentered(0, this->ButtonPages[1].y + 8, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Rules2), 115);
@@ -143,42 +143,42 @@ void Rules::HelperHandler(uint32_t &Down, touchPosition &T) {
 					this->Direction = false;
 					this->ToSwipe = 1;
 					this->DoSwipe = true;
-				};
+				}
 
 			} else if (Common::Touching(T, this->Pages[1])) {
 				if (this->CanGoNext()) {
 					this->Direction = true;
 					this->ToSwipe = 1;
 					this->DoSwipe = true;
-				};
+				}
 
 			} else {
 				for (int8_t Idx = 0; Idx < 7; Idx++) {
 					if (Common::Touching(T, this->ButtonPages[Idx])) {
 						if (this->PageButtonHandle(Idx)) break;
-					};
-				};
-			};
-		};
+					}
+				}
+			}
+		}
 
 		if (Down & KEY_L || Down & KEY_UP) {
 			if (this->CanGoPrev()) {
 				this->Direction = false;
 				this->ToSwipe = 1;
 				this->DoSwipe = true;
-			};
-		};
+			}
+		}
 
 		if (Down & KEY_R || Down & KEY_DOWN) {
 			if (this->CanGoNext()) {
 				this->Direction = true;
 				this->ToSwipe = 1;
 				this->DoSwipe = true;
-			};
-		};
+			}
+		}
 
 		if (Down & KEY_B) this->Done = true;
-	};
+	}
 };
 
 
@@ -207,7 +207,7 @@ void Rules::PageSwitch() {
 
 			} else { // Forward.
 				for (int8_t Idx = 0; Idx < 7; Idx++) this->PageOffs[Idx] = this->BackupOffs[Idx] + this->Cubic;
-			};
+			}
 
 			if (this->Cubic >= (this->ToSwipe * 400.0f)) {
 				this->Cubic = 0.0f;
@@ -215,13 +215,13 @@ void Rules::PageSwitch() {
 				for (int8_t Idx = 0; Idx < 7; Idx++) {
 					this->PageOffs[Idx] = (this->Direction ? this->BackupOffs[Idx] - (this->ToSwipe * 400) : this->BackupOffs[Idx] + (this->ToSwipe * 400));
 					this->BackupOffs[Idx] = this->PageOffs[Idx];
-				};
+				}
 
 				this->DoSwipe = false;
 				this->PageHandler();
-			};
-		};
-	};
+			}
+		}
+	}
 };
 
 
@@ -234,8 +234,8 @@ void Rules::Handler() {
 			StackMill3DS::App->FadeAlpha += 5;
 
 			if (StackMill3DS::App->FadeAlpha == 255) this->Done = true;
-		};
-	};
+		}
+	}
 
 	this->Done = false;
 
@@ -255,20 +255,20 @@ void Rules::Handler() {
 				StackMill3DS::App->FadeAlpha += 5;
 
 				if (StackMill3DS::App->FadeAlpha == 255) this->FullDone = true;
-			};
+			}
 
 			continue;
-		};
+		}
 
 		if (this->FirstAccess) { // FirstAccess -> Fade in.
 			if (StackMill3DS::App->FadeAlpha > 0) {
 				StackMill3DS::App->FadeAlpha -= 5;
 
 				if (StackMill3DS::App->FadeAlpha == 0) this->FirstAccess = false;
-			};
+			}
 
 			continue;
-		};
+		}
 
 		/* Handle Input. */
 		hidScanInput();
@@ -276,7 +276,7 @@ void Rules::Handler() {
 		touchPosition T;
 		hidTouchRead(&T);
 		this->HelperHandler(Down, T);
-	};
+	}
 
 	this->Done = false;
 
@@ -288,6 +288,6 @@ void Rules::Handler() {
 			StackMill3DS::App->FadeAlpha -= 5;
 
 			if (StackMill3DS::App->FadeAlpha == 0) this->Done = true;
-		};
-	};
+		}
+	}
 };

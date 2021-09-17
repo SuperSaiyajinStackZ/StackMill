@@ -94,8 +94,8 @@ void StackMill3DS::DrawTop() {
 			case StackMill::Phases::Jump:
 				Gui::DrawStringCentered(0, 220, 0.5f, TEXT_BG_COLOR, this->LH->Translation(LangHandler::Strings::Player) + ": " + this->LH->Translation(LangHandler::Strings::JumpStone), 395);
 				break;
-		};
-	};
+		}
+	}
 };
 
 
@@ -127,8 +127,8 @@ void StackMill3DS::Draw() {
 			case StackMill3DS::Tabs::Credits:
 				this->Credits->Draw();
 				break;
-		};
-	};
+		}
+	}
 
 	this->DrawTab();
 	if (this->FadeAlpha > 0) Gui::Draw_Rect(0, 0, 320, 240, C2D_Color32(0, 0, 0, this->FadeAlpha));
@@ -160,8 +160,8 @@ int StackMill3DS::Handler() {
 
 			case StackMill3DS::Tabs::Credits:
 				break;
-		};
-	};
+		}
+	}
 
 	Gui::exit();
 	this->CData->SaveConfig();

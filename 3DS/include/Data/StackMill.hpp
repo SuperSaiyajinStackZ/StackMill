@@ -47,7 +47,6 @@ public:
 	/* Some return things about the game. */
 	StackMill::GameStone Field(const int8_t Pos) const {
 		if (Pos < 0 || Pos > 23) return StackMill::GameStone::None;
-
 		return this->_Field[Pos];
 	};
 	int8_t Available(const StackMill::GameStone Stone) const { return this->Players[Stone == StackMill::GameStone::Black]->Available(); };
@@ -109,6 +108,7 @@ private:
 			if (Pos < 0 || Pos > 8 || NewPos < -2 || NewPos > 23) return;
 			this->Stones[Pos] = NewPos;
 		};
+
 
 		/* Returns the available / left Stones from the Player. */
 		int8_t Available() {

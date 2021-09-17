@@ -69,7 +69,7 @@ void ConfigData::LoadConfig() {
 							case 3:
 								StackMill3DS::App->LH->LoadLang(LangHandler::Langs::German);
 								break;
-						};
+						}
 
 						/* Stone colors. */
 						if (Data[0x6] < 10) SettingsTab::StoneColors[0x0] = Data[0x6]; // Player 1.
@@ -79,19 +79,19 @@ void ConfigData::LoadConfig() {
 
 					} else {
 						Good = false; // Config version doesn't match.
-					};
+					}
 
 				} else {
 					Good = false; // Identifier doesn't match.
-				};
+				}
 
 			} else {
 				Good = false; // Size doesn't match.
-			};
+			}
 
 			fclose(ConfigIn);
-		};
-	};
+		}
+	}
 
 	if (!Good) this->ConfigChanged = true; // Needs to save at the end.
 };
@@ -116,7 +116,7 @@ void ConfigData::SaveConfig() {
 			case LangHandler::Langs::German:
 				Data[0x5] = 3;
 				break;
-		};
+		}
 
 		/* Stone colors. */
 		Data[0x6] = SettingsTab::StoneColors[0x0]; // Player 1.
@@ -129,6 +129,6 @@ void ConfigData::SaveConfig() {
 		if (ConfigOut) {
 			fwrite(Data.get(), 1, this->ConfigSize, ConfigOut);
 			fclose(ConfigOut);
-		};
-	};
+		}
+	}
 };

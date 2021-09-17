@@ -64,9 +64,9 @@ void Tab::Handler() {
 				if (Common::Touching(StackMill3DS::App->T, this->Tabs[Idx])) {
 					this->SwitchTabs(Idx);
 					break;
-				};
-			};
-		};
+				}
+			}
+		}
 
 		/* L -> Previous Tab. */
 		if (StackMill3DS::App->Down & KEY_L) {
@@ -81,8 +81,8 @@ void Tab::Handler() {
 				case StackMill3DS::Tabs::Credits:
 					this->SwitchTabs(1);
 					break;
-			};
-		};
+			}
+		}
 
 		/* R -> Next Tab. */
 		if (StackMill3DS::App->Down & KEY_R) {
@@ -97,9 +97,9 @@ void Tab::Handler() {
 
 				case StackMill3DS::Tabs::Credits:
 					break;
-			};
-		};
-	};
+			}
+		}
+	}
 };
 
 
@@ -118,7 +118,7 @@ void Tab::HandleSwitch() {
 				Tab::CreditsOffset = this->COffs + Tab::Cubic;
 				Tab::SettingsOffset = this->SOffs + Tab::Cubic;
 				Tab::GameOffset = this->GOffs + Tab::Cubic;
-			};
+			}
 
 
 			if (Tab::Cubic >= (this->TabsToGo == 1 ? 320.0f : 640.0f)) {
@@ -137,13 +137,13 @@ void Tab::HandleSwitch() {
 					case 2:
 						Tab::GameOffset = -640, Tab::SettingsOffset = -320, Tab::CreditsOffset = 0;
 						break;
-				};
+				}
 
 				Tab::TabSwitch = false;
 				StackMill3DS::App->ActiveTab = (StackMill3DS::Tabs)this->NewTab;
-			};
-		};
-	};
+			}
+		}
+	}
 };
 
 
@@ -157,7 +157,7 @@ void Tab::SwitchTabs(const int8_t TabIdx) {
 				this->TabsToGo = TabIdx;
 				this->SwipeDir = true;
 				Good = true;
-			};
+			}
 			break;
 
 		case StackMill3DS::Tabs::Settings:
@@ -165,7 +165,7 @@ void Tab::SwitchTabs(const int8_t TabIdx) {
 				this->TabsToGo = 1;
 				this->SwipeDir = (TabIdx == 0 ? false : true);
 				Good = true;
-			};
+			}
 			break;
 
 		case StackMill3DS::Tabs::Credits:
@@ -173,14 +173,14 @@ void Tab::SwitchTabs(const int8_t TabIdx) {
 				this->TabsToGo = (TabIdx == 0 ? 2 : 1);
 				this->SwipeDir = false;
 				Good = true;
-			};
+			}
 			break;
-	};
+	}
 
 	/* In case the Tab action is good, now handle the animation. */
 	if (Good) {
 		this->NewTab = TabIdx;
 		this->GOffs = Tab::GameOffset, this->SOffs = Tab::SettingsOffset, this->COffs = Tab::CreditsOffset;
 		Tab::TabSwitch = true;
-	};
+	}
 };

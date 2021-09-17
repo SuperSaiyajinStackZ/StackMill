@@ -53,7 +53,7 @@ void Splash::Handler() {
 				StackMill3DS::App->FadeAlpha -= 3;
 
 				if (StackMill3DS::App->FadeAlpha == 0) this->State = 1;
-			};
+			}
 
 		/* State 1: Waiting. */
 		} else if (this->State == 1) {
@@ -61,7 +61,7 @@ void Splash::Handler() {
 				this->Wait--;
 
 				if (this->Wait == 0) this->State = 2;
-			};
+			}
 
 		/* State 2: Fade Out. */
 		} else if (this->State == 2) {
@@ -69,9 +69,9 @@ void Splash::Handler() {
 				StackMill3DS::App->FadeAlpha += 5;
 
 				if (StackMill3DS::App->FadeAlpha == 255) this->Done = true;
-			};
-		};
-	};
+			}
+		}
+	}
 
 	this->Done = false;
 
@@ -83,6 +83,6 @@ void Splash::Handler() {
 			StackMill3DS::App->FadeAlpha -= 5;
 
 			if (StackMill3DS::App->FadeAlpha == 0) this->Done = true;
-		};
-	};
+		}
+	}
 };

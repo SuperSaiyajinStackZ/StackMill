@@ -41,13 +41,12 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 					Gui::drawGrid(this->MainPos[Idx].x + Tab::SettingsOffset, this->MainPos[Idx].y + AddOffs, this->MainPos[Idx].w, this->MainPos[Idx].h, BAR_COLOR_OUTLINE);
 					/* If Idx is the current Selection -> Fill the button with the bar color. */
 					if ((Idx == this->SelectedOption)) Gui::Draw_Rect(this->MainPos[Idx].x + 1 + Tab::SettingsOffset, this->MainPos[Idx].y + 1 + AddOffs, this->MainPos[Idx].w - 2, this->MainPos[Idx].h - 2, BAR_COLOR);
-				};
+				}
 
 				Gui::DrawStringCentered(Tab::SettingsOffset, this->MainPos[0].y + 10 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::GameSettings), 135);
 				Gui::DrawStringCentered(Tab::SettingsOffset, this->MainPos[1].y + 10 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Language), 135);
 				Gui::DrawStringCentered(Tab::SettingsOffset, this->MainPos[2].y + 10 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::ImportExport), 135);
 				break;
-
 
 			/* Game Settings. */
 			case SettingsTab::SubMenu::GameSettings:
@@ -55,7 +54,7 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 25 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Player1Color), 310);
 				for (int8_t Idx = 0; Idx < 10; Idx++) {
 					StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 45 + AddOffs);
-				};
+				}
 
 				StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->XPos[SettingsTab::StoneColors[0]] + 6 + Tab::SettingsOffset, 51 + AddOffs);
 				if (this->SelectedOption == 0) Gui::drawGrid(5 + Tab::SettingsOffset, 25 + AddOffs, 310, 50, BAR_COLOR_OUTLINE);
@@ -64,7 +63,7 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 80 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Player2Color), 310);
 				for (int8_t Idx = 0; Idx < 10; Idx++) {
 					StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 100 + AddOffs);
-				};
+				}
 
 				StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->XPos[SettingsTab::StoneColors[1]] + 6 + Tab::SettingsOffset, 106 + AddOffs);
 				if (this->SelectedOption == 1) Gui::drawGrid(5 + Tab::SettingsOffset, 80 + AddOffs, 310, 50, BAR_COLOR_OUTLINE);
@@ -73,7 +72,7 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 				Gui::DrawStringCentered(0 + Tab::SettingsOffset, 135 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::PreviewColor), 310);
 				for (int8_t Idx = 0; Idx < 10; Idx++) {
 					StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 155 + AddOffs);
-				};
+				}
 
 				StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->XPos[SettingsTab::StoneColors[2]] + 6 + Tab::SettingsOffset, 161 + AddOffs);
 				if (this->SelectedOption == 2) Gui::drawGrid(5 + Tab::SettingsOffset, 135 + AddOffs, 310, 50, BAR_COLOR_OUTLINE);
@@ -88,26 +87,24 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 				if (this->SelectedOption == 3) Gui::drawGrid(5 + Tab::SettingsOffset, 190 + AddOffs, 310, 45, BAR_COLOR_OUTLINE);
 				break;
 
-
 			/* Language Selection. */
 			case SettingsTab::SubMenu::Language: { // Needed to do '{' because of a declared variable inside it.
-				uint8_t ClrIdx = 0;
+				int8_t ClrIdx = 0;
 
-				for (uint8_t Lang = 0; Lang < 3; Lang++) {
+				for (int8_t Lang = 0; Lang < 3; Lang++) {
 					/* Switch the chip color index, so the selection looks good. */
 					if (ClrIdx < 9) ClrIdx++;
 					else ClrIdx = 0;
 
 					StackMill3DS::App->GData->DrawStone(ClrIdx, this->LanguagePos[Lang].x + Tab::SettingsOffset, this->LanguagePos[Lang].y + AddOffs);
 					if (this->Language == Lang) StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->LanguagePos[Lang].x + 6 + Tab::SettingsOffset, this->LanguagePos[Lang].y + 6 + AddOffs);
-				};
+				}
 
 				Gui::DrawString(this->LanguagePos[0].x + 25 + Tab::SettingsOffset, this->LanguagePos[0].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "English");
 				Gui::DrawString(this->LanguagePos[1].x + 25 + Tab::SettingsOffset, this->LanguagePos[1].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "Deutsch");
 				Gui::DrawString(this->LanguagePos[2].x + 25 + Tab::SettingsOffset, this->LanguagePos[2].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "日本語");
-			};
-			break;
-
+				break;
+			}
 
 			/* Import / Export Game. */
 			case SettingsTab::SubMenu::ImportExport:
@@ -115,13 +112,13 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 					Gui::drawGrid(this->ImportExportPos[Idx].x + Tab::SettingsOffset, this->ImportExportPos[Idx].y + AddOffs, this->ImportExportPos[Idx].w, this->ImportExportPos[Idx].h, BAR_COLOR_OUTLINE);
 					/* If Idx is the current Selection -> Fill the button with the bar color. */
 					if ((Idx == this->SelectedOption)) Gui::Draw_Rect(this->ImportExportPos[Idx].x + 1 + Tab::SettingsOffset, this->ImportExportPos[Idx].y + 1 + AddOffs, this->ImportExportPos[Idx].w - 2, this->ImportExportPos[Idx].h - 2, BAR_COLOR);
-				};
+				}
 
 				Gui::DrawStringCentered(Tab::SettingsOffset, this->ImportExportPos[0].y + 10 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::ImportGame), 135);
 				Gui::DrawStringCentered(Tab::SettingsOffset, this->ImportExportPos[1].y + 10 + AddOffs, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::ExportGame), 135);
 				break;
-		};
-	};
+		}
+	}
 };
 
 
@@ -144,7 +141,7 @@ void SettingsTab::Draw() {
 		case SettingsTab::SubMenu::ImportExport:
 			this->DrawMenu(SettingsTab::SubMenu::ImportExport, this->MenuPos[1]);
 			break;
-	};
+	}
 };
 
 
@@ -156,9 +153,9 @@ void SettingsTab::MainHandle() {
 				this->In = true, this->SelectedOption = 0, this->Language = StackMill3DS::App->LH->GetLang();
 				SettingsTab::Swipe = true;
 				break;
-			};
-		};
-	};
+			}
+		}
+	}
 
 
 	if (StackMill3DS::App->Down & KEY_A) {
@@ -180,16 +177,16 @@ void SettingsTab::MainHandle() {
 				this->In = true, this->Language = StackMill3DS::App->LH->GetLang();
 				SettingsTab::Swipe = true;
 				break;
-		};
-	};
+		}
+	}
 
 	if (StackMill3DS::App->Down & KEY_DOWN) {
 		if (this->SelectedOption < 2) this->SelectedOption++;
-	};
+	}
 
 	if (StackMill3DS::App->Down & KEY_UP) {
 		if (this->SelectedOption > 0) this->SelectedOption--;
-	};
+	}
 };
 
 
@@ -197,7 +194,7 @@ void SettingsTab::GameSettingsHandle() {
 	if (StackMill3DS::App->Down & KEY_B) {
 		this->In = false, this->SelectedOption = 0;
 		SettingsTab::Swipe = true;
-	};
+	}
 
 	if (StackMill3DS::App->Down & KEY_TOUCH) {
 		/* Stone Color Handler. */
@@ -212,10 +209,10 @@ void SettingsTab::GameSettingsHandle() {
 						SettingsTab::StoneColors[Idx2] = Idx;
 						StackMill3DS::App->ConfigChanged();
 						return;
-					};
-				};
-			};
-		};
+					}
+				}
+			}
+		}
 
 		/* AI Mode Handler. */
 		for (int8_t Idx = 0; Idx < 3; Idx++) {
@@ -223,17 +220,17 @@ void SettingsTab::GameSettingsHandle() {
 				SettingsTab::AI = Idx;
 				StackMill3DS::App->ConfigChanged();
 				return;
-			};
-		};
-	};
+			}
+		}
+	}
 
 	/* Option Switch. */
 	if (StackMill3DS::App->Repeat & KEY_DOWN) {
 		if (this->SelectedOption < 3) this->SelectedOption++;
-	};
+	}
 	if (StackMill3DS::App->Repeat & KEY_UP) {
 		if (this->SelectedOption > 0) this->SelectedOption--;
-	};
+	}
 
 	/* Color Switch & AI Switch. */
 	if (StackMill3DS::App->Repeat & KEY_RIGHT) {
@@ -241,29 +238,29 @@ void SettingsTab::GameSettingsHandle() {
 			if (SettingsTab::StoneColors[this->SelectedOption] < 9) {
 				SettingsTab::StoneColors[this->SelectedOption]++;
 				StackMill3DS::App->ConfigChanged();
-			};
+			}
 
 		} else {
 			if (SettingsTab::AI < 2) {
 				SettingsTab::AI++;
 				StackMill3DS::App->ConfigChanged();
-			};
-		};
-	};
+			}
+		}
+	}
 	if (StackMill3DS::App->Repeat & KEY_LEFT) {
 		if (this->SelectedOption < 3) {
 			if (SettingsTab::StoneColors[this->SelectedOption] > 0) {
 				SettingsTab::StoneColors[this->SelectedOption]--;
 				StackMill3DS::App->ConfigChanged();
-			};
+			}
 
 		} else {
 			if (SettingsTab::AI > 0) {
 				SettingsTab::AI--;
 				StackMill3DS::App->ConfigChanged();
-			};
-		};
-	};
+			}
+		}
+	}
 };
 
 
@@ -271,15 +268,15 @@ void SettingsTab::LanguageHandle() {
 	if (StackMill3DS::App->Down & KEY_B) {
 		this->In = false, this->SelectedOption = 1;
 		SettingsTab::Swipe = true;
-	};
+	}
 
 	if (StackMill3DS::App->Down & KEY_DOWN) {
 		if (this->Language < 2) this->Language++;
-	};
+	}
 
 	if (StackMill3DS::App->Down & KEY_UP) {
 		if (this->Language > 0) this->Language--;
-	};
+	}
 
 	if (StackMill3DS::App->Down & KEY_A) {
 		/* Load Language. */
@@ -288,7 +285,7 @@ void SettingsTab::LanguageHandle() {
 
 		this->In = false, this->SelectedOption = 1;
 		SettingsTab::Swipe = true;
-	};
+	}
 
 	if (StackMill3DS::App->Down & KEY_TOUCH) {
 		for (int8_t Idx = 0; Idx < 3; Idx++) {
@@ -302,9 +299,9 @@ void SettingsTab::LanguageHandle() {
 				this->In = false, this->SelectedOption = 1;
 				SettingsTab::Swipe = true;
 				break;
-			};
-		};
-	};
+			}
+		}
+	}
 };
 
 
@@ -312,15 +309,15 @@ void SettingsTab::ImportExportHandle() {
 	if (StackMill3DS::App->Down & KEY_B) {
 		this->In = false, this->SelectedOption = 2;
 		SettingsTab::Swipe = true;
-	};
+	}
 
 	if (StackMill3DS::App->Down & KEY_DOWN) {
 		if (this->SelectedOption < 1) this->SelectedOption++;
-	};
+	}
 
 	if (StackMill3DS::App->Down & KEY_UP) {
 		if (this->SelectedOption > 0) this->SelectedOption--;
-	};
+	}
 
 
 	if (StackMill3DS::App->Down & KEY_A) {
@@ -329,21 +326,21 @@ void SettingsTab::ImportExportHandle() {
 				if (StackMill3DS::App->Core->ImportGame("sdmc:/3ds/StackMill/GameData.dat")) {
 					if (StackMill3DS::App->Core->InRemove()) {
 						GameTab::Preview = StackMill3DS::App->Core->RemoveableStones((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::Black : StackMill::GameStone::White);
-					};
+					}
 
 					this->In = false, this->SelectedOption = 2;
 					SettingsTab::Swipe = true;
-				};
+				}
 				break;
 
 			case 1: // Export Game.
 				if (StackMill3DS::App->Core->ExportGame("sdmc:/3ds/StackMill/GameData.dat")) {
 					this->In = false, this->SelectedOption = 2;
 					SettingsTab::Swipe = true;
-				};
+				}
 				break;
-		};
-	};
+		}
+	}
 
 
 	if (StackMill3DS::App->Down & KEY_TOUCH) {
@@ -351,19 +348,19 @@ void SettingsTab::ImportExportHandle() {
 			if (StackMill3DS::App->Core->ImportGame("sdmc:/3ds/StackMill/GameData.dat")) {
 				if (StackMill3DS::App->Core->InRemove()) {
 					GameTab::Preview = StackMill3DS::App->Core->RemoveableStones((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::Black : StackMill::GameStone::White);
-				};
+				}
 
 				this->In = false, this->SelectedOption = 2;
 				SettingsTab::Swipe = true;
-			};
+			}
 
 		} else if (Common::Touching(StackMill3DS::App->T, this->ImportExportPos[1])) { // Export Game.
 			if (StackMill3DS::App->Core->ExportGame("sdmc:/3ds/StackMill/GameData.dat")) {
 				this->In = false, this->SelectedOption = 2;
 				SettingsTab::Swipe = true;
-			};
-		};
-	};
+			}
+		}
+	}
 };
 
 
@@ -388,8 +385,8 @@ void SettingsTab::Handler() {
 			case SettingsTab::SubMenu::ImportExport:
 				this->ImportExportHandle();
 				break;
-		};
-	};
+		}
+	}
 };
 
 
@@ -405,9 +402,9 @@ void SettingsTab::DoSwipe() {
 			else {
 				this->MenuPos[0] = 0, this->MenuPos[1] = 240;
 				this->Menu = SettingsTab::SubMenu::Main;
-			};
+			}
 
 			this->Cubic = 0.0f, SettingsTab::Swipe = false;
-		};
-	};
+		}
+	}
 };

@@ -84,5 +84,5 @@ void GFXData::DrawCornerEdge(const bool LeftSide, const int XPos, const int YPos
 		Gui::Draw_Rect(XPos, YPos + 25, 25, YSize - 50, BAR_COLOR_OUTLINE);
 		Gui::DrawSprite(this->Sprites, sprites_corner_idx, XPos, YPos + YSize - 25, -1.0f, -1.0f);
 		if (DrawArrow) Gui::DrawSprite(this->Sprites, sprites_arrow_idx, XPos, YPos + ((YSize / 2) - (39 / 2)), -1.0f, 1.0f);
-	};
+	}
 };
