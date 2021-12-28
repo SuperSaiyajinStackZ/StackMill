@@ -148,7 +148,7 @@ void SettingsTab::Draw() {
 void SettingsTab::MainHandle() {
 	if (StackMill3DS::App->Down & KEY_TOUCH) {
 		for (int8_t Idx = 1; Idx < 4; Idx++) {
-			if (Common::Touching(StackMill3DS::App->T, this->MainPos[Idx - 1])) {
+			if (this->MainPos[Idx - 1].Touched(StackMill3DS::App->T)) {
 				this->Menu = (SettingsTab::SubMenu)Idx;
 				this->In = true, this->SelectedOption = 0;
 				if (this->Menu == SettingsTab::SubMenu::Language) this->Language = StackMill3DS::App->LH->GetLang();
@@ -157,7 +157,6 @@ void SettingsTab::MainHandle() {
 			}
 		}
 	}
-
 
 	if (StackMill3DS::App->Down & KEY_A) {
 		switch(this->SelectedOption) {
@@ -229,6 +228,7 @@ void SettingsTab::GameSettingsHandle() {
 	if (StackMill3DS::App->Repeat & KEY_DOWN) {
 		if (this->SelectedOption < 3) this->SelectedOption++;
 	}
+
 	if (StackMill3DS::App->Repeat & KEY_UP) {
 		if (this->SelectedOption > 0) this->SelectedOption--;
 	}
@@ -248,6 +248,7 @@ void SettingsTab::GameSettingsHandle() {
 			}
 		}
 	}
+
 	if (StackMill3DS::App->Repeat & KEY_LEFT) {
 		if (this->SelectedOption < 3) {
 			if (SettingsTab::StoneColors[this->SelectedOption] > 0) {
@@ -290,7 +291,7 @@ void SettingsTab::LanguageHandle() {
 
 	if (StackMill3DS::App->Down & KEY_TOUCH) {
 		for (int8_t Idx = 0; Idx < 3; Idx++) {
-			if (Common::Touching(StackMill3DS::App->T, this->LanguagePos[Idx])) {
+			if (this->LanguagePos[Idx].Touched(StackMill3DS::App->T)) {
 				this->Language = Idx;
 
 				/* Load Language. */
@@ -320,7 +321,6 @@ void SettingsTab::ImportExportHandle() {
 		if (this->SelectedOption > 0) this->SelectedOption--;
 	}
 
-
 	if (StackMill3DS::App->Down & KEY_A) {
 		switch(this->SelectedOption) {
 			case 0: // Import Game.
@@ -343,9 +343,8 @@ void SettingsTab::ImportExportHandle() {
 		}
 	}
 
-
 	if (StackMill3DS::App->Down & KEY_TOUCH) {
-		if (Common::Touching(StackMill3DS::App->T, this->ImportExportPos[0])) { // Import Game.
+		if (this->ImportExportPos[0].Touched(StackMill3DS::App->T)) { // Import Game.
 			if (StackMill3DS::App->Core->ImportGame("sdmc:/3ds/StackMill/GameData.dat")) {
 				if (StackMill3DS::App->Core->InRemove()) {
 					GameTab::Preview = StackMill3DS::App->Core->RemoveableStones((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::Black : StackMill::GameStone::White);
@@ -355,7 +354,7 @@ void SettingsTab::ImportExportHandle() {
 				SettingsTab::Swipe = true;
 			}
 
-		} else if (Common::Touching(StackMill3DS::App->T, this->ImportExportPos[1])) { // Export Game.
+		} else if (this->ImportExportPos[1].Touched(StackMill3DS::App->T)) { // Export Game.
 			if (StackMill3DS::App->Core->ExportGame("sdmc:/3ds/StackMill/GameData.dat")) {
 				this->In = false, this->SelectedOption = 2;
 				SettingsTab::Swipe = true;

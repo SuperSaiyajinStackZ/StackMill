@@ -58,10 +58,9 @@ void Tab::Handler() {
 
 	if (Tab::TabSwitch) this->HandleSwitch(); // If we switch Tabs, handle the switch.
 	else { // Otherwise handle the Tabs.
-
 		if (StackMill3DS::App->Down & KEY_TOUCH) {
 			for (int8_t Idx = 0; Idx < 3; Idx++) {
-				if (Common::Touching(StackMill3DS::App->T, this->Tabs[Idx])) {
+				if (this->Tabs[Idx].Touched(StackMill3DS::App->T)) {
 					this->SwitchTabs(Idx);
 					break;
 				}
@@ -119,7 +118,6 @@ void Tab::HandleSwitch() {
 				Tab::SettingsOffset = this->SOffs + Tab::Cubic;
 				Tab::GameOffset = this->GOffs + Tab::Cubic;
 			}
-
 
 			if (Tab::Cubic >= (this->TabsToGo == 1 ? 320.0f : 640.0f)) {
 				Tab::Cubic = 0.0f;

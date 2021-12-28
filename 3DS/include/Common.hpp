@@ -30,8 +30,4 @@
 #include "screenCommon.hpp"
 #include "StackMill3DS.hpp"
 
-namespace Common {
-	bool Touching(const touchPosition T, const Structs::ButtonPos P);
-};
-
 #endif

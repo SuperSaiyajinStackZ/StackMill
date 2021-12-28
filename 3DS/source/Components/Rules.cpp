@@ -138,14 +138,14 @@ void Rules::HelperHandler(uint32_t &Down, touchPosition &T) {
 	if (this->DoSwipe) this->PageSwitch();
 	else {
 		if (Down & KEY_TOUCH) {
-			if (Common::Touching(T, this->Pages[0])) {
+			if (this->Pages[0].Touched(T)) {
 				if (this->CanGoPrev()) {
 					this->Direction = false;
 					this->ToSwipe = 1;
 					this->DoSwipe = true;
 				}
 
-			} else if (Common::Touching(T, this->Pages[1])) {
+			} else if (this->Pages[1].Touched(T)) {
 				if (this->CanGoNext()) {
 					this->Direction = true;
 					this->ToSwipe = 1;
@@ -154,7 +154,7 @@ void Rules::HelperHandler(uint32_t &Down, touchPosition &T) {
 
 			} else {
 				for (int8_t Idx = 0; Idx < 7; Idx++) {
-					if (Common::Touching(T, this->ButtonPages[Idx])) {
+					if (this->ButtonPages[Idx].Touched(T)) {
 						if (this->PageButtonHandle(Idx)) break;
 					}
 				}

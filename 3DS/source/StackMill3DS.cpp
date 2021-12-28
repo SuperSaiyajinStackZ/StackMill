@@ -36,7 +36,6 @@ std::unique_ptr<StackMill3DS> StackMill3DS::App = nullptr;
 void StackMill3DS::DrawTab() { this->_Tab->Draw(); };
 
 
-
 void StackMill3DS::InitApp() {
 	gfxInitDefault();
 	romfsInit();
@@ -137,8 +136,6 @@ void StackMill3DS::Draw() {
 
 
 int StackMill3DS::Handler() {
-	
-
 	while(aptMainLoop() && this->Running) {
 		this->Draw();
 

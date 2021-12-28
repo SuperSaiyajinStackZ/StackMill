@@ -657,7 +657,6 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 			std::pair<int8_t, int8_t> DangerIdx = { -1, -1 };
 			std::pair<int8_t, int8_t> MatchIdx = { -1, -1 }; // first: StonePos, second: MovePos.
 
-
 			/* Check all available Stones for play-abilities and push them to the PossiblePlays vector. */
 			for (int8_t Idx = 0; Idx < 9; Idx++) {
 				/* Check for play-able positions for the Computer. */
@@ -681,7 +680,6 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 
 			/* No useless allocation. */
 			PossiblePlays.shrink_to_fit(); OpponentPossiblePlays.shrink_to_fit();
-
 
 			/* Go through all possibilities for the Computer. */
 			for (int8_t Idx = 0; Idx < (int8_t)PossiblePlays.size(); Idx++) {
@@ -781,7 +779,6 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 			std::pair<int8_t, int8_t> DangerIdx = { -1, -1 };
 			std::pair<int8_t, int8_t> MatchIdx = { -1, -1 }; // first: StonePos, second: MovePos.
 
-
 			/* Check all available Stones for play-abilities and push them to the PossiblePlays vector. */
 			for (int8_t Idx = 0; Idx < 9; Idx++) {
 				/* Check for play-able positions for the Computer. */
@@ -806,7 +803,6 @@ std::pair<int8_t, int8_t> StackMill::AI5050() {
 
 			/* No useless allocation. */
 			PossiblePlays.shrink_to_fit(); OpponentPossiblePlays.shrink_to_fit();
-
 
 			/* Go through all possibilities for the Computer. */
 			for (int8_t Idx = 0; Idx < (int8_t)PossiblePlays.size(); Idx++) {
@@ -1012,7 +1008,6 @@ bool StackMill::ImportGame(const std::string &Path) {
 					break;
 			}
 
-
 			/* Get Player 2 Stones. */
 			for (int8_t Idx = 0; Idx < 9; Idx++) {
 				if (Data[0x24 + Idx] < 24) this->Players[1]->Position(Idx, Data[0x24 + Idx]);
@@ -1068,7 +1063,6 @@ bool StackMill::ExportGame(const std::string &Path) {
 		}
 	}
 
-
 	/* Get Player 1 Stones. */
 	for (int8_t Idx = 0; Idx < 9; Idx++) {
 		if (this->Players[0]->Position(Idx) >= 0 && this->Players[0]->Position(Idx) < 24) Data[0x1A + Idx] = this->Players[0]->Position(Idx);
@@ -1091,7 +1085,6 @@ bool StackMill::ExportGame(const std::string &Path) {
 			break;
 	}
 
-
 	/* Get Player 2 Stones. */
 	for (int8_t Idx = 0; Idx < 9; Idx++) {
 		if (this->Players[1]->Position(Idx) >= 0 && this->Players[1]->Position(Idx) < 24) Data[0x24 + Idx] = this->Players[1]->Position(Idx);
@@ -1113,7 +1106,6 @@ bool StackMill::ExportGame(const std::string &Path) {
 			Data[0x2D] = 0x2;
 			break;
 	}
-
 
 	/* Handle Writing to the GameDataFile. */
 	FILE *GameOut = fopen(Path.c_str(), "wb");

@@ -202,7 +202,7 @@ void GameTab::RemoveAction() {
 		const StackMill::GameStone Stone = ((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::Black : StackMill::GameStone::White);
 
 		for (int8_t Idx = 0; Idx < 24; Idx++) {
-			if (Common::Touching(StackMill3DS::App->T, this->Fields[Idx])) {
+			if (this->Fields[Idx].Touched(StackMill3DS::App->T)) {
 				if (this->ShowPointer) this->ShowPointer = false;
 
 				bool CanContinue = false;
@@ -217,7 +217,6 @@ void GameTab::RemoveAction() {
 				if (CanContinue) {
 					this->Selection = Idx;
 					this->Remove();
-
 					const StackMill::RemoveState State = StackMill3DS::App->Core->StoneRemove(this->Selection, Stone);
 
 					switch(State) {
@@ -242,7 +241,6 @@ void GameTab::RemoveAction() {
 			}
 		}
 	}
-
 
 	if (StackMill3DS::App->Down & KEY_A) {
 		const StackMill::GameStone Stone = ((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::Black : StackMill::GameStone::White);
@@ -340,13 +338,12 @@ void GameTab::PlayerTurn() {
 		return;
 	}
 	if (StackMill3DS::App->Down & KEY_TOUCH) {
-		if (Common::Touching(StackMill3DS::App->T, this->Help)) {
+		if (this->Help.Touched(StackMill3DS::App->T)) {
 			std::unique_ptr<Rules> Ovl = std::make_unique<Rules>();
 			Ovl->Handler();
 			return;
 		}
 	}
-
 
 	if (StackMill3DS::App->Core->InRemove()) this->RemoveAction(); // We are in the remove action.
 	else {
@@ -362,10 +359,9 @@ void GameTab::PlayerTurn() {
 			}
 		}
 
-
 		if (StackMill3DS::App->Down & KEY_TOUCH) {
 			for (int8_t Idx = 0; Idx < 24; Idx++) {
-				if (Common::Touching(StackMill3DS::App->T, this->Fields[Idx])) {
+				if (this->Fields[Idx].Touched(StackMill3DS::App->T)) {
 					if (this->ShowPointer) this->ShowPointer = false;
 
 					/* If Move / Jump Phase, try to go to Stone Selection. */
@@ -387,7 +383,6 @@ void GameTab::PlayerTurn() {
 						}
 					}
 
-
 					/* In case Pos and Stone Selection are the same, go back to Stone Selection. */
 					if (Idx == this->SelectedStone) {
 						if (!this->StartMode) {
@@ -399,7 +394,6 @@ void GameTab::PlayerTurn() {
 							break;
 						}
 					}
-
 
 					/* Check if the specific play can be done. */
 					if (StackMill3DS::App->Core->CanDoSpecifiedPlay(this->SelectedStone, Idx, StackMill3DS::App->Core->Phase((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black))) {
@@ -419,7 +413,6 @@ void GameTab::PlayerTurn() {
 								this->Jump();
 								break;
 						}
-
 
 						const StackMill::PlayStatus Status = StackMill3DS::App->Core->Play(this->SelectedStone, this->Selection);
 
@@ -449,7 +442,6 @@ void GameTab::PlayerTurn() {
 			}
 		}
 
-
 		if (StackMill3DS::App->Down & KEY_A) {
 			if (!this->ShowPointer) this->ShowPointer = true;
 
@@ -468,7 +460,6 @@ void GameTab::PlayerTurn() {
 				}
 			}
 
-
 			/* In case Pos and Stone Selection are the same, go back to Stone Selection. */
 			if (this->Selection == this->SelectedStone) {
 				if (!this->StartMode) {
@@ -480,7 +471,6 @@ void GameTab::PlayerTurn() {
 					return;
 				}
 			}
-
 
 			/* Check if the specific play can be done. */
 			if (StackMill3DS::App->Core->CanDoSpecifiedPlay(this->SelectedStone, this->Selection, StackMill3DS::App->Core->Phase((StackMill3DS::App->Core->CurrentPlayer() == 1) ? StackMill::GameStone::White : StackMill::GameStone::Black))) {
@@ -499,7 +489,6 @@ void GameTab::PlayerTurn() {
 						this->Jump();
 						break;
 				}
-
 
 				const StackMill::PlayStatus Status = StackMill3DS::App->Core->Play(this->SelectedStone, this->Selection);
 
@@ -562,7 +551,6 @@ void GameTab::AITurn() {
 				Status = true;
 			}
 	}
-
 
 	if (Status) {
 		const StackMill::PlayStatus PStatus = StackMill3DS::App->Core->Play(this->SelectedStone, this->Selection);
@@ -672,7 +660,6 @@ void GameTab::Move() {
 		}
 	}
 
-
 	/* If Direction is not -1, aka start and destination being the same, don't do this. */
 	if (Direction != -1) {
 		while(aptMainLoop() && !Done) {
@@ -715,7 +702,6 @@ void GameTab::Move() {
 					}
 				}
 			}
-
 
 			StackMill3DS::App->GData->DrawSprite(sprites_help_idx, this->Help.x, this->Help.y);
 			C3D_FrameEnd(0);
@@ -770,7 +756,6 @@ void GameTab::Remove() {
 				StackMill3DS::App->GData->DrawStone(SettingsTab::StoneColors[1], (Idx % 2 == 0 ? 270 + Tab::GameOffset : 295 + Tab::GameOffset), 40 + (Idx / 2 * 30));
 			}
 		}
-
 
 		StackMill3DS::App->GData->DrawSprite(sprites_help_idx, this->Help.x, this->Help.y);
 		C3D_FrameEnd(0);
@@ -899,7 +884,6 @@ void GameTab::Jump() {
 			}
 		}
 
-
 		StackMill3DS::App->GData->DrawSprite(sprites_help_idx, this->Help.x, this->Help.y);
 		C3D_FrameEnd(0);
 		Scale = std::lerp(Scale, 1.1f, 0.1f); // cubic bezier animation for the Stone to "jump".
@@ -991,8 +975,8 @@ void GameTab::PopupPrompt() {
 			if (Down & KEY_B) State = false, EndIt = true; // Exit.
 
 			if (Down & KEY_TOUCH) {
-				if (Common::Touching(T, this->Prompt[0])) State = false, EndIt = true; // Exit.
-				else if (Common::Touching(T, this->Prompt[1])) State = true, EndIt = true; // New Game.
+				if (this->Prompt[0].Touched(T)) State = false, EndIt = true; // Exit.
+				else if (this->Prompt[1].Touched(T)) State = true, EndIt = true; // New Game.
 			}
 		}
 
