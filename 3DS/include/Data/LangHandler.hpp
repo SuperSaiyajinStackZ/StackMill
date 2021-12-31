@@ -1,6 +1,6 @@
 /*
 *   This file is part of StackMill
-*   Copyright (C) 2021 SuperSaiyajinStackZ
+*   Copyright (C) 2021-2022 SuperSaiyajinStackZ
 *
 *   This program is free software: you can redistribute it and/or modify
 *   it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ private:
 			"Game", "Settings", "Credits", "Game Settings", "Language", "Import / Export",
 			"Player 1 Stone Color", "Player 2 Stone Color", "Play Preview Color", "Computer Opponent (Disabled, Random, 50:50)",
 			"Import Game", "Export Game",
-			"StackMill developed by SuperSaiyajinStackZ.\nCopyright (c) 2021",
+			"StackMill developed by SuperSaiyajinStackZ.\nCopyright (c) 2021-2022",
 			"StackMill developed by SuperSaiyajinStackZ.", "Graphics: SuperSaiyajinStackZ",
 			"StackMill-Core: SuperSaiyajinStackZ", "Universal-Core: Universal-Team",
 			"Player", "Stones available: ", "Remove a Stone from your opponent.", "Set a Stone to a free intersection.",
@@ -131,7 +131,7 @@ private:
 			"Spiel", "Einstellungen", "Credits", "Spiel-Einstellungen", "Sprache", "Import / Export",
 			"Spieler 1 Steinfarbe", "Spieler 2 Steinfarbe", "Spielvorschau-Farbe", "Computer Gegner (Deaktiviert, Zufall, 50:50)",
 			"Spiel Importieren", "Spiel Exportieren",
-			"StackMill entwickelt von SuperSaiyajinStackZ.\nCopyright (c) 2021",
+			"StackMill entwickelt von SuperSaiyajinStackZ.\nCopyright (c) 2021-2022",
 			"StackMill entwickelt von SuperSaiyajinStackZ.", "Grafiken: SuperSaiyajinStackZ",
 			"StackMill-Core: SuperSaiyajinStackZ", "Universal-Core: Universal-Team",
 
@@ -200,7 +200,7 @@ private:
 			"ゲーム", "設定", "クレジット", "ゲーム設定", "言語", "インポート・エクスポート",
 			"プレイヤー1の石の色", "プレイヤー2の石の色", "プレイプレビューの色", "コンピューター対戦相手（無効、ランダム、50:50）",
 			"ゲームをインポート", "ゲームをエクスポート",
-			"StackMillはSuperSaiyajinStackZによって開発しました。\n著作権 © 2021",
+			"StackMillはSuperSaiyajinStackZによって開発しました。\n著作権 © 2021-2022",
 			"StackMillはSuperSaiyajinStackZによって開発しました。", "グラフィックス: SuperSaiyajinStackZ",
 			"StackMill-Core: SuperSaiyajinStackZ", "Universal-Core: Universal-Team",
 			"プレイヤー", "利用可能な石: ", "対戦相手から石を取り除く。", "自由な交差点に石を置きます。",
