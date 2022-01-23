@@ -45,6 +45,7 @@ public:
 	void DrawTop();
 	void DrawTab();
 	void InitApp();
+	void ScanKeys();
 
 	static std::unique_ptr<StackMill3DS> App;
 	std::unique_ptr<GFXData> GData = nullptr;

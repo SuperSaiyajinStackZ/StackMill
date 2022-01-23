@@ -386,6 +386,29 @@ void SettingsTab::Handler() {
 				this->ImportExportHandle();
 				break;
 		}
+
+		/* Swipe to Main Settings. */
+		if (this->MainPos[3].Touched(StackMill3DS::App->T)) {
+			switch(this->Menu) {
+				case SettingsTab::SubMenu::Main:
+					break;
+
+				case SettingsTab::SubMenu::GameSettings:
+					this->In = false, this->SelectedOption = 0;
+					SettingsTab::Swipe = true;
+					break;
+
+				case SettingsTab::SubMenu::Language:
+					this->In = false, this->SelectedOption = 1;
+					SettingsTab::Swipe = true;
+					break;
+
+				case SettingsTab::SubMenu::ImportExport:
+					this->In = false, this->SelectedOption = 2;
+					SettingsTab::Swipe = true;
+					break;
+			}
+		}
 	}
 };
 

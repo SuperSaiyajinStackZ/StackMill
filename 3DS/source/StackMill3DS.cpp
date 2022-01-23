@@ -138,12 +138,7 @@ void StackMill3DS::Draw() {
 int StackMill3DS::Handler() {
 	while(aptMainLoop() && this->Running) {
 		this->Draw();
-
-		hidScanInput();
-		this->Down = hidKeysDown();
-		this->Repeat = hidKeysDownRepeat();
-		hidTouchRead(&this->T);
-
+		this->ScanKeys();
 		this->_Tab->Handler();
 
 		switch(this->ActiveTab) {
@@ -166,6 +161,14 @@ int StackMill3DS::Handler() {
 	romfsExit();
 	gfxExit();
 	return 0;
+};
+
+
+void StackMill3DS::ScanKeys() {
+	hidScanInput();
+	this->Down = hidKeysDown();
+	this->Repeat = hidKeysDownRepeat();
+	hidTouchRead(&this->T);
 };
 
 

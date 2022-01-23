@@ -50,10 +50,11 @@ private:
 
 
 	void MainHandle();
-	static constexpr Structs::ButtonPos MainPos[3] = {
-		{ 90, 50, 140, 35 }, // Game Settings.
+	static constexpr Structs::ButtonPos MainPos[4] = {
+		{ 90, 50, 140, 35 },  // Game Settings.
 		{ 90, 110, 140, 35 }, // Language.
-		{ 90, 170, 140, 35 } // Import | Export.
+		{ 90, 170, 140, 35 }, // Import | Export.
+		{ 107, 0, 106, 20 }   // Main Settings Tab.
 	};
 
 
