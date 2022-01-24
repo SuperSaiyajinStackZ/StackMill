@@ -1,6 +1,6 @@
 # StackMill
 <p align="center">
-	<a href="https://github.com/SuperSaiyajinStackZ/StackMill/releases/latest"><img src="https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/logos/v0.1.0-v0.4.0/ReadMeCover.png"></a><br>
+	<a href="https://github.com/SuperSaiyajinStackZ/StackMill/releases/latest"><img src="https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/logos/v0.1.0-v0.5.0/ReadMeCover.png"></a><br>
 	<b>A clone of the mill game for Nintendo 3DS.</b><br>
 </p>
 
@@ -32,6 +32,7 @@ You want to learn more about the GameData Structure? Then checkout the [GameData
 
 ### Credits Tab
 ![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/creditsTab.png)
+![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/creditsTabTranslators.png)
 
 ### Game Tab
 ![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/gameTab.png)

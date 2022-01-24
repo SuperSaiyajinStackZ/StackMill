@@ -43,7 +43,8 @@ public:
 		Rules1 = 28, Rules2 = 29, Rules3 = 30, Rules4 = 31, Rules5 = 32, Rules6 = 33, Rules7 = 34,
 		Rules_1 = 35, Rules_2 = 36, Rules_3 = 37, Rules_4 = 38, Rules_5 = 39, Rules_6 = 40, Rules_7 = 41,
 
-		Rules_1T = 42, Rules_2T = 43, Rules_3T = 44, Rules_4T = 45, Rules_5T = 46, Rules_6T = 47, Rules_7T = 48
+		Rules_1T = 42, Rules_2T = 43, Rules_3T = 44, Rules_4T = 45, Rules_5T = 46, Rules_6T = 47, Rules_7T = 48,
+		Translators = 49
 	};
 
 	enum class Langs : int8_t { English = 0, German = 1, Japanese = 2 };
@@ -57,7 +58,7 @@ public:
 private:
 	LangHandler::Langs ActiveLang = LangHandler::Langs::English;
 
-	const std::string TranslationStrings[3][49] = {
+	const std::string TranslationStrings[3][50] = {
 		/* English. */
 		{
 			"Game", "Settings", "Credits", "Game Settings", "Language", "Import / Export",
@@ -123,7 +124,9 @@ private:
 			"- Phase 1: Tap a intersection from the lines to play a Stone.\n\n"
 			"- Phase 2 & 3: Tap a Stone and tap on one of the highlighted Intersections to move / jump the Stone.\n\n"
 			"- Remove: Tap a highlighted Stone to remove it.\n\n"
-			"Keep in mind, that you can also use the D-Pad optionally, if you don't want to use touch."
+			"Keep in mind, that you can also use the D-Pad optionally, if you don't want to use touch.",
+
+			"Translators"
 		},
 
 		/* German. */
@@ -192,7 +195,9 @@ private:
 			"- Phase 1: Berühre einen Schnittpunkt um einen Stein zu platzieren.\n\n"
 			"- Phase 2 & 3: Berühre einen Stein und dann eine der hervorgehobenen Schnittpunkte zum bewegen / springen eines Steines.\n\n"
 			"- Entfernen: Berühre einen hervorgehobenen Stein um ihn zu entfernen.\n\n"
-			"Behalte jedoch im Kopf, dass du ebenfalls das Steuerkreuz benutzen kannst, falls du nicht den touchscreen benutzen willst."
+			"Behalte jedoch im Kopf, dass du ebenfalls das Steuerkreuz benutzen kannst, falls du nicht den touchscreen benutzen willst.",
+
+			"Übersetzer"
 		},
 
 		/* Japanese. */
@@ -260,7 +265,9 @@ private:
 			"- 第1段階: 交差点をタップして石をプレイします。\n\n"
 			"- 第2と第3段階: 石をタップし、強調表示される交差点を1つタップして、\n石を動かします・ジャンプします。\n\n"
 			"- 取り除く: 強調表示される石をタップして取り除きます。\n\n"
-			"タッチを使用したくない場合は、\nオプションで十字キーを使用できますにご注意してください。"
+			"タッチを使用したくない場合は、\nオプションで十字キーを使用できますにご注意してください。",
+
+			"翻訳者"
 		}
 	};
 };

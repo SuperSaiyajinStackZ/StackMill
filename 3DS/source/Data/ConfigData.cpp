@@ -126,6 +126,7 @@ void ConfigData::SaveConfig() {
 
 		/* Handle Writing to the ConfigData. */
 		FILE *ConfigOut = fopen("sdmc:/3ds/StackMill/Config.bin", "wb");
+		
 		if (ConfigOut) {
 			fwrite(Data.get(), 1, this->ConfigSize, ConfigOut);
 			fclose(ConfigOut);

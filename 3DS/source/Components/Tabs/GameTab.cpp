@@ -60,7 +60,17 @@ void GameTab::Draw() {
 	}
 
 	/* In case the Pointer is set to shown, display it. */
-	if (this->ShowPointer) StackMill3DS::App->GData->DrawSprite(sprites_pointer_idx, this->Fields[(this->SelectionMode ? this->Selection : this->SelectedStone)].x + 6 + Tab::GameOffset, this->Fields[(this->SelectionMode ? this->Selection : this->SelectedStone)].y + 6);
+	if (this->ShowPointer) {
+		/* Remove State => Display preview color selector. */
+		if (StackMill3DS::App->Core->InRemove()) {
+			StackMill3DS::App->GData->DrawSprite(sprites_selector_0_idx + SettingsTab::StoneColors[2], this->Fields[(this->SelectionMode ? this->Selection : this->SelectedStone)].x + Tab::GameOffset, this->Fields[(this->SelectionMode ? this->Selection : this->SelectedStone)].y);
+
+		/* Draw current Player's stone color as selector. */
+		} else {
+			StackMill3DS::App->GData->DrawSprite(sprites_selector_0_idx + (StackMill3DS::App->Core->CurrentPlayer() == 1 ?  SettingsTab::StoneColors[0] : SettingsTab::StoneColors[1]), this->Fields[(this->SelectionMode ? this->Selection : this->SelectedStone)].x + Tab::GameOffset, this->Fields[(this->SelectionMode ? this->Selection : this->SelectedStone)].y);
+		}
+	}
+
 	StackMill3DS::App->GData->DrawSprite(sprites_help_idx, this->Help.x + Tab::GameOffset, this->Help.y);
 
 	/* Draw Side Stones. */

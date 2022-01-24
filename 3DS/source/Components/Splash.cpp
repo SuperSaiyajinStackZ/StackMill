@@ -48,9 +48,7 @@ void Splash::Handler() {
 		C3D_FrameEnd(0);
 
 		StackMill3DS::App->ScanKeys();
-		if (StackMill3DS::App->Down & KEY_A) {
-			if (this->State != 2) this->State = 2;
-		}
+		if (StackMill3DS::App->Down & KEY_A || StackMill3DS::App->Down & KEY_TOUCH) this->Done = true;
 
 		/* State 0: Fade In. */
 		if (this->State == 0) {
@@ -71,8 +69,7 @@ void Splash::Handler() {
 		/* State 2: Fade Out. */
 		} else if (this->State == 2) {
 			if (StackMill3DS::App->FadeAlpha <= 255) {
-				if (StackMill3DS::App->FadeAlpha + 5 >= 255) StackMill3DS::App->FadeAlpha = 255;
-				else StackMill3DS::App->FadeAlpha += 5;
+				StackMill3DS::App->FadeAlpha += 5;
 
 				if (StackMill3DS::App->FadeAlpha == 255) this->Done = true;
 			}
@@ -86,7 +83,8 @@ void Splash::Handler() {
 		StackMill3DS::App->Draw();
 
 		if (StackMill3DS::App->FadeAlpha > 0) {
-			StackMill3DS::App->FadeAlpha -= 5;
+			if (StackMill3DS::App->FadeAlpha - 5 <= 0) StackMill3DS::App->FadeAlpha = 0;
+			else StackMill3DS::App->FadeAlpha -= 5;
 
 			if (StackMill3DS::App->FadeAlpha == 0) this->Done = true;
 		}

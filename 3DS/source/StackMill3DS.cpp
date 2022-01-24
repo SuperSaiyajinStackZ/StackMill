@@ -151,6 +151,7 @@ int StackMill3DS::Handler() {
 				break;
 
 			case StackMill3DS::Tabs::Credits:
+				this->Credits->Handler();
 				break;
 		}
 	}

@@ -28,8 +28,6 @@
 #define _STACKMILL_RULES_HPP
 
 #include "structs.hpp"
-#include <string>
-#include <3ds.h>
 
 class Rules {
 public:
@@ -42,7 +40,7 @@ private:
 
 	bool CanGoNext() const;
 	bool CanGoPrev() const;
-	void HelperHandler(uint32_t &Down, touchPosition &T);
+	void HelperHandler();
 	void PageSwitch();
 	void PageHandler();
 	void DrawPages(const Rules::HelperPage PG, const int AddOffs = 0);
@@ -58,7 +56,10 @@ private:
 		{ 295, 15, 25, 215 }
 	};
 
-	const std::string ButtonNames[7] = { "Main", "How to Play", "Phase 1", "Phase 2", "Phase 3", "Win Conditions", "Instructions" };
+	/* Back to game button. */
+	static constexpr Structs::ButtonPos GameBtn = { 48, 180, 28, 33 };
+
+	/* Button for the Pages. */
 	static constexpr Structs::ButtonPos ButtonPages[7] = {
 		{ 100, 15, 120, 30 },
 		{ 100, 45, 120, 30 },

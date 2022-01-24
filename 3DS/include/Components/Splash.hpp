@@ -27,7 +27,6 @@
 #ifndef _STACKMILL_SPLASH_HPP
 #define _STACKMILL_SPLASH_HPP
 
-#include "structs.hpp"
 #include <string>
 
 class Splash {

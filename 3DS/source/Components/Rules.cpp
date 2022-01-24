@@ -129,23 +129,25 @@ void Rules::DrawBottom() {
 	Gui::DrawStringCentered(0, this->ButtonPages[5].y + 8, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Rules6), 115);
 	Gui::DrawStringCentered(0, this->ButtonPages[6].y + 8, 0.5f, TEXT_BG_COLOR, StackMill3DS::App->LH->Translation(LangHandler::Strings::Rules7), 115);
 
+	StackMill3DS::App->GData->DrawSprite(sprites_game_idx, this->GameBtn.x, this->GameBtn.y);
+
 	if (StackMill3DS::App->FadeAlpha > 0) Gui::Draw_Rect(0, 0, 320, 240, C2D_Color32(0, 0, 0, StackMill3DS::App->FadeAlpha));
 };
 
 
 /* Handle the Input such as page switch. */
-void Rules::HelperHandler(uint32_t &Down, touchPosition &T) {
+void Rules::HelperHandler() {
 	if (this->DoSwipe) this->PageSwitch();
 	else {
-		if (Down & KEY_TOUCH) {
-			if (this->Pages[0].Touched(T)) {
+		if (StackMill3DS::App->Down & KEY_TOUCH) {
+			if (this->Pages[0].Touched(StackMill3DS::App->T)) {
 				if (this->CanGoPrev()) {
 					this->Direction = false;
 					this->ToSwipe = 1;
 					this->DoSwipe = true;
 				}
 
-			} else if (this->Pages[1].Touched(T)) {
+			} else if (this->Pages[1].Touched(StackMill3DS::App->T)) {
 				if (this->CanGoNext()) {
 					this->Direction = true;
 					this->ToSwipe = 1;
@@ -154,14 +156,14 @@ void Rules::HelperHandler(uint32_t &Down, touchPosition &T) {
 
 			} else {
 				for (int8_t Idx = 0; Idx < 7; Idx++) {
-					if (this->ButtonPages[Idx].Touched(T)) {
+					if (this->ButtonPages[Idx].Touched(StackMill3DS::App->T)) {
 						if (this->PageButtonHandle(Idx)) break;
 					}
 				}
 			}
 		}
 
-		if (Down & KEY_L || Down & KEY_UP) {
+		if (StackMill3DS::App->Down & KEY_L || StackMill3DS::App->Down & KEY_UP) {
 			if (this->CanGoPrev()) {
 				this->Direction = false;
 				this->ToSwipe = 1;
@@ -169,7 +171,7 @@ void Rules::HelperHandler(uint32_t &Down, touchPosition &T) {
 			}
 		}
 
-		if (Down & KEY_R || Down & KEY_DOWN) {
+		if (StackMill3DS::App->Down & KEY_R || StackMill3DS::App->Down & KEY_DOWN) {
 			if (this->CanGoNext()) {
 				this->Direction = true;
 				this->ToSwipe = 1;
@@ -177,7 +179,7 @@ void Rules::HelperHandler(uint32_t &Down, touchPosition &T) {
 			}
 		}
 
-		if (Down & KEY_B) this->Done = true;
+		if ((StackMill3DS::App->Down & KEY_B) || (StackMill3DS::App->Down & KEY_TOUCH && this->GameBtn.Touched(StackMill3DS::App->T))) this->Done = true;
 	}
 };
 
@@ -249,7 +251,6 @@ void Rules::Handler() {
 		this->DrawBottom();
 		C3D_FrameEnd(0);
 
-
 		if (this->Done) { // Done -> fade out.
 			if (StackMill3DS::App->FadeAlpha < 255) {
 				StackMill3DS::App->FadeAlpha += 5;
@@ -271,11 +272,8 @@ void Rules::Handler() {
 		}
 
 		/* Handle Input. */
-		hidScanInput();
-		uint32_t Down = hidKeysDown();
-		touchPosition T;
-		hidTouchRead(&T);
-		this->HelperHandler(Down, T);
+		StackMill3DS::App->ScanKeys();
+		this->HelperHandler();
 	}
 
 	this->Done = false;

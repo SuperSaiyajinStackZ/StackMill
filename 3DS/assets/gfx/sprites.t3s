@@ -8,8 +8,21 @@ sprites/arrow.png
 sprites/corner.png
 sprites/Cover3DS.png
 sprites/field.png
+sprites/game.png
 sprites/help.png
-sprites/pointer.png
+sprites/translators.png
+
+sprites/selectors/selector_0.png
+sprites/selectors/selector_1.png
+sprites/selectors/selector_2.png
+sprites/selectors/selector_3.png
+sprites/selectors/selector_4.png
+sprites/selectors/selector_5.png
+sprites/selectors/selector_6.png
+sprites/selectors/selector_7.png
+sprites/selectors/selector_8.png
+sprites/selectors/selector_9.png
+sprites/selectors/selector_10.png
 
 sprites/stones/0.png
 sprites/stones/1.png

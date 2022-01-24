@@ -28,7 +28,6 @@
 #define _STACKMILL_TAB_HPP
 
 #include "structs.hpp"
-#include <string>
 
 class Tab {
 public:

@@ -28,7 +28,6 @@
 #define _STACKMILL_SETTINGS_TAB_HPP
 
 #include "structs.hpp"
-#include <string>
 
 class SettingsTab {
 public:

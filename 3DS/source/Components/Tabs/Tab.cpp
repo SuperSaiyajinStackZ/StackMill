@@ -54,7 +54,7 @@ void Tab::Draw() {
 
 
 void Tab::Handler() {
-	if (SettingsTab::Swipe) return; // No.
+	if (SettingsTab::Swipe || CreditsTab::Swipe) return; // No.
 
 	if (Tab::TabSwitch) this->HandleSwitch(); // If we switch Tabs, handle the switch.
 	else { // Otherwise handle the Tabs.

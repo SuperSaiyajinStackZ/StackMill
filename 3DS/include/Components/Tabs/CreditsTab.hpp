@@ -28,11 +28,24 @@
 #define _STACKMILL_CREDITS_TAB_HPP
 
 #include "structs.hpp"
-#include <string>
 
 class CreditsTab {
 public:
 	void Draw();
+	void Handler();
+	static bool Swipe;
+private:
+	enum class SubTab : uint8_t { Main = 0, Translators = 1 };
+	SubTab Tab = SubTab::Main;
+	float Cubic = 0.0f;
+	bool IntoTranslators = false;
+	int TabPos[2] = { 0, 240 }; // 0: Main, 1: Translators.
+
+	void DrawSubTab(const CreditsTab::SubTab STab, const int AddOffs);
+	void DoSwipe();
+
+	static constexpr Structs::ButtonPos TranslatorBtn = { 13, 202, 28, 33 };
+	static constexpr Structs::ButtonPos CTabBtn = { 213, 0, 106, 20 };
 };
 
 #endif
