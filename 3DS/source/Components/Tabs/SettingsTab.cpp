@@ -56,7 +56,7 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 					StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 45 + AddOffs);
 				}
 
-				StackMill3DS::App->GData->DrawSprite(sprites_selector_0_idx + SettingsTab::StoneColors[2], this->XPos[SettingsTab::StoneColors[0]] + Tab::SettingsOffset, 45 + AddOffs);
+				StackMill3DS::App->GData->DrawSprite(sprites_selector_0_idx + SettingsTab::StoneColors[0], this->XPos[SettingsTab::StoneColors[0]] + Tab::SettingsOffset, 45 + AddOffs);
 				if (this->SelectedOption == 0) Gui::drawGrid(5 + Tab::SettingsOffset, 25 + AddOffs, 310, 50, BAR_COLOR_OUTLINE);
 
 				/* Player 2 Stone Color. */
@@ -65,7 +65,7 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 					StackMill3DS::App->GData->DrawStone(Idx, this->XPos[Idx] + Tab::SettingsOffset, 100 + AddOffs);
 				}
 
-				StackMill3DS::App->GData->DrawSprite(sprites_selector_0_idx + SettingsTab::StoneColors[2], this->XPos[SettingsTab::StoneColors[1]] + Tab::SettingsOffset, 100 + AddOffs);
+				StackMill3DS::App->GData->DrawSprite(sprites_selector_0_idx + SettingsTab::StoneColors[1], this->XPos[SettingsTab::StoneColors[1]] + Tab::SettingsOffset, 100 + AddOffs);
 				if (this->SelectedOption == 1) Gui::drawGrid(5 + Tab::SettingsOffset, 80 + AddOffs, 310, 50, BAR_COLOR_OUTLINE);
 
 				/* Possibly Play Color. */
@@ -83,7 +83,7 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 				StackMill3DS::App->GData->DrawStone(4, this->XPos[5] - 15 + Tab::SettingsOffset, 210 + AddOffs); // Yellow.
 				StackMill3DS::App->GData->DrawStone(7, this->XPos[6] - 15 + Tab::SettingsOffset, 210 + AddOffs); // Green.
 
-				StackMill3DS::App->GData->DrawSprite(sprites_selector_0_idx + SettingsTab::StoneColors[2], this->XPos[4 + SettingsTab::AI] - 15 + Tab::SettingsOffset, 210 + AddOffs);
+				StackMill3DS::App->GData->DrawSprite(sprites_selector_0_idx + this->AIModeClr(), this->XPos[4 + SettingsTab::AI] - 15 + Tab::SettingsOffset, 210 + AddOffs);
 				if (this->SelectedOption == 3) Gui::drawGrid(5 + Tab::SettingsOffset, 190 + AddOffs, 310, 45, BAR_COLOR_OUTLINE);
 				break;
 
@@ -97,13 +97,13 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 					else ClrIdx = 0;
 
 					StackMill3DS::App->GData->DrawStone(ClrIdx, this->LanguagePos[Lang].x + Tab::SettingsOffset, this->LanguagePos[Lang].y + AddOffs);
-					if (this->Language == Lang) StackMill3DS::App->GData->DrawSprite(sprites_selector_0_idx + SettingsTab::StoneColors[2], this->LanguagePos[Lang].x + Tab::SettingsOffset, this->LanguagePos[Lang].y + AddOffs);
+					if (this->Language == Lang) StackMill3DS::App->GData->DrawSprite(sprites_selector_0_idx + ClrIdx, this->LanguagePos[Lang].x + Tab::SettingsOffset, this->LanguagePos[Lang].y + AddOffs);
 				}
 
-				Gui::DrawString(this->LanguagePos[0].x + 25 + Tab::SettingsOffset, this->LanguagePos[0].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "English");
-				Gui::DrawString(this->LanguagePos[1].x + 25 + Tab::SettingsOffset, this->LanguagePos[1].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "Deutsch");
-				Gui::DrawString(this->LanguagePos[2].x + 25 + Tab::SettingsOffset, this->LanguagePos[2].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "日本語");
-				Gui::DrawString(this->LanguagePos[3].x + 25 + Tab::SettingsOffset, this->LanguagePos[3].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "Italiano");
+				Gui::DrawString(this->LanguagePos[0].x + 25 + Tab::SettingsOffset, this->LanguagePos[0].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "Deutsch");
+				Gui::DrawString(this->LanguagePos[1].x + 25 + Tab::SettingsOffset, this->LanguagePos[1].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "English");
+				Gui::DrawString(this->LanguagePos[2].x + 25 + Tab::SettingsOffset, this->LanguagePos[2].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "Italiano");
+				Gui::DrawString(this->LanguagePos[3].x + 25 + Tab::SettingsOffset, this->LanguagePos[3].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "日本語");
 				break;
 			}
 
@@ -152,7 +152,7 @@ void SettingsTab::MainHandle() {
 			if (this->MainPos[Idx - 1].Touched(StackMill3DS::App->T)) {
 				this->Menu = (SettingsTab::SubMenu)Idx;
 				this->In = true, this->SelectedOption = 0;
-				if (this->Menu == SettingsTab::SubMenu::Language) this->Language = StackMill3DS::App->LH->GetLang();
+				if (this->Menu == SettingsTab::SubMenu::Language) this->Language = this->LangHandlerToSelection();
 				SettingsTab::Swipe = true;
 				break;
 			}
@@ -169,7 +169,7 @@ void SettingsTab::MainHandle() {
 
 			case 1:
 				this->Menu = SettingsTab::SubMenu::Language;
-				this->In = true, this->Language = StackMill3DS::App->LH->GetLang();
+				this->In = true, this->Language = this->LangHandlerToSelection();
 				SettingsTab::Swipe = true;
 				break;
 
@@ -187,6 +187,16 @@ void SettingsTab::MainHandle() {
 
 	if (StackMill3DS::App->Down & KEY_UP) {
 		if (this->SelectedOption > 0) this->SelectedOption--;
+	}
+};
+
+
+int8_t SettingsTab::AIModeClr() const {
+	switch(SettingsTab::AI) {
+		default:
+		case 0: return 9; // Mode 0 => Red.
+		case 1: return 4; // Mode 1 => Yellow.
+		case 2: return 7; // Mode 2 => Green.
 	}
 };
 
@@ -267,6 +277,28 @@ void SettingsTab::GameSettingsHandle() {
 };
 
 
+int8_t SettingsTab::LangHandlerToSelection() const {
+	switch(StackMill3DS::App->LH->GetLangEnum()) {
+		case LangHandler::Langs::German: return 0;
+		default:
+		case LangHandler::Langs::English: return 1;
+		case LangHandler::Langs::Italian: return 2;
+		case LangHandler::Langs::Japanese: return 3;
+	}
+};
+
+
+int8_t SettingsTab::SelectionToLangHandler(const int8_t Slt) const {
+	switch(Slt) {
+		case 0: return 1; // German.
+		default:
+		case 1: return 0; // English.
+		case 2: return 3; // Italian.
+		case 3: return 2; // Japanese.
+	}
+};
+
+
 void SettingsTab::LanguageHandle() {
 	if (StackMill3DS::App->Down & KEY_B) {
 		this->In = false, this->SelectedOption = 1;
@@ -283,7 +315,7 @@ void SettingsTab::LanguageHandle() {
 
 	if (StackMill3DS::App->Down & KEY_A) {
 		/* Load Language. */
-		StackMill3DS::App->LH->LoadLang((LangHandler::Langs)this->Language);
+		StackMill3DS::App->LH->LoadLang((LangHandler::Langs)this->SelectionToLangHandler(this->Language));
 		StackMill3DS::App->ConfigChanged();
 
 		this->In = false, this->SelectedOption = 1;
@@ -296,7 +328,7 @@ void SettingsTab::LanguageHandle() {
 				this->Language = Idx;
 
 				/* Load Language. */
-				StackMill3DS::App->LH->LoadLang((LangHandler::Langs)this->Language);
+				StackMill3DS::App->LH->LoadLang((LangHandler::Langs)this->SelectionToLangHandler(this->Language));
 				StackMill3DS::App->ConfigChanged();
 
 				this->In = false, this->SelectedOption = 1;

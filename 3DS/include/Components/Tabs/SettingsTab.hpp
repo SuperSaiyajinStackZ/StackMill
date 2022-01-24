@@ -57,11 +57,14 @@ private:
 	};
 
 
+	int8_t AIModeClr() const;
 	void GameSettingsHandle();
 	/* X-Positions of the Stone colors. */
 	static constexpr int XPos[10] = { 15, 45, 75, 105, 135, 165, 195, 225, 255, 285 };
 
 
+	int8_t LangHandlerToSelection() const;
+	int8_t SelectionToLangHandler(const int8_t Slt) const;
 	void LanguageHandle();
 	static constexpr Structs::ButtonPos LanguagePos[4] = {
 		{ 37, 32, 18, 18 },  // English.

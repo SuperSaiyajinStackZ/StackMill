@@ -16,7 +16,7 @@ StackMill includes the following features right now:
 
 * Select a color from 10 for the Stones from Player 1, Player 2 and a highlighted color for possible plays.
 
-* Multi Language support. Currently supporting English, German and Japanese.
+* Multi Language support. Currently supporting English, German, Italian and Japanese.
 
 * Importing / Exporting the current match's data, so you can save important matches whenever you want and load them whenever you want.
 
@@ -30,12 +30,11 @@ You want to learn more about the GameData Structure? Then checkout the [GameData
 
 <details><summary>Screenshots</summary>
 
-### Credits Tab
-![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/creditsTab.png)
-![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/creditsTabTranslators.png)
-
 ### Game Tab
 ![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/gameTab.png)
+
+### Splash
+![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/splash.png)
 
 ### Rules
 ![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/rules1.png)
@@ -52,9 +51,9 @@ You want to learn more about the GameData Structure? Then checkout the [GameData
 ![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/settingsTabLanguage.png)
 ![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/settingsTabImportExport.png)
 
-
-### Splash
-![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/splash.png)
+### Credits Tab
+![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/creditsTab.png)
+![](https://github.com/SuperSaiyajinStackZ/StackMill/blob/main/resources/screenshots/creditsTabTranslators.png)
 
 
 </details>
@@ -98,3 +97,4 @@ Once you've cloned the repository (with submodules), simply run `make` in the `3
 ### Translators
 - [SuperSaiyajinStackZ](https://github.com/SuperSaiyajinStackZ): German & English.
 - [Pk11](https://github.com/Epicpkmn11): Japanese & English.
+- [Samplasion](https://github.com/Samplasion): Italian.

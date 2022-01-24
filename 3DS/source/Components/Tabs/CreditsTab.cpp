@@ -68,7 +68,8 @@ void CreditsTab::DrawSubTab(const CreditsTab::SubTab STab, const int AddOffs) {
 
 				Gui::DrawStringCentered(0 + Tab::CreditsOffset, 65 + AddOffs, 0.5f, TEXT_BG_COLOR, "Deutsch - SuperSaiyajinStackZ", 310);
 				Gui::DrawStringCentered(0 + Tab::CreditsOffset, 85 + AddOffs, 0.5f, TEXT_BG_COLOR, "English - Pk11, SuperSaiyajinStackZ", 310);
-				Gui::DrawStringCentered(0 + Tab::CreditsOffset, 105 + AddOffs, 0.5f, TEXT_BG_COLOR, "日本語 - Pk11", 310);
+				Gui::DrawStringCentered(0 + Tab::CreditsOffset, 105 + AddOffs, 0.5f, TEXT_BG_COLOR, "Italiano - Samplasion", 310);
+				Gui::DrawStringCentered(0 + Tab::CreditsOffset, 125 + AddOffs, 0.5f, TEXT_BG_COLOR, "日本語 - Pk11", 310);
 				break;
 		}
 	}

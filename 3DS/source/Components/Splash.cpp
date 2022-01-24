@@ -52,7 +52,7 @@ void Splash::Handler() {
 
 		/* State 0: Fade In. */
 		if (this->State == 0) {
-			if (StackMill3DS::App->FadeAlpha > 0) {
+			if (StackMill3DS::App->FadeAlpha >= 0) {
 				StackMill3DS::App->FadeAlpha -= 3;
 
 				if (StackMill3DS::App->FadeAlpha == 0) this->State = 1;
@@ -60,7 +60,7 @@ void Splash::Handler() {
 
 		/* State 1: Waiting. */
 		} else if (this->State == 1) {
-			if (this->Wait > 0) {
+			if (this->Wait >= 0) {
 				this->Wait--;
 
 				if (this->Wait == 0) this->State = 2;
@@ -82,7 +82,7 @@ void Splash::Handler() {
 	while(aptMainLoop() && !this->Done) {
 		StackMill3DS::App->Draw();
 
-		if (StackMill3DS::App->FadeAlpha > 0) {
+		if (StackMill3DS::App->FadeAlpha >= 0) {
 			if (StackMill3DS::App->FadeAlpha - 5 <= 0) StackMill3DS::App->FadeAlpha = 0;
 			else StackMill3DS::App->FadeAlpha -= 5;
 

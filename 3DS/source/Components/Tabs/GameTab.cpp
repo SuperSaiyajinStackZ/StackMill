@@ -976,17 +976,14 @@ void GameTab::PopupPrompt() {
 
 		/* Handle Input for the prompt. */
 		if (SwipedIn && !EndIt) {
-			hidScanInput();
-			const uint32_t Down = hidKeysDown();
-			touchPosition T;
-			hidTouchRead(&T);
+			StackMill3DS::App->ScanKeys();
 
-			if (Down & KEY_A) State = true, EndIt = true; // New Game.
-			if (Down & KEY_B) State = false, EndIt = true; // Exit.
+			if (StackMill3DS::App->Down & KEY_A) State = true, EndIt = true; // New Game.
+			if (StackMill3DS::App->Down & KEY_B) State = false, EndIt = true; // Exit.
 
-			if (Down & KEY_TOUCH) {
-				if (this->Prompt[0].Touched(T)) State = false, EndIt = true; // Exit.
-				else if (this->Prompt[1].Touched(T)) State = true, EndIt = true; // New Game.
+			if (StackMill3DS::App->Down & KEY_TOUCH) {
+				if (this->Prompt[0].Touched(StackMill3DS::App->T)) State = false, EndIt = true; // Exit.
+				else if (this->Prompt[1].Touched(StackMill3DS::App->T)) State = true, EndIt = true; // New Game.
 			}
 		}
 
