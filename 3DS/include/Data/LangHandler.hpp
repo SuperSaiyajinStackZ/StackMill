@@ -313,7 +313,7 @@ private:
 
 			/* Rule 4. */
 			"Questa è la seconda fase del gioco, che dura fino a che i giocatori hanno più di tre pezzi.\n\n"
-			"Il primo giocatore muove un pezzo in una casella adiacente. Il secondo giocatore fa lo stesso.\n\n"
+			"Il primo giocatore muove un pezzo in una cella adiacente. Il secondo giocatore fa lo stesso.\n\n"
 			"Questo processo è ripetuto per tutto il resto della fase, e l'obiettivo è di muovere i pezzi in modo tale che l'avversario non possa più muovere i suoi (o che rimanga con tre o meno pezzi).\n\n"
 			"Se un giocatore rimane con tre pezzi, passerà ad una fase esclusiva a lui, la fase 3.",
 

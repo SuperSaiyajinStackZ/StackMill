@@ -91,7 +91,7 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 			case SettingsTab::SubMenu::Language: { // Needed to do '{' because of a declared variable inside it.
 				int8_t ClrIdx = 0;
 
-				for (int8_t Lang = 0; Lang < 3; Lang++) {
+				for (int8_t Lang = 0; Lang < 4; Lang++) {
 					/* Switch the chip color index, so the selection looks good. */
 					if (ClrIdx < 9) ClrIdx++;
 					else ClrIdx = 0;
@@ -103,6 +103,7 @@ void SettingsTab::DrawMenu(const SettingsTab::SubMenu M, const int AddOffs) {
 				Gui::DrawString(this->LanguagePos[0].x + 25 + Tab::SettingsOffset, this->LanguagePos[0].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "English");
 				Gui::DrawString(this->LanguagePos[1].x + 25 + Tab::SettingsOffset, this->LanguagePos[1].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "Deutsch");
 				Gui::DrawString(this->LanguagePos[2].x + 25 + Tab::SettingsOffset, this->LanguagePos[2].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "日本語");
+				Gui::DrawString(this->LanguagePos[3].x + 25 + Tab::SettingsOffset, this->LanguagePos[3].y - 1 + AddOffs, 0.6f, TEXT_BG_COLOR, "Italiano");
 				break;
 			}
 
@@ -273,7 +274,7 @@ void SettingsTab::LanguageHandle() {
 	}
 
 	if (StackMill3DS::App->Down & KEY_DOWN) {
-		if (this->Language < 2) this->Language++;
+		if (this->Language < 3) this->Language++;
 	}
 
 	if (StackMill3DS::App->Down & KEY_UP) {
@@ -290,7 +291,7 @@ void SettingsTab::LanguageHandle() {
 	}
 
 	if (StackMill3DS::App->Down & KEY_TOUCH) {
-		for (int8_t Idx = 0; Idx < 3; Idx++) {
+		for (int8_t Idx = 0; Idx < 4; Idx++) {
 			if (this->LanguagePos[Idx].Touched(StackMill3DS::App->T)) {
 				this->Language = Idx;
 
