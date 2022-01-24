@@ -45,6 +45,10 @@ LangHandler::LangHandler() {
 		case 3:
 			this->ActiveLang = LangHandler::Langs::German;
 			break;
+
+		case 4:
+			this->ActiveLang = LangHandler::Langs::Italian;
+			break;
 	}
 };
 

@@ -69,6 +69,10 @@ void ConfigData::LoadConfig() {
 							case 3:
 								StackMill3DS::App->LH->LoadLang(LangHandler::Langs::German);
 								break;
+
+							case 4:
+								StackMill3DS::App->LH->LoadLang(LangHandler::Langs::Italian);
+								break;
 						}
 
 						/* Stone colors. */
@@ -115,6 +119,10 @@ void ConfigData::SaveConfig() {
 
 			case LangHandler::Langs::German:
 				Data[0x5] = 3;
+				break;
+
+			case LangHandler::Langs::Italian:
+				Data[0x5] = 4;
 				break;
 		}
 

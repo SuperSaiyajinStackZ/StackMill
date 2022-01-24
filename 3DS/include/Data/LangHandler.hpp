@@ -47,7 +47,7 @@ public:
 		Translators = 49
 	};
 
-	enum class Langs : int8_t { English = 0, German = 1, Japanese = 2 };
+	enum class Langs : int8_t { English = 0, German = 1, Japanese = 2, Italian = 3 };
 
 	LangHandler();
 	void LoadLang(const LangHandler::Langs Lng);
@@ -58,7 +58,7 @@ public:
 private:
 	LangHandler::Langs ActiveLang = LangHandler::Langs::English;
 
-	const std::string TranslationStrings[3][50] = {
+	const std::string TranslationStrings[4][50] = {
 		/* English. */
 		{
 			"Game", "Settings", "Credits", "Game Settings", "Language", "Import / Export",
@@ -268,6 +268,76 @@ private:
 			"タッチを使用したくない場合は、\nオプションで十字キーを使用できますにご注意してください。",
 
 			"翻訳者"
+		},
+		
+		/* Italian. */
+		{
+			"Gioco", "Impostazioni", "Crediti", "Impostazioni del gioco", "Lingua", "Importa / Esporta",
+			"Colore del pezzo del giocatore 1", "Colore del pezzo del giocatore", "Colore anteprima", "Avversario CPU (Disabilitato, Casuale, 50:50)",
+			"Importa partita", "Esporta partita",
+			"StackMill sviluppato da SuperSaiyajinStackZ.\nCopyright (c) 2021-2022",
+			"StackMill sviluppato da SuperSaiyajinStackZ.", "Grafica: SuperSaiyajinStackZ",
+			"StackMill-Core: SuperSaiyajinStackZ", "Universal-Core: Universal-Team",
+			"Giocatore", "Pezzi disponibili: ", "Rimuovi uno dei pezzi dell'avversario.", "Posiziona un pezzo in un incrocio.",
+			"Muovi un pezzo.", "Posiziona un pezzo in un incrocio.", // I've found no difference between "Jump" and "Move" in Italian
+			"Pareggio!", "vince!", "Vuoi giocare ancora?", "\uE000 Sì", "\uE001 No",
+
+			"Inizio", "Come si gioca", "Fase 1", "Fase 2", "Fase 3", "Come vincere", "Istruzioni",
+
+			"Inizio ( 1 / 7 )", "Come si gioca ( 2 / 7 )", "Fase 1: piazzamento pezzi ( 3 / 7 )", "Fase 2: spostamento pezzi ( 4 / 7 )",
+			"Fase 3: 'volo' / spostamento libero dei pezzi ( 5 / 7 )", "Come vincere ( 6 / 7 )", "Istruzioni ( 7 / 7 )",
+
+			/* Rule 1. */
+			"StackMill è un clone del gioco Mulino.\n\n"
+			"Il gioco è conosciuto anche come:\n"
+			"Nine Men's Morris, Nine-Man Morris,\n"
+			"Mill, Mills, The Mill Game,\n"
+			"Merels, Merrills,\n"
+			"Merelles, Marelles, Morelles,\n"
+			"Ninepenny Marl\n"
+			"e Cowboy Checkers.\n\n"
+			"Vedi le altre schede per le regole del gioco o controlla su Wikipedia: https://it.wikipedia.org/wiki/Mulino_(gioco).",
+
+			/* Rule 2. */
+			"Le regole in breve:\n"
+			"- Entrambi i giocatori devono provare a posizionare 3 pezzi in una fila.\n\n"
+			"- Dopo aver ottenuto una fila, il giocatore può rimuovere un pezzo dell'avversario.\n\n"
+			"Perché la fila sia valida, tutti i pezzi devono farne parte.\n\n"
+			"Il gioco è formato da tre fasi, spiegate di seguito.",
+
+			/* Rule 3. */
+			"Questa è la prima fase del gioco, che dura fino al posizionamento di tutti e 9 i pezzi.\n\n"
+			"Il primo giocatore posiziona un pezzo su un incrocio. Dopodiché il secondo giocatore fa lo stesso fino a che non sono stati posizionati tutti i pezzi.\n\n"
+			"L'obiettivo è quello di formare un buon layout per la fase successiva.\n\n"
+			"Se tutti i pezzi sono stati posizionati, il gioco passa alla fase 2: spostamento.",
+
+			/* Rule 4. */
+			"Questa è la seconda fase del gioco, che dura fino a che i giocatori hanno più di tre pezzi.\n\n"
+			"Il primo giocatore muove un pezzo in una cella adiacente. Il secondo giocatore fa lo stesso.\n\n"
+			"Questo processo è ripetuto per tutto il resto della fase, e l'obiettivo è di muovere i pezzi in modo tale che l'avversario non possa più muovere i suoi (o che rimanga con tre o meno pezzi).\n\n"
+			"Se un giocatore rimane con tre pezzi, passerà ad una fase esclusiva a lui, la fase 3.",
+
+			/* Rule 5. */
+			"Questa è l'ultima fase, esclusiva ai giocatori con tre o meno pezzi.\n\n"
+			"Il giocatore può muovere i pezzi in qualunque posizione.\n"
+			"Questo lascia al giocatore possibilità di riprendersi, in quanto all'altro giocatore serve solo una fila per vincere.\n\n"
+			"L'obiettivo di questa fase è impedire al giocatore di fare una fila e provare a pareggiare, riducendo i pezzi dell'avversario a 3.\n\n"
+			"La pagina seguente illustra alcune modalità di vittoria",
+
+			/* Rule 6. */
+			"Per vincere una partita, deve essere rispettata almeno una delle seguenti condizioni:\n\n"
+			"- L'avversario non può più muoversi e rimane bloccato.\n\n"
+			"- L'avversario è rimasto con tre pezzi e tu ottieni una fila, rimuovendo un pezzo dall'avversario che con due pezzi non può formare file.\n\n"
+			"È anche possibile pareggiare, se entrambi i giocatori rimangono con tre pezzi.",
+
+			/* Rule 7. */
+			"Le istruzioni su come giocare sono semplici.\n\n"
+			"- Fase 1: Tocca un incrocio per posizionare un pezzo.\n\n"
+			"- Fasi 2 & 3: Tocca un pezzo e tocca uno spazio evidenziato per spostare il pezzo.\n\n"
+			"- Rimuovi: Tocca un pezzo evidenziato per rimuoverlo.\n\n"
+			"Se preferisci, puoi usare il DPad anziché il touch screen.",
+
+			"Traduttori"
 		}
 	};
 };
